@@ -1,6 +1,6 @@
-  	// Translation dictionary for selected elements.
-	// Translation dictionary for selected elements.
-    	const translations = {
+// Translation dictionary for selected elements.
+// Translation dictionary for selected elements.
+const translations = {
       	"navbar.home": { 
         	en: "Recently Stamped", 
         	ru: "Недавно Отмечено", 
@@ -174,58 +174,58 @@
     		es: "Cantidad de incidentes:"
   	}
       	// Extend further as needed...
-    	};
-	// Set language function.
-	function setLanguage(lang) {
-      		localStorage.setItem("preferredLanguage", lang);
-      		console.log("Setting language to", lang);
-     		// Translate elements.
-      		const translatableElements = document.querySelectorAll("[data-translate]");
-      		translatableElements.forEach(el => {
-        		const key = el.getAttribute("data-translate");
-        		if (translations[key] && translations[key][lang]) {
-        			el.innerText = translations[key][lang];
-        		}
-      		});
-      		// Translate attributes
-      		const translatablePlaceholders = document.querySelectorAll("[data-translate-placeholder]");
-      		translatablePlaceholders.forEach(el => {
-        	const key = el.getAttribute("data-translate-placeholder");
-        		if (translations[key] && translations[key][lang]) {
-          			el.placeholder = translations[key][lang];
-        		}
-      		});
-    	}
-	// Document function for lanuage preference.
-    	document.addEventListener("DOMContentLoaded", () => {
-      		// Set saved language or default to English
-      		const savedLang = localStorage.getItem("preferredLanguage") || "en";
-      		setLanguage(savedLang);
-      		// Animated language switcher code:
-      		const languages = ['en', 'es', 'ru', 'zh'];
-      		// Initialize currentIndex to the index of savedLang, or 0 if not found.
-      		let currentIndex = languages.indexOf(savedLang);
-      		if (currentIndex === -1) currentIndex = 0;
-      		const animatedBtn = document.getElementById('animatedLangBtn');
-      		animatedBtn.innerText = languages[currentIndex].toUpperCase();
-      		// Function to cycle the button text without affecting page translation.
-      		function cycleLanguage() {
-        		// Fade out the text
-        		animatedBtn.style.opacity = '0';
-        		setTimeout(() => {
-          			currentIndex = (currentIndex + 1) % languages.length;
-          			animatedBtn.innerText = languages[currentIndex].toUpperCase();
-          			animatedBtn.style.opacity = '1';
-          			console.log("Cycling language, now:", languages[currentIndex]);
-        		}, 500); // 500ms for fade effect
-      		}
-      		// Start cycling languages every few seconds.
-	      	let cycleInterval = setInterval(cycleLanguage, 3000);
-      		// When the button is clicked, set the selected language but do not clear the cycle.
-      		animatedBtn.addEventListener('click', () => {
-        		const selectedLang = languages[currentIndex];
-        		setLanguage(selectedLang);
-        		console.log("Language selected:", selectedLang);
-        		// The animation continues even after clicking.
-      		});
-    	});
+};
+// Set language function.
+function setLanguage(lang) {
+      	localStorage.setItem("preferredLanguage", lang);
+      	console.log("Setting language to", lang);
+     	// Translate elements.
+      	const translatableElements = document.querySelectorAll("[data-translate]");
+      	translatableElements.forEach(el => {
+        	const key = el.getAttribute("data-translate");
+        	if (translations[key] && translations[key][lang]) {
+        		el.innerText = translations[key][lang];
+        	}
+      	});
+      	// Translate attributes
+      	const translatablePlaceholders = document.querySelectorAll("[data-translate-placeholder]");
+      	translatablePlaceholders.forEach(el => {
+        const key = el.getAttribute("data-translate-placeholder");
+        	if (translations[key] && translations[key][lang]) {
+          		el.placeholder = translations[key][lang];
+        	}
+      	});
+    }
+// Document function for lanuage preference.
+document.addEventListener("DOMContentLoaded", () => {
+      	// Set saved language or default to English
+      	const savedLang = localStorage.getItem("preferredLanguage") || "en";
+      	setLanguage(savedLang);
+      	// Animated language switcher code:
+      	const languages = ['en', 'es', 'ru', 'zh'];
+      	// Initialize currentIndex to the index of savedLang, or 0 if not found.
+      	let currentIndex = languages.indexOf(savedLang);
+      	if (currentIndex === -1) currentIndex = 0;
+      	const animatedBtn = document.getElementById('animatedLangBtn');
+      	animatedBtn.innerText = languages[currentIndex].toUpperCase();
+      	// Function to cycle the button text without affecting page translation.
+      	function cycleLanguage() {
+        	// Fade out the text
+        	animatedBtn.style.opacity = '0';
+        	setTimeout(() => {
+          		currentIndex = (currentIndex + 1) % languages.length;
+          		animatedBtn.innerText = languages[currentIndex].toUpperCase();
+          		animatedBtn.style.opacity = '1';
+          		console.log("Cycling language, now:", languages[currentIndex]);
+        	}, 500); // 500ms for fade effect
+      	}
+      	// Start cycling languages every few seconds.
+	let cycleInterval = setInterval(cycleLanguage, 3000);
+      	// When the button is clicked, set the selected language but do not clear the cycle.
+      	animatedBtn.addEventListener('click', () => {
+        	const selectedLang = languages[currentIndex];
+        	setLanguage(selectedLang);
+        	console.log("Language selected:", selectedLang);
+        	// The animation continues even after clicking.
+      	});
+});
