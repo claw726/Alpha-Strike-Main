@@ -3,7 +3,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-image: url('../assets/images/blackholes.avif');
+    background-image: url('../assets/images/blackholes2.avif');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -214,4 +214,13 @@ h1 > i, /* Target direct child <i> of <h1> */
 /* Remove bottom border from the last row of cells to prevent double border with table's rounded corner */
 .monthly-tables tbody tr:last-child td {
     border-bottom: none;
+}
+
+.site-footer {
+    text-align: center; /* Center the text within the footer */
+    padding: 20px 0;    /* Add some padding above and below the text */
+    margin-top: 40px;   /* Add space above the footer, separating it from content */
+    border-top: 1px solid #444; /* Optional: a subtle line to separate footer */
+    font-size: 0.9em;   /* Slightly smaller font size for the disclaimer */
+    color: #aaa;       /* Light grey color for the text, less prominent */
 }
