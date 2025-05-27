@@ -2,21 +2,25 @@
 @media screen and (max-width: 600px) {
     /* Prevent background scroll when selecting language in mobile view */
     body {
-        background-attachment: scroll;  /* Let the background scroll on mobile */
+        background-attachment: scroll;
     }
 
     .topnav {
-        flex-direction: column; /* Stack items vertically */
-        align-items: stretch;   /* Make each link fill the container width */
-        padding: 0;    /* Adjust padding on mobile if necessary */
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0;
+        background:
+            linear-gradient(135deg, rgba(26, 26, 26, 0.98) 0%, rgba(18, 18, 18, 1) 100%);
     }
 
     .topnav a {
         display: block;
-        text-align: left;    /* Left-align text or use center for a different style */
-        padding: 12px;    /* Adjust link padding for easier tapping */
-        margin: 0;    /* Remove any margin that might disrupt the layout */
-        border-bottom: 1px solid #333;  /* Darker divider between links for dark theme */
+        text-align: center;
+        padding: 16px;
+        margin: 0;
+        border-bottom: 1px solid rgba(211, 47, 47, 0.3);
+        border-radius: 0;
+        font-size: 0.9rem;
     }
 
     /* Remove the extra margin on the last child and its divider line */
@@ -26,39 +30,136 @@
     }
 
     #animatedLangBtn {
-        display: flex;    /* Make it a block-level element */
-        width: 100%;    /* Fill its container's width */
-        padding: 14px 16px;  /* Match the nav link padding */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 16px;
         text-align: center;
-        color: #E0E0E0; /* Light text color */
-        background-color: #1A1A1A; /* Consistent dark background */
+        color: #E0E0E0;
+        background:
+            linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(18, 18, 18, 0.95) 100%);
         border: none;
-        border-radius: 0;    /* Optionally, remove border radius */
+        border-radius: 0;
         cursor: pointer;
-        border-bottom: 1px solid #333; /* Add divider like other nav items */
+        border-bottom: 1px solid rgba(211, 47, 47, 0.3);
+        font-size: 0.9rem;
+    }
+
+    /* Container adjustments for mobile */
+    .container {
+        max-width: 95%;
+        margin: 10px auto;
+        padding: 20px;
     }
 
     /* Make sure table is responsive */
     th, td {
-        padding: 8px; /* Keep mobile padding */
+        padding: 10px;
+        font-size: 0.85rem;
     }
 
     /* Search will also be mobile friendly */
     .search-container {
         flex-direction: column;
         align-items: stretch;
+        gap: 12px;
+        padding: 15px;
     }
 
     .search-container select,
     .search-container input,
     .search-container button {
         width: 100%;
-        box-sizing: border-box;  /* Ensure padding and border don't cause overflow */
+        box-sizing: border-box;
         margin-bottom: 10px;
+        padding: 14px 16px;
+        font-size: 1rem;
     }
 
-    /* Remove extra bottom margin from the last element if needed */
+    .search-container input {
+        width: 100%;
+    }
+
+    /* Remove extra bottom margin from the last element */
     .search-container button {
         margin-bottom: 0;
+    }
+
+    /* Mobile data cards */
+    .data-card {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .data-card h2 {
+        font-size: 1.4em;
+    }
+
+    /* Mobile table improvements */
+    .table-responsive {
+        border-radius: 6px;
+    }
+
+    .monthly-tables th,
+    .monthly-tables td {
+        padding: 12px 8px;
+        font-size: 0.85rem;
+    }
+
+    /* Adjust sci-fi effects for mobile */
+    .container::before {
+        opacity: 0.4;
+    }
+
+    .data-card::before,
+    .data-card::after {
+        width: 15px;
+        height: 15px;
+    }
+
+    /* Reduce glow effects on mobile for performance */
+    h1 {
+        text-shadow:
+            0 0 15px rgba(211, 47, 47, 0.5),
+            0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .topnav {
+        box-shadow:
+            0 2px 15px rgba(211, 47, 47, 0.2),
+            0 1px 5px rgba(0, 0, 0, 0.4);
+    }
+}
+
+/* Tablet adjustments */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+    .container {
+        max-width: 70%;
+    }
+
+    .search-container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .search-container input {
+        width: 200px;
+    }
+}
+
+/* Large screen enhancements */
+@media screen and (min-width: 1200px) {
+    .container {
+        max-width: 60%;
+    }
+
+    /* Enhanced sci-fi effects for larger screens */
+    .container::before {
+        animation: borderPulse 2s ease-in-out infinite alternate;
+    }
+
+    .topnav a.active {
+        animation: scifiPulse 2.5s ease-in-out infinite;
     }
 }

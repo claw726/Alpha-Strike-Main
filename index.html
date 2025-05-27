@@ -15,14 +15,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    
+
 </head>
 <body>
     <!-- Navigation will be inserted here -->
     <div id="navigation-container"></div>
-    
+
     <h1><i class="fa-solid fa-stamp"></i> <span data-translate="page.stamped-header">Recently Stamped Mails</span></h1>
     <div id="data-container" class="container"></div>
+
+    <!-- Floating timezone toggle button -->
+    <button id="timezone-toggle" class="timezone-toggle-floating" onclick="toggleTimezone()">
+        <i class="far fa-clock"></i> Show UTC
+    </button>
 
      <!-- Added Footer -->
      <footer class="site-footer">
@@ -36,12 +41,12 @@
     <script src="js/websocket.js"></script>
     <script src="components/navigation.js"></script>
     <script src="js/common.js"></script>
-    
+
     <script>
         // Page-specific initialization
         document.addEventListener("DOMContentLoaded", async () => {
             initializePage('home');
-            
+
             try {
                 const data = await fetchRecentIncidents();
                 displayDataInContainer(data, 'data-container', createIncidentCard, {
