@@ -1,0 +1,217 @@
+/* Base styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-image: url('../assets/images/blackholes.avif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #e0e0e0;
+}
+
+/* Main Container */
+.container {
+    max-width: 30%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(18, 18, 18, 0.85);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Container variant for monthly tables */
+.container.monthly-tables {
+    margin: auto;
+    background-color: rgba(24, 24, 24, 0.9);
+}
+
+h1 {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-style: normal;
+    text-align: center;
+    color: #D32F2F;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(211, 47, 47, 0.3);
+}
+
+.data-card {
+    background-color: #2c2c2c; /* Dark background for the card */
+    border: 1px solid #444; /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside the card */
+    margin-bottom: 20px; /* Space between cards */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    color: #f0f0f0; /* Light text color for contrast */
+    text-align: center; /* Center the text content within the card */
+}
+
+.data-card h2 {
+    margin-top: 0; /* Remove default top margin for h2 */
+    margin-bottom: 15px; /* Space below the title */
+}
+
+.data-card p {
+    margin-bottom: 10px; /* Space between paragraphs */
+    line-height: 1.6; /* Improved readability for paragraph text */
+}
+
+.data-card p strong {
+    color: #ffffff; /* White color for strong/label text */
+}
+
+/* Specific styling for the search totals card if needed */
+.search-total h2 {
+    font-size: 1.8em; /* Larger font for the main name/system in totals card */
+}
+
+.timestamp {
+    font-style: italic;
+    color: #666;
+    font-size: 0.85rem;
+    margin-top: 12px;
+}
+
+/* Table styles */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: rgba(28, 28, 28, 0.9);
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #333;
+    text-align: left;
+}
+
+th {
+    background-color: #D32F2F;
+    color: #fff;
+    font-weight: 600;
+}
+
+th:last-child,
+td:last-child {
+    text-align: right;
+}
+
+/* Data container */
+#data-container {
+    text-align: center;
+    margin-top: 20px;
+    color: #bbb;
+}
+
+#totals-card {
+    text-align: center;
+    background-color: rgba(32, 32, 32, 0.9);
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+/* Player colors */
+.victim {
+    color: #D32F2F;
+    font-weight: 500;
+}
+
+.killer {
+    color: #FFA726;
+    font-weight: 500;
+}
+
+/* Search Container */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: rgba(32, 32, 32, 0.9);
+    border-radius: 6px;
+}
+
+.search-container select,
+.search-container input {
+    padding: 8px 12px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    font-size: 0.95rem;
+}
+
+.search-container input {
+    width: 250px;
+}
+
+.search-container button {
+    padding: 8px 16px;
+    background-color: #D32F2F;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+}
+
+.search-container button:hover {
+    background-color: #b71c1c;
+}
+
+/* Styling for Font Awesome icons in navigation, headers, and buttons */
+.topnav a i,
+h1 > i, /* Target direct child <i> of <h1> */
+#searchBtn i { /* Target icon within the search button */
+    margin-right: 8px; /* Adds space to the right of the icon */
+}
+
+/* Table Styling for .monthly-tables */
+.monthly-tables table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.95em; /* Adjusted for better readability */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Slightly enhanced shadow */
+    border-radius: 8px;
+    overflow: hidden; /* Important for border-radius to clip child elements */
+}
+
+.monthly-tables th,
+.monthly-tables td {
+    padding: 14px 18px; /* Increased padding for more space */
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0; /* Lighter border for a softer look */
+}
+
+.monthly-tables th {
+    color: white;
+    font-weight: 600; /* Slightly bolder */
+    text-transform: uppercase;
+    letter-spacing: 0.5px; /* Added letter spacing for header */
+}
+
+.monthly-tables tbody tr:nth-child(even) {
+    background-color: #393a3a; /* Zebra striping */
+}
+
+.monthly-tables tbody tr:hover {
+    background-color: #e9ecef; /* Hover effect */
+}
+
+/* Remove bottom border from the last row of cells to prevent double border with table's rounded corner */
+.monthly-tables tbody tr:last-child td {
+    border-bottom: none;
+}

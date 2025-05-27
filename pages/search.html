@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="The Alpha-Strike Leaderboard or Killboard for Eve Frontier">
+    <meta name="keywords" content="Eve Frontier, PVP, Leaderboard, Killboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha-Strike, Find your Content on the Frontier!</title>
+    <!-- Corrected favicon path for pages subdirectory -->
+    <link rel="shortcut icon" href="../favicon.png">
+    <!-- External stylesheets -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/navigation.css">
+    <link rel="stylesheet" href="../styles/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <!-- Dynamic Navigation Bar will be inserted here -->
+    <div id="navigation-container"></div>
+
+    <h1><i class="fa-solid fa-magnifying-glass"></i> <span data-translate="page.search-header">Search Stamped Mails</span></h1>
+    <div class="search-container">
+        <select id="searchType">
+            <option value="name" data-translate="search.byName">Search by Name</option>
+            <option value="system" data-translate="search.bySystem">Search by System</option>
+        </select>
+        <input type="text" id="searchQuery" placeholder="Enter search query..." data-translate="search.placeholder" />
+        <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i> <span data-translate="search.button">Search</span></button>
+    </div>
+
+    <!-- Main Container for Search Results -->
+    <div class="container">
+        <h1 data-translate="search-results.header">Search Results</h1>
+        <!-- New container for the aggregated totals card -->
+        <div id="totals-card"></div>
+        <div id="results-container"></div>
+    </div>
+
+    <!-- External JavaScript files -->
+    <script src="../js/translation-dictionary.js"></script>
+    <script src="../js/utils.js"></script> <!-- Contains formatTimestamp and createIncidentCard -->
+    <script src="../js/api.js"></script> <!-- Contains searchIncidents and searchTotals -->
+    <script src="../components/navigation.js"></script>
+    <script src="../js/common.js"></script>
+
+    <script>
+        /**
+         * Performs two API calls concurrently:
+         *   1. Incident search (detailed stamped mail results)
+         *   2. Aggregated totals (all time totals) from a different URL.
+         *
+         * Depending on the type (name or system), the URLs are built accordingly.
+         */
+        async function performSearch(query) {
+            const searchType = document.getElementById('searchType').value;
+            const resultsContainer = document.getElementById('results-container');
+            const totalsCardContainer = document.getElementById('totals-card');
+            
+            resultsContainer.innerHTML = '<p data-translate="search.loading">Loading...</p>'; // Loading message
+            totalsCardContainer.innerHTML = ''; // Clear previous totals
+
+            try {
+                // Use refactored API functions
+                const [incidentData, totalsData] = await Promise.all([
+                    searchIncidents(query, searchType),
+                    searchTotals(query, searchType)
+                ]);
+
+                displayAggregateCard(totalsData, searchType);
+                displaySearchResults(incidentData);
+
+            } catch (error) {
+                console.error("Error fetching search data:", error);
+                const currentLang = localStorage.getItem("preferredLanguage") || "en";
+                // Ensure translations object and error message key exist
+                if (translations && translations["search.error"] && translations["search.error"][currentLang]) {
+                    resultsContainer.innerText = translations["search.error"][currentLang];
+                } else {
+                    resultsContainer.innerText = "Error loading search results.";
+                }
+            }
+            // Re-apply translations to new dynamic content
+            if (typeof setLanguage === 'function') {
+                const currentLang = localStorage.getItem("preferredLanguage") || "en";
+                setLanguage(currentLang);
+            }
+        }
+
+        /**
+         * Displays the aggregated search totals as a card.
+         */
+        function displayAggregateCard(data, type) {
+            const totalsCardContainer = document.getElementById("totals-card");
+            totalsCardContainer.innerHTML = ""; // Clear any previous card.
+
+            if (!data || data.length === 0) {
+                totalsCardContainer.innerHTML = `<p data-translate="search.noAggregatedData">No aggregated data found.</p>`;
+                return;
+            }
+
+            // API returns an array, even for totals, so we take the first element.
+            const item = data[0]; 
+
+            if (type === "name" && item) {
+                totalsCardContainer.innerHTML = `
+                    <div class="data-card search-total">
+                        <h2>${item.name}</h2>
+                        <p><strong data-translate="card.totalVictims">Total Victims:</strong> ${item.total_kills !== undefined ? item.total_kills : 'N/A'}</p>
+                        <p><strong data-translate="card.totalAwakenings">Total Awakenings:</strong> ${item.total_losses !== undefined ? item.total_losses : 'N/A'}</p>
+                    </div>
+                `;
+            } else if (type === "system" && item) {
+                totalsCardContainer.innerHTML = `
+                    <div class="data-card search-total">
+                        <h2>${item.solar_system_name || 'N/A'}</h2>
+                        <p><strong data-translate="card.solarSystemID">Solar System ID:</strong> ${item.solar_system_id || 'N/A'}</p>
+                        <p><strong data-translate="card.incidentCount">Incident Count:</strong> ${item.incident_count !== undefined ? item.incident_count : 'N/A'}</p>
+                    </div>
+                `;
+            } else {
+                 totalsCardContainer.innerHTML = `<p data-translate="search.noAggregatedData">No aggregated data found for this type.</p>`;
+            }
+        }
+
+        /**
+         * Display the search results using createIncidentCard from utils.js.
+         */
+        function displaySearchResults(data) {
+            const container = document.getElementById('results-container');
+            container.innerHTML = ""; // Clear previous results
+
+            if (!data || data.length === 0) {
+                container.innerHTML = `<p data-translate="search.noResults">No results found.</p>`;
+                return;
+            }
+
+            data.forEach(item => {
+                // Use createIncidentCard from js/utils.js
+                const card = createIncidentCard(item);
+                container.appendChild(card);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Initialize the page, including navigation and language settings
+            initializePage('search');
+
+            const searchButton = document.getElementById('searchBtn');
+            const searchInput = document.getElementById('searchQuery');
+
+            searchButton.addEventListener('click', () => {
+                const query = searchInput.value.trim();
+                if (query === "") {
+                    // Consider using a translated alert or an inline message
+                    alert("Please enter a search query."); 
+                    return;
+                }
+                performSearch(query);
+            });
+
+            searchInput.addEventListener('keypress', (event) => {
+                if (event.key === "Enter") {
+                    searchButton.click();
+                }
+            });
+            
+            // Initial translation for static elements after page load
+            if (typeof setLanguage === 'function') {
+                const currentLang = localStorage.getItem("preferredLanguage") || "en";
+                setLanguage(currentLang);
+            }
+        });
+    </script>
+</body>
+</html>

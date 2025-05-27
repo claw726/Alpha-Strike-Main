@@ -1,0 +1,64 @@
+/* Mobile responsive: Vertical stacking for the navigation */
+@media screen and (max-width: 600px) {
+    /* Prevent background scroll when selecting language in mobile view */
+    body {
+        background-attachment: scroll;  /* Let the background scroll on mobile */
+    }
+
+    .topnav {
+        flex-direction: column; /* Stack items vertically */
+        align-items: stretch;   /* Make each link fill the container width */
+        padding: 0;    /* Adjust padding on mobile if necessary */
+    }
+
+    .topnav a {
+        display: block;
+        text-align: left;    /* Left-align text or use center for a different style */
+        padding: 12px;    /* Adjust link padding for easier tapping */
+        margin: 0;    /* Remove any margin that might disrupt the layout */
+        border-bottom: 1px solid #333;  /* Darker divider between links for dark theme */
+    }
+
+    /* Remove the extra margin on the last child and its divider line */
+    .topnav a:last-child {
+        margin-left: 0;
+        border-bottom: none;
+    }
+
+    #animatedLangBtn {
+        display: flex;    /* Make it a block-level element */
+        width: 100%;    /* Fill its container's width */
+        padding: 14px 16px;  /* Match the nav link padding */
+        text-align: center;
+        color: #E0E0E0; /* Light text color */
+        background-color: #1A1A1A; /* Consistent dark background */
+        border: none;
+        border-radius: 0;    /* Optionally, remove border radius */
+        cursor: pointer;
+        border-bottom: 1px solid #333; /* Add divider like other nav items */
+    }
+
+    /* Make sure table is responsive */
+    th, td {
+        padding: 8px; /* Keep mobile padding */
+    }
+
+    /* Search will also be mobile friendly */
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-container select,
+    .search-container input,
+    .search-container button {
+        width: 100%;
+        box-sizing: border-box;  /* Ensure padding and border don't cause overflow */
+        margin-bottom: 10px;
+    }
+
+    /* Remove extra bottom margin from the last element if needed */
+    .search-container button {
+        margin-bottom: 0;
+    }
+}
