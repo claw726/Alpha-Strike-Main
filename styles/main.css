@@ -32,7 +32,7 @@ h1 {
     font-weight: 700;
     font-style: normal;
     text-align: center;
-    color: #D32F2F;
+    color: #F8F8F8;
     margin-bottom: 30px;
     text-shadow: 0 0 10px rgba(211, 47, 47, 0.3);
 }
@@ -208,7 +208,8 @@ h1 > i, /* Target direct child <i> of <h1> */
 }
 
 .monthly-tables tbody tr:hover {
-    background-color: #e9ecef; /* Hover effect */
+    background-color: #4b4b4b; /* Hover effect */
+    
 }
 
 /* Remove bottom border from the last row of cells to prevent double border with table's rounded corner */
