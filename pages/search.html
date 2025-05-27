@@ -78,11 +78,7 @@
                 console.error("Error fetching search data:", error);
                 const currentLang = localStorage.getItem("preferredLanguage") || "en";
                 // Ensure translations object and error message key exist
-                if (translations && translations["search.error"] && translations["search.error"][currentLang]) {
-                    resultsContainer.innerText = translations["search.error"][currentLang];
-                } else {
-                    resultsContainer.innerText = "Error loading search results.";
-                }
+                resultsContainer.innerHTML = `<p data-translate="search.error">Error loading search results.</p>`;
             }
             // Re-apply translations to new dynamic content
             if (typeof setLanguage === 'function') {
