@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     
 </head>
 <body>
@@ -153,6 +153,7 @@
                             <div class="profile-section">
                                 <div class="profile-image-container">
                                     <img src="${assetBasePath}assets/images/awakened.avif" alt="Player Profile" class="profile-image">
+                                    <div class="profile-status-indicator"></div>
                                 </div>
                                 <div class="profile-info">
                                     <h2 class="player-name">${item.name}</h2>
@@ -201,43 +202,43 @@
                 const threatClass = threatLevel === 'HIGH' ? 'threat-high' : threatLevel === 'MEDIUM' ? 'threat-medium' : 'threat-low';
                 
                 totalsCardContainer.innerHTML = `
-                    <div class="data-card search-total enhanced-system-card">
-                        <div class="card-header">
-                            <div class="system-section">
-                                <div class="system-image-container">
-                                    <img src="https://images.evetech.net/types/3796/render" alt="Solar System" class="system-image">
-                                </div>
-                                <div class="system-info">
-                                    <h2 class="system-name">${item.solar_system_name || 'Unknown System'}</h2>
-                                    <span class="system-region" data-translate="card.region">Region: Unknown</span>
-                                </div>
+                <div class="data-card search-total enhanced-system-card">
+                    <div class="card-header">
+                        <div class="system-section">
+                            <div class="system-image-container">
+                                <img src="https://images.evetech.net/types/3796/render" alt="Solar System" class="system-image">
                             </div>
-                            <div class="header-stats">
-                                <div class="header-stat">
-                                    <div class="header-stat-value">${item.incident_count || 0}</div>
-                                    <div class="header-stat-label" data-translate="card.incidentCount">Incidents</div>
-                                </div>
-                                <div class="header-stat">
-                                    <div class="header-stat-value ${threatClass}">${threatLevel}</div>
-                                    <div class="header-stat-label" data-translate="card.threatLevel">Threat Level</div>
-                                </div>
-                                <div class="header-stat">
-                                    <div class="header-stat-value">${avgIncidentsPerDay}</div>
-                                    <div class="header-stat-label" data-translate="card.avgPerDay">Avg/Day</div>
-                                </div>
+                            <div class="system-info">
+                                <h2 class="system-name">${item.solar_system_name || 'Unknown System'}</h2>
+                                <span class="system-region" data-translate="card.region">Region: Unknown</span>
                             </div>
                         </div>
-                        
-                        <div class="stats-grid">
-                            <div class="stat-item secondary">
-                                <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                                <div class="stat-content">
-                                    <span class="stat-value">${item.days_active || 'N/A'}</span>
-                                    <span class="stat-label" data-translate="card.activeDays">Active Days</span>
-                                </div>
+                        <div class="header-stats">
+                            <div class="header-stat">
+                                <div class="header-stat-value">${item.incident_count || 0}</div>
+                                <div class="header-stat-label" data-translate="card.incidentCount">Incidents</div>
+                            </div>
+                            <div class="header-stat">
+                                <div class="header-stat-value ${threatClass}">${threatLevel}</div>
+                                <div class="header-stat-label" data-translate="card.threatLevel">Threat Level</div>
+                            </div>
+                            <div class="header-stat">
+                                <div class="header-stat-value">${avgIncidentsPerDay}</div>
+                                <div class="header-stat-label" data-translate="card.avgPerDay">Avg/Day</div>
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item secondary">
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-content">
+                                <span class="stat-value">${item.days_active || 'N/A'}</span>
+                                <span class="stat-label" data-translate="card.activeDays">Active Days</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 `;
             } else {
                 totalsCardContainer.innerHTML = `<p data-translate="search.noAggregatedData">No aggregated data found for this type.</p>`;
