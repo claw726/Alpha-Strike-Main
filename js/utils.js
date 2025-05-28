@@ -36,7 +36,7 @@ function formatTimestamp(timestamp, showLocal = true) {
     }
 
     // Validate the date
-    if (!date || isNaN(date.getTime()) || date.getFullYear() > 2100 || date.getFullYear() < 1970) {
+    if (!date || Number.isNaN(date.getTime()) || date.getFullYear() > 2100 || date.getFullYear() < 1970) {
         console.warn('Invalid timestamp:', timestamp);
         return 'INVALID TIMESTAMP';
     }
@@ -56,18 +56,17 @@ function formatTimestamp(timestamp, showLocal = true) {
 
         // Return in military/sci-fi format with local timezone
         return `${year}.${month}.${day} - ${hours}:${minutes}:${seconds} ${timeZoneShort}`;
-    } else {
-        // Format as UTC (original behavior)
-        const year = date.getUTCFullYear();
-        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(date.getUTCDate()).padStart(2, '0');
-        const hours = String(date.getUTCHours()).padStart(2, '0');
-        const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-        const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-
-        // Return in military/sci-fi format: YYYY.MM.DD - HH:MM:SS UTC
-        return `${year}.${month}.${day} - ${hours}:${minutes}:${seconds} UTC`;
     }
+    // Format as UTC (original behavior)
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const hours = String(date.getUTCHours()).padStart(2, '0');
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+
+    // Return in military/sci-fi format: YYYY.MM.DD - HH:MM:SS UTC
+    return `${year}.${month}.${day} - ${hours}:${minutes}:${seconds} UTC`;
 }
 
 /**
@@ -80,8 +79,8 @@ function toggleTimezone() {
     const timestampElements = document.querySelectorAll('.timestamp-value');
     [...timestampElements].map(element => {
         const card = element.closest('.incident-card');
-        if (card && card.dataset.timestamp) {
-            element.textContent = formatTimestamp(parseInt(card.dataset.timestamp), showLocalTime);
+        if (card?.dataset.timestamp) {
+            element.textContent = formatTimestamp(Number.parseInt(card.dataset.timestamp), showLocalTime);
         }
     });
 
@@ -126,7 +125,7 @@ function getTimeElapsed(timestamp) {
     }
 
     // Validate the date
-    if (!incidentTime || isNaN(incidentTime.getTime()) || incidentTime.getFullYear() > 2100 || incidentTime.getFullYear() < 1970) {
+    if (!incidentTime || Number.isNaN(incidentTime.getTime()) || incidentTime.getFullYear() > 2100 || incidentTime.getFullYear() < 1970) {
         return '';
     }
 
@@ -144,13 +143,14 @@ function getTimeElapsed(timestamp) {
 
     if (diffDays > 0) {
         return `${diffDays}d ${diffHours}h ago`;
-    } else if (diffHours > 0) {
-        return `${diffHours}h ${diffMinutes}m ago`;
-    } else if (diffMinutes > 0) {
-        return `${diffMinutes}m ago`;
-    } else {
-        return "Just now";
     }
+    if (diffHours > 0) {
+        return `${diffHours}h ${diffMinutes}m ago`;
+    }
+    if (diffMinutes > 0) {
+        return `${diffMinutes}m ago`;
+    }
+    return "Just now";
 }
 
 /**
