@@ -32,23 +32,24 @@ body::before {
     z-index: -1;
 }
 
-/* Main Container */
+/* Container adjustments to accommodate wider cards */
 .container {
-    max-width: 50%;
+    max-width: 90%; /* Increased from 50% */
     width: fit-content;
     margin: 20px auto;
     padding: 25px;
     background:
-        linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(28, 28, 28, 0.9) 100%);
+    linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(28, 28, 28, 0.9) 100%);
     border: 1px solid rgba(211, 47, 47, 0.3);
     border-radius: 12px;
     box-shadow:
-        0 0 30px rgba(211, 47, 47, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1),
-        0 8px 32px rgba(0, 0, 0, 0.6);
+    0 0 30px rgba(211, 47, 47, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.6);
     position: relative;
     backdrop-filter: blur(10px);
 }
+
 
 /* Sci-fi border glow effect */
 .container::before {
@@ -431,228 +432,211 @@ h1 > i,
         transform: translateY(0);
     }
 }
-
-/* Add to /home/calaw/Alpha-Strike-Main/styles/main.css */
-
-/* Enhanced incident card styling */
-.incident-card {
-    background:
-        linear-gradient(135deg, rgba(44, 44, 44, 0.95) 0%, rgba(32, 32, 32, 0.98) 100%);
-    border: 1px solid rgba(211, 47, 47, 0.4);
-    border-radius: 12px;
-    padding: 0;
-    margin-bottom: 25px;
-    box-shadow:
-        0 0 25px rgba(211, 47, 47, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05),
-        0 8px 32px rgba(0, 0, 0, 0.5);
-    color: #f0f0f0;
-    position: relative;
-    backdrop-filter: blur(8px);
-    overflow: hidden;
-
-    width: fit-content;
-}
-
-/* Incident header */
-.incident-header {
+/* Incident List Styling */
+.incident-list-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
-    background: linear-gradient(135deg,
-        rgba(211, 47, 47, 0.9) 0%,
-        rgba(139, 0, 0, 1) 50%,
-        rgba(211, 47, 47, 0.9) 100%);
-    border-bottom: 1px solid rgba(211, 47, 47, 0.3);
+    gap: 20px;
+    padding: 12px 20px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, rgba(44, 44, 44, 0.95) 0%, rgba(32, 32, 32, 0.98) 100%);
+    border: 1px solid rgba(211, 47, 47, 0.3);
+    border-radius: 8px;
+    color: #f0f0f0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.incident-status {
+.incident-list-item:hover {
+    background: linear-gradient(135deg, rgba(54, 54, 54, 0.95) 0%, rgba(42, 42, 42, 0.98) 100%);
+    border-color: rgba(211, 47, 47, 0.5);
+    box-shadow: 0 0 15px rgba(211, 47, 47, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Photo section */
+.incident-photos {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: 'Orbitron', monospace;
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #fff;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    flex-shrink: 0;
 }
 
-.incident-id {
-    font-family: 'Exo 2', monospace;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
+.photo-container {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    background-color: #1a1a1a;
+    clip-path: polygon(15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%, 0% 15%);
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
 }
 
-.id-label {
-    opacity: 0.7;
-    margin-right: 5px;
+.killer-photo {
+    border-color: rgba(255, 167, 38, 0.6);
+    box-shadow: 0 0 8px rgba(255, 167, 38, 0.3), inset 0 0 5px rgba(0,0,0,0.5);
 }
 
-.id-value {
-    font-weight: 600;
-    color: #fff;
+.victim-photo {
+    border-color: rgba(255, 82, 82, 0.6);
+    box-shadow: 0 0 8px rgba(255, 82, 82, 0.3), inset 0 0 5px rgba(0,0,0,0.5);
+}
+
+.combatant-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.vs-indicator {
+    color: rgba(211, 47, 47, 0.8);
+    font-size: 0.8rem;
+    margin: 0 4px;
 }
 
 /* Combatants section */
-.combatants {
+.incident-combatants {
     display: flex;
-    align-items: center;
-    padding: 25px 20px;
-    background: rgba(0, 0, 0, 0.2);
+    flex-direction: column;
+    gap: 4px;
+    min-width: 200px;
+    flex: 1;
 }
 
-.combatant {
-    flex: 1;
-    text-align: center;
+.combatant-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .combatant-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
     font-family: 'Orbitron', monospace;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     color: #aaa;
-    margin-bottom: 8px;
+    min-width: 60px;
 }
 
 .combatant-name {
     font-family: 'Exo 2', monospace;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
 .combatant-name.killer {
     color: #FFA726;
-    text-shadow: 0 0 10px rgba(255, 167, 38, 0.4);
+    text-shadow: 0 0 5px rgba(255, 167, 38, 0.3);
 }
 
 .combatant-name.victim {
     color: #FF5252;
-    text-shadow: 0 0 10px rgba(255, 82, 82, 0.4);
+    text-shadow: 0 0 5px rgba(255, 82, 82, 0.3);
 }
 
-/* VS divider */
-.vs-divider {
+/* Details section */
+.incident-details-compact {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin: 0 20px;
-    position: relative;
-}
-
-.vs-icon {
-    height: 24px;
-    filter: drop-shadow(0 0 8px rgba(211, 47, 47, 0.6));
-    margin-bottom: 8px;
-}
-
-.vs-line {
-    width: 2px;
-    height: 30px;
-    background: linear-gradient(180deg,
-        transparent,
-        rgba(211, 47, 47, 0.8),
-        transparent);
-    box-shadow: 0 0 8px rgba(211, 47, 47, 0.4);
-}
-
-/* Incident details */
-.incident-details {
-    padding: 20px;
-}
-
-.detail-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.detail-row:last-child {
-    margin-bottom: 0;
-}
-
-.detail-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    gap: 4px;
+    min-width: 180px;
     flex: 1;
+}
+
+.detail-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .detail-label {
     font-family: 'Orbitron', monospace;
-    font-size: 0.8rem;
+    font-size: 0.65rem;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     color: #bbb;
-    min-width: 120px;
+    min-width: 70px;
 }
 
 .detail-value {
     font-family: 'Exo 2', monospace;
+    font-size: 0.85rem;
     font-weight: 600;
     color: #fff;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.2);
 }
 
-.timestamp-row {
+/* Timestamp section */
+.incident-timestamp {
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+    align-items: flex-end;
+    min-width: 160px;
+    flex-shrink: 0;
+}
+
+.timestamp-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.timestamp-label {
+    font-size: 0.6rem;
+    color: #888;
 }
 
 .timestamp-value {
     font-family: 'Space Mono', monospace;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #D32F2F;
-    text-shadow: 0 0 8px rgba(211, 47, 47, 0.4);
+    text-shadow: 0 0 5px rgba(211, 47, 47, 0.4);
 }
 
 .time-elapsed {
     font-family: 'Exo 2', monospace;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     color: #888;
     font-style: italic;
-    margin-left: 24px;
 }
 
-/* Incident footer */
-.incident-footer {
-    padding: 15px 20px;
-    background: rgba(0, 0, 0, 0.3);
-    border-top: 1px solid rgba(211, 47, 47, 0.2);
-}
-
-.threat-level {
+/* ID section */
+.incident-id-compact {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    font-family: 'Orbitron', monospace;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #D32F2F;
+    min-width: 80px;
+    flex-shrink: 0;
 }
 
-.threat-indicator {
-    width: 8px;
-    height: 8px;
-    background: #D32F2F;
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(211, 47, 47, 0.6);
-    animation: threatPulse 2s ease-in-out infinite;
+.id-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.6rem;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.id-value {
+    font-family: 'Exo 2', monospace;
+    font-size: 0.8rem;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Container adjustments for list view */
+.container {
+    max-width: 95%;
+    width: 100%;
 }
 
 @keyframes threatPulse {
@@ -665,42 +649,6 @@ h1 > i,
         transform: scale(1.2);
     }
 }
-
-/* Mobile responsive adjustments for incident cards */
-@media screen and (max-width: 600px) {
-    .incident-header {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
-
-    .combatants {
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px 15px;
-    }
-
-    .vs-divider {
-        transform: rotate(90deg);
-        margin: 10px 0;
-    }
-
-    .vs-line {
-        width: 30px;
-        height: 2px;
-    }
-
-    .detail-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-
-    .detail-label {
-        min-width: auto;
-    }
-}
-
 /* Add this to the end of your main.css file */
 
 /* Floating timezone toggle button */

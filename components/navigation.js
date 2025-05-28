@@ -4,7 +4,7 @@
 function createNavigation(activePage) {
     return `
     <div class="topnav">
-    <a ${activePage === 'home' ? 'class="active"' : ''} href="../index.html" data-translate="navbar.home"><i class="fas fa-house"></i>Recently Stamped</a> 
+    <a ${activePage === 'home' ? 'class="active"' : ''} href="../index.html" data-translate="navbar.home"><i class="fa-sharp fa-solid fa-trophy"></i>Recently Stamped</a> 
     <a ${activePage === 'killers' ? 'class="active"' : ''} href="../pages/killers.html" data-translate="navbar.killers">Leading Killers</a>
     <a ${activePage === 'systems' ? 'class="active"' : ''} href="../pages/systems.html" data-translate="navbar.systems">Leading Systems</a>
     <a ${activePage === 'victims' ? 'class="active"' : ''} href="../pages/victims.html" data-translate="navbar.victims">Leading Victims</a>
@@ -28,7 +28,7 @@ function initializeNavigation(activePage) {
 
         navContainer.innerHTML = `
             <div class="topnav">
-            <a ${activePage === 'home' ? 'class="active"' : ''} href="${basePath}index.html"><i class="fa-solid fa-satellite"></i> <span data-translate="navbar.home">Recently Stamped</span></a>
+            <a ${activePage === 'home' ? 'class="active"' : ''} href="${basePath}index.html"><i class="fa-sharp fa-solid fa-trophy"></i> <span data-translate="navbar.home">Recently Stamped</span></a>
             <a ${activePage === 'killers' ? 'class="active"' : ''} href="${basePath}pages/killers.html"><i class="fa-solid fa-skull-crossbones"></i> <span data-translate="navbar.killers">Leading Killers</span></a>
             <a ${activePage === 'victims' ? 'class="active"' : ''} href="${basePath}pages/victims.html"><i class="fa-solid fa-user-shield"></i> <span data-translate="navbar.victims">Leading Victims</span></a>
             <a ${activePage === 'systems' ? 'class="active"' : ''} href="${basePath}pages/systems.html"><i class="fa-solid fa-map-location-dot"></i> <span data-translate="navbar.systems">Leading Systems</span></a>

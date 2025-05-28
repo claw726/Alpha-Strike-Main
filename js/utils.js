@@ -189,11 +189,11 @@ function createIncidentCard(item) {
         return null;
     }
 
-    const card = document.createElement("div");
-    card.classList.add("data-card", "incident-card");
+    const listItem = document.createElement("div");
+    listItem.classList.add("incident-list-item");
 
     if (item.time_stamp) {
-        card.dataset.timestamp = item.time_stamp;
+        listItem.dataset.timestamp = item.time_stamp;
     }
 
     const isIndexPage = window.location.pathname.endsWith("index.html") || window.location.pathname === "/";
@@ -203,78 +203,58 @@ function createIncidentCard(item) {
     const timeElapsed = item.time_stamp ? getTimeElapsed(item.time_stamp) : '';
 
     const timeLabelKey = showLocalTime ? "card.localTimeLabel" : "card.utcTimeLabel";
+    const placeholderProfileImage = `${assetBasePath}assets/images/awakened.avif`;
 
-    card.innerHTML = `
-        <div class="incident-header">
-            <div class="incident-status">
-                <i class="fas fa-skull-crossbones"></i>
-                <span class="status-text" data-translate="card.combatIncident"></span>
+    listItem.innerHTML = `
+        <div class="incident-photos">
+            <div class="photo-container killer-photo">
+                <img src="${placeholderProfileImage}" alt="Aggressor" class="combatant-photo"/>
             </div>
-            <div class="incident-id">
-                <span class="id-label" data-translate="card.idLabel"></span>
-                <span class="id-value">${item.solar_system_id || 'UNKNOWN'}</span>
+            <div class="vs-indicator">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <div class="photo-container victim-photo">
+                <img src="${placeholderProfileImage}" alt="Victim" class="combatant-photo"/>
             </div>
         </div>
-
-        <div class="combatants">
-            <div class="combatant killer-section">
-                <div class="combatant-label">
-                    <i class="fas fa-crosshairs"></i>
-                    <span data-translate="card.aggressor"></span>
-                </div>
-                <div class="combatant-name killer">${item.killer_name || 'UNKNOWN'}</div>
+        
+        <div class="incident-combatants">
+            <div class="combatant-info killer-info">
+                <span class="combatant-label" data-translate="card.aggressor"></span>
+                <span class="combatant-name killer">${item.killer_name || 'UNKNOWN'}</span>
             </div>
-
-            <div class="vs-divider">
-                <img src="${assetBasePath}assets/images/pew.png" alt="vs" class="vs-icon" />
-                <div class="vs-line"></div>
-            </div>
-
-            <div class="combatant victim-section">
-                <div class="combatant-label">
-                    <i class="fas fa-shield-halved"></i>
-                    <span data-translate="card.casualty"></span>
-                </div>
-                <div class="combatant-name victim">${item.victim_name || 'UNKNOWN'}</div>
+            <div class="combatant-info victim-info">
+                <span class="combatant-label" data-translate="card.casualty"></span>
+                <span class="combatant-name victim">${item.victim_name || 'UNKNOWN'}</span>
             </div>
         </div>
-
-        <div class="incident-details">
-            <div class="detail-row">
-                <div class="detail-item">
-                    <i class="fas fa-tag"></i>
-                    <span class="detail-label" data-translate="card.lossType"></span>
-                    <span class="detail-value">${item.loss_type || 'CLASSIFIED'}</span>
-                </div>
+        
+        <div class="incident-details-compact">
+            <div class="detail-group">
+                <span class="detail-label" data-translate="card.lossType"></span>
+                <span class="detail-value">${item.loss_type || 'CLASSIFIED'}</span>
             </div>
-
-            <div class="detail-row">
-                <div class="detail-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span class="detail-label" data-translate="card.location"></span>
-                    <span class="detail-value">${item.solar_system_name || 'UNKNOWN SECTOR'}</span>
-                </div>
-            </div>
-
-            <div class="detail-row timestamp-row">
-                <div class="detail-item">
-                    <i class="far fa-clock"></i>
-                    <span class="detail-label" data-translate="${timeLabelKey}"></span>
-                    <span class="detail-value timestamp-value">${formattedTimestamp}</span>
-                </div>
-                ${timeElapsed ? `<div class="time-elapsed">${timeElapsed}</div>` : ''}
+            <div class="detail-group">
+                <span class="detail-label" data-translate="card.location"></span>
+                <span class="detail-value">${item.solar_system_name || 'UNKNOWN'}</span>
             </div>
         </div>
-
-        <div class="incident-footer">
-            <div class="threat-level">
-                <span class="threat-indicator"></span>
-                <span class="threat-text" data-translate="card.hostileActivity"></span>
+        
+        <div class="incident-timestamp">
+            <div class="timestamp-group">
+                <span class="detail-label timestamp-label" data-translate="${timeLabelKey}"></span>
+                <span class="timestamp-value">${formattedTimestamp}</span>
+                ${timeElapsed ? `<span class="time-elapsed">${timeElapsed}</span>` : ''}
             </div>
+        </div>
+        
+        <div class="incident-id-compact">
+            <span class="id-label" data-translate="card.idLabel"></span>
+            <span class="id-value">${item.solar_system_id || 'UNKNOWN'}</span>
         </div>
     `;
 
-    return card;
+    return listItem;
 }
 
 /**

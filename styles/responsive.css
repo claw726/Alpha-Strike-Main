@@ -1,9 +1,20 @@
 /* Mobile responsive: Vertical stacking for the navigation */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1000px) {
     /* Prevent background scroll when selecting language in mobile view */
     body {
         background-attachment: scroll;
     }
+
+    .incident-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .incident-card {
+        max-width: 100%;
+    }
+    
 
     .topnav {
         flex-direction: column;
@@ -46,10 +57,53 @@
         font-size: 0.9rem;
     }
 
+    .incident-list-item {
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px;
+        align-items: stretch;
+    }
+    
+    .incident-photos {
+        justify-content: center;
+        gap: 12px;
+    }
+    
+    .photo-container {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .incident-combatants {
+        min-width: auto;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .incident-details-compact {
+        min-width: auto;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .incident-timestamp {
+        align-items: center;
+        min-width: auto;
+    }
+    
+    .timestamp-group {
+        align-items: center;
+        text-align: center;
+    }
+    
+    .incident-id-compact {
+        min-width: auto;
+    }
+
     /* Container adjustments for mobile */
     .container {
-        max-width: 95%;
-        margin: 10px auto;
+        max-width: 100%;
+        margin: auto auto;
         padding: 20px;
     }
 
@@ -130,7 +184,43 @@
             0 2px 15px rgba(211, 47, 47, 0.2),
             0 1px 5px rgba(0, 0, 0, 0.4);
     }
+
+    .vs-divider {
+        transform: rotate(90deg);
+        margin: 10px 0;
+    }
+
+    .vs-line {
+        width: 30px;
+        height: 2px;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .detail-label {
+        min-width: auto;
+    }
 }
+
+/* Further responsive adjustments for smaller screens if needed for photos */
+@media screen and (max-width: 400px) {
+    .combatant-photo-container {
+        width: 50px; /* Even smaller on very small screens */
+        height: 50px;
+    }
+    .combatant-name {
+        font-size: 1rem; /* Slightly smaller name on very small screens */
+    }
+    .container {
+        max-width: 95%;
+        padding: 15px;
+    }
+}
+
 
 /* Tablet adjustments */
 @media screen and (min-width: 601px) and (max-width: 1024px) {
