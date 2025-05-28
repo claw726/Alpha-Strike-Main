@@ -78,7 +78,7 @@ function toggleTimezone() {
     // Update all timestamp displays
     const timestampElements = document.querySelectorAll('.timestamp-value');
     [...timestampElements].map(element => {
-        const card = element.closest('.incident-card');
+        const card = element.closest('.incident-list-item');
         if (card?.dataset.timestamp) {
             element.textContent = formatTimestamp(Number.parseInt(card.dataset.timestamp), showLocalTime);
         }
