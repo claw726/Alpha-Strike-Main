@@ -247,11 +247,6 @@ function createIncidentCard(item) {
                 ${timeElapsed ? `<span class="time-elapsed">${timeElapsed}</span>` : ''}
             </div>
         </div>
-        
-        <div class="incident-id-compact">
-            <span class="id-label" data-translate="card.idLabel"></span>
-            <span class="id-value">${item.solar_system_id || 'UNKNOWN'}</span>
-        </div>
     `;
 
     return listItem;
