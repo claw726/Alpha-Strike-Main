@@ -221,11 +221,11 @@ function createIncidentCard(item) {
         <div class="incident-combatants">
             <div class="combatant-info killer-info">
                 <span class="combatant-label" data-translate="card.aggressor"></span>
-                <span class="combatant-name killer">${item.killer_name || 'UNKNOWN'}</span>
+                <span class="combatant-name killer clickable-name" data-name="${item.killer_name || ''}" title="Click to search for ${item.killer_name || 'UNKNOWN'}">${item.killer_name || 'UNKNOWN'}</span>
             </div>
             <div class="combatant-info victim-info">
                 <span class="combatant-label" data-translate="card.casualty"></span>
-                <span class="combatant-name victim">${item.victim_name || 'UNKNOWN'}</span>
+                <span class="combatant-name victim clickable-name" data-name="${item.victim_name || ''}" title="Click to search for ${item.victim_name || 'UNKNOWN'}">${item.victim_name || 'UNKNOWN'}</span>
             </div>
         </div>
         
@@ -236,7 +236,7 @@ function createIncidentCard(item) {
             </div>
             <div class="detail-group">
                 <span class="detail-label" data-translate="card.location"></span>
-                <span class="detail-value">${item.solar_system_name || 'UNKNOWN'}</span>
+                <span class="detail-value clickable-system" data-system="${item.solar_system_name || ''}" title="Click to search for ${item.solar_system_name || 'UNKNOWN'}">${item.solar_system_name || 'UNKNOWN'}</span>
             </div>
         </div>
         
@@ -255,6 +255,56 @@ function createIncidentCard(item) {
     `;
 
     return listItem;
+}
+
+/**
+ * Navigate to search page with pre-filled query
+ * @param {string} query - The search query
+ * @param {string} type - The search type ('name' or 'system')
+ */
+function navigateToSearch(query, type) {
+    if (!query || query === 'UNKNOWN' || query === 'CLASSIFIED') {
+        console.warn('Cannot search for empty, unknown, or classified values');
+        return;
+    }
+
+    // Determine the correct path to search.html based on current page
+    const isIndexPage = window.location.pathname.endsWith("index.html") || window.location.pathname === "/";
+    const searchPagePath = isIndexPage ? 'pages/search.html' : 'search.html';
+    
+    // Create URL with search parameters
+    const searchUrl = `${searchPagePath}?query=${encodeURIComponent(query)}&type=${type}`;
+    
+    // Navigate to search page
+    window.location.href = searchUrl;
+}
+
+/**
+ * Add click event listeners to incident cards for navigation
+ * This should be called after cards are added to the DOM
+ */
+function addIncidentCardListeners() {
+    // Add listeners for clickable names
+    for (const element of document.querySelectorAll('.clickable-name')) {
+        element.addEventListener('click', (e) => {
+            e.preventDefault();
+            const name = element.dataset.name;
+            if (name && name !== 'UNKNOWN') {
+                navigateToSearch(name, 'name');
+            }
+        });
+    }
+
+    // Add listeners for clickable systems
+    for (const element of document.querySelectorAll('.clickable-system')) {
+        element.addEventListener('click', (e) => {
+            e.preventDefault();
+            const system = element.dataset.system;
+            if (system && system !== 'UNKNOWN') {
+                navigateToSearch(system, 'system');
+            }
+        });
+    }
 }
 
 /**

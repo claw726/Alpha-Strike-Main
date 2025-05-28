@@ -92,6 +92,8 @@ function displayDataInContainer(data, containerId, createCardFn, options = {}) {
         else console.warn("Skipping invalid card for item:", item);
     });
 
+    if (typeof addIncidentCardListeners === 'function') addIncidentCardListeners();
+
     // Update translations for newly added dynamic content
     if (typeof setLanguage === 'function' && typeof languages !== 'undefined' && languages.length > 0) {
         const currentLang = localStorage.getItem("preferredLanguage") || languages[0];

@@ -220,7 +220,55 @@ const translations = {
             ru: "ВРЕМЯ UTC:",
             zh: "UTC 时间:",
             es: "HORA UTC:"
-        }
+        },
+		"card.combatPilot": {
+        en: "Combat Pilot",
+        ru: "Боевой пилот",
+        zh: "战斗飞行员",
+        es: "Piloto de Combate"
+    },
+    "card.kdRatio": {
+        en: "K/D Ratio",
+        ru: "Соотношение У/С",
+        zh: "击杀死亡比",
+        es: "Ratio K/D"
+    },
+    "card.winRate": {
+        en: "Win Rate",
+        ru: "Процент побед",
+        zh: "胜率",
+        es: "Tasa de Victoria"
+    },
+    "card.totalEngagements": {
+        en: "Total Engagements",
+        ru: "Всего боев",
+        zh: "总交战次数",
+        es: "Enfrentamientos Totales"
+    },
+    "card.threatLevel": {
+        en: "Threat Level",
+        ru: "Уровень угрозы",
+        zh: "威胁等级",
+        es: "Nivel de Amenaza"
+    },
+    "card.avgPerDay": {
+        en: "Avg/Day",
+        ru: "Среднее/День",
+        zh: "平均/天",
+        es: "Promedio/Día"
+    },
+    "card.activeDays": {
+        en: "Active Days",
+        ru: "Активные дни",
+        zh: "活跃天数",
+        es: "Días Activos"
+    },
+    "card.region": {
+        en: "Region",
+        ru: "Регион",
+        zh: "区域",
+        es: "Región"
+    }
       	// Extend further as needed...
 };
 

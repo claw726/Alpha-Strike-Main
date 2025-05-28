@@ -50,6 +50,43 @@
 
     <script>
         /**
+         * Get URL parameters for pre-filling search
+         */
+        function getUrlParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return {
+                query: urlParams.get('query'),
+                type: urlParams.get('type')
+            };
+        }
+    
+        /**
+         * Pre-fill search form if URL parameters are present
+         */
+        function prefillSearchForm() {
+            const { query, type } = getUrlParameters();
+            
+            if (query) {
+                const searchInput = document.getElementById('searchQuery');
+                if (searchInput) {
+                    searchInput.value = decodeURIComponent(query);
+                }
+            }
+            
+            if (type && (type === 'name' || type === 'system')) {
+                const searchTypeSelect = document.getElementById('searchType');
+                if (searchTypeSelect) {
+                    searchTypeSelect.value = type;
+                }
+            }
+            
+            // Auto-perform search if both parameters are present
+            if (query && type) {
+                performSearch(decodeURIComponent(query));
+            }
+        }
+    
+        /**
          * Performs two API calls concurrently:
          *   1. Incident search (detailed stamped mail results)
          *   2. Aggregated totals (all time totals) from a different URL.
@@ -63,17 +100,17 @@
             
             resultsContainer.innerHTML = '<p data-translate="search.loading">Loading...</p>'; // Loading message
             totalsCardContainer.innerHTML = ''; // Clear previous totals
-
+    
             try {
                 // Use refactored API functions
                 const [incidentData, totalsData] = await Promise.all([
                     searchIncidents(query, searchType),
                     searchTotals(query, searchType)
                 ]);
-
+    
                 displayAggregateCard(totalsData, searchType);
                 displaySearchResults(incidentData);
-
+    
             } catch (error) {
                 console.error("Error fetching search data:", error);
                 const currentLang = localStorage.getItem("preferredLanguage") || "en";
@@ -86,11 +123,11 @@
                 setLanguage(currentLang);
             }
         }
-
+    
         /**
          * Displays the aggregated search totals as a card.
          */
-        function displayAggregateCard(data, type) {
+         function displayAggregateCard(data, type) {
             const totalsCardContainer = document.getElementById("totals-card");
             totalsCardContainer.innerHTML = ""; // Clear any previous card.
 
@@ -100,55 +137,146 @@
             }
 
             // API returns an array, even for totals, so we take the first element.
-            const item = data[0]; 
+            const item = data[0];
+            
+            // Determine the correct path to assets based on current page location
+            const assetBasePath = '../';
 
             if (type === "name" && item) {
+                const killDeathRatio = item.total_losses > 0 ? (item.total_kills / item.total_losses).toFixed(2) : item.total_kills || 0;
+                const totalEngagements = (item.total_kills || 0) + (item.total_losses || 0);
+                const winRate = totalEngagements > 0 ? ((item.total_kills || 0) / totalEngagements * 100).toFixed(1) : 0;
+                
                 totalsCardContainer.innerHTML = `
-                    <div class="data-card search-total">
-                        <h2>${item.name}</h2>
-                        <p><strong data-translate="card.totalVictims">Total Victims:</strong> ${item.total_kills !== undefined ? item.total_kills : 'N/A'}</p>
-                        <p><strong data-translate="card.totalAwakenings">Total Awakenings:</strong> ${item.total_losses !== undefined ? item.total_losses : 'N/A'}</p>
+                    <div class="data-card search-total enhanced-player-card">
+                        <div class="card-header">
+                            <div class="profile-section">
+                                <div class="profile-image-container">
+                                    <img src="${assetBasePath}assets/images/awakened.avif" alt="Player Profile" class="profile-image">
+                                </div>
+                                <div class="profile-info">
+                                    <h2 class="player-name">${item.name}</h2>
+                                    <span class="player-status" data-translate="card.combatPilot">Combat Pilot</span>
+                                </div>
+                            </div>
+                            <div class="header-stats">
+                                <div class="header-stat">
+                                    <div class="header-stat-value killer">${item.total_kills || 0}</div>
+                                    <div class="header-stat-label" data-translate="card.totalVictims">Victims</div>
+                                </div>
+                                <div class="header-stat">
+                                    <div class="header-stat-value victim">${item.total_losses || 0}</div>
+                                    <div class="header-stat-label" data-translate="card.totalAwakenings">Awakenings</div>
+                                </div>
+                                <div class="header-stat">
+                                    <div class="header-stat-value">${killDeathRatio}</div>
+                                    <div class="header-stat-label" data-translate="card.kdRatio">K/D Ratio</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-item secondary">
+                                <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                                <div class="stat-content">
+                                    <span class="stat-value">${winRate}%</span>
+                                    <span class="stat-label" data-translate="card.winRate">Win Rate</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item secondary">
+                                <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                                <div class="stat-content">
+                                    <span class="stat-value">${totalEngagements}</span>
+                                    <span class="stat-label" data-translate="card.totalEngagements">Total Engagements</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 `;
             } else if (type === "system" && item) {
+                // Calculate additional system statistics
+                const avgIncidentsPerDay = item.incident_count && item.days_active ? (item.incident_count / item.days_active).toFixed(1) : "< 1";
+                const threatLevel = item.incident_count > 100 ? 'HIGH' : item.incident_count > 50 ? 'MEDIUM' : 'LOW';
+                const threatClass = threatLevel === 'HIGH' ? 'threat-high' : threatLevel === 'MEDIUM' ? 'threat-medium' : 'threat-low';
+                
                 totalsCardContainer.innerHTML = `
-                    <div class="data-card search-total">
-                        <h2>${item.solar_system_name || 'N/A'}</h2>
-                        <p><strong data-translate="card.solarSystemID">Solar System ID:</strong> ${item.solar_system_id || 'N/A'}</p>
-                        <p><strong data-translate="card.incidentCount">Incident Count:</strong> ${item.incident_count !== undefined ? item.incident_count : 'N/A'}</p>
+                    <div class="data-card search-total enhanced-system-card">
+                        <div class="card-header">
+                            <div class="system-section">
+                                <div class="system-image-container">
+                                    <img src="https://images.evetech.net/types/3796/render" alt="Solar System" class="system-image">
+                                </div>
+                                <div class="system-info">
+                                    <h2 class="system-name">${item.solar_system_name || 'Unknown System'}</h2>
+                                    <span class="system-region" data-translate="card.region">Region: Unknown</span>
+                                </div>
+                            </div>
+                            <div class="header-stats">
+                                <div class="header-stat">
+                                    <div class="header-stat-value">${item.incident_count || 0}</div>
+                                    <div class="header-stat-label" data-translate="card.incidentCount">Incidents</div>
+                                </div>
+                                <div class="header-stat">
+                                    <div class="header-stat-value ${threatClass}">${threatLevel}</div>
+                                    <div class="header-stat-label" data-translate="card.threatLevel">Threat Level</div>
+                                </div>
+                                <div class="header-stat">
+                                    <div class="header-stat-value">${avgIncidentsPerDay}</div>
+                                    <div class="header-stat-label" data-translate="card.avgPerDay">Avg/Day</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-item secondary">
+                                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                                <div class="stat-content">
+                                    <span class="stat-value">${item.days_active || 'N/A'}</span>
+                                    <span class="stat-label" data-translate="card.activeDays">Active Days</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 `;
             } else {
-                 totalsCardContainer.innerHTML = `<p data-translate="search.noAggregatedData">No aggregated data found for this type.</p>`;
+                totalsCardContainer.innerHTML = `<p data-translate="search.noAggregatedData">No aggregated data found for this type.</p>`;
             }
         }
-
+    
         /**
          * Display the search results using createIncidentCard from utils.js.
          */
         function displaySearchResults(data) {
             const container = document.getElementById('results-container');
             container.innerHTML = ""; // Clear previous results
-
+    
             if (!data || data.length === 0) {
                 container.innerHTML = `<p data-translate="search.noResults">No results found.</p>`;
                 return;
             }
-
+    
             data.forEach(item => {
                 // Use createIncidentCard from js/utils.js
                 const card = createIncidentCard(item);
-                container.appendChild(card);
+                if (card) {
+                    container.appendChild(card);
+                }
             });
+    
+            // Add click listeners to the newly created cards
+            if (typeof addIncidentCardListeners === 'function') {
+                addIncidentCardListeners();
+            }
         }
-
+    
         document.addEventListener("DOMContentLoaded", () => {
             // Initialize the page, including navigation and language settings
             initializePage('search');
-
+    
             const searchButton = document.getElementById('searchBtn');
             const searchInput = document.getElementById('searchQuery');
-
+    
             searchButton.addEventListener('click', () => {
                 const query = searchInput.value.trim();
                 if (query === "") {
@@ -158,12 +286,15 @@
                 }
                 performSearch(query);
             });
-
+    
             searchInput.addEventListener('keypress', (event) => {
                 if (event.key === "Enter") {
                     searchButton.click();
                 }
             });
+            
+            // Pre-fill search form if URL parameters are present
+            prefillSearchForm();
             
             // Initial translation for static elements after page load
             if (typeof setLanguage === 'function') {

@@ -14,6 +14,15 @@
     .incident-card {
         max-width: 100%;
     }
+
+    .header-stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .header-stat {
+        min-width: auto;
+    }
     
 
     .topnav {
@@ -204,6 +213,43 @@
     .detail-label {
         min-width: auto;
     }
+    .profile-section,
+    .system-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .profile-image-container,
+    .system-image-container {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .player-name,
+    .system-name {
+        font-size: 1.4rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 15px;
+    }
+    
+    .stat-item {
+        padding: 12px;
+    }
+    
+    .stat-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .stat-value {
+        font-size: 1.2rem;
+    }
 }
 
 /* Further responsive adjustments for smaller screens if needed for photos */
@@ -252,4 +298,164 @@
     .topnav a.active {
         animation: scifiPulse 2.5s ease-in-out infinite;
     }
+    .incident-list-item {
+        gap: 15px; /* Reduce gap on smaller screens */
+        padding: 10px 15px; /* Reduce padding */
+    }
+    
+    .incident-combatants {
+        min-width: 120px; /* Further reduce min-width */
+    }
+    
+    .incident-details-compact {
+        min-width: 100px; /* Further reduce min-width */
+    }
+    
+    .incident-timestamp {
+        min-width: 100px; /* Further reduce min-width */
+    }
+    
+    .combatant-name,
+    .detail-value {
+        font-size: 0.8rem; /* Slightly smaller font */
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .incident-list-item {
+        gap: 10px; /* Further reduce gap */
+        padding: 8px 12px; /* Further reduce padding */
+    }
+    
+    .incident-photos {
+        gap: 6px; /* Reduce photo gap */
+    }
+    
+    .photo-container {
+        width: 35px; /* Smaller photos */
+        height: 35px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .card-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .profile-section,
+    .system-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .header-stats {
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    .profile-image-container,
+    .system-image-container {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .enhanced-player-card .player-name,
+    .enhanced-system-card .system-name {
+        font-size: 1.4rem;
+    }
+    
+    .header-stat-value {
+        font-size: 1.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 15px;
+    }
+    
+    .stat-item {
+        padding: 10px;
+    }
+    
+    .stat-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+    }
+    
+    .stat-value {
+        font-size: 1.1rem;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    /* ... existing mobile styles ... */
+    
+    .incident-list-item {
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px;
+        align-items: stretch;
+        width: 100%; /* Ensure full width */
+        box-sizing: border-box; /* Include padding in width */
+    }
+    
+    .incident-photos {
+        justify-content: center;
+        gap: 12px;
+    }
+    
+    .photo-container {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .incident-combatants {
+        min-width: auto;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .incident-details-compact {
+        min-width: auto;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .incident-timestamp {
+        align-items: center;
+        min-width: auto;
+    }
+    
+    .timestamp-group {
+        align-items: center;
+        text-align: center;
+    }
+    
+    .incident-id-compact {
+        min-width: auto;
+    }
+
+    /* Container adjustments for mobile */
+    .container {
+        max-width: 100%;
+        margin: auto auto;
+        padding: 20px;
+        box-sizing: border-box; /* Added */
+    }
+    
+    /* Remove text overflow restrictions on mobile for better readability */
+    .combatant-name,
+    .detail-value,
+    .id-value {
+        white-space: normal; /* Allow wrapping on mobile */
+        text-overflow: clip; /* Remove ellipsis on mobile */
+        overflow: visible; /* Allow overflow on mobile */
+    }
+
+    /* ... rest of existing mobile styles ... */
 }
