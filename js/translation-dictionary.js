@@ -172,7 +172,55 @@ const translations = {
     		ru: "Количество инцидентов:",
     		zh: "事件数量:",
     		es: "Cantidad de incidentes:"
-  	}
+  	},
+	"card.combatIncident": {
+            en: "COMBAT INCIDENT",
+            ru: "БОЕВОЙ ИНЦИДЕНТ",
+            zh: "战斗事件",
+            es: "INCIDENTE DE COMBATE"
+        },
+        "card.idLabel": {
+            en: "ID:",
+            ru: "ID:",
+            zh: "ID:",
+            es: "ID:"
+        },
+        "card.aggressor": {
+            en: "AGGRESSOR",
+            ru: "АТАКУЮЩИЙ", // "Attacker"
+            zh: "攻击方",     // "Attacking Side"
+            es: "AGRESOR"
+        },
+        "card.casualty": {
+            en: "CASUALTY",
+            ru: "ПОСТРАДАВШИЙ", // "The one who suffered/casualty"
+            zh: "受损方",       // "Damaged Party / Casualty Side"
+            es: "BAJA"          // "Casualty (military term)"
+        },
+        "card.location": {
+            en: "LOCATION:",
+            ru: "МЕСТОПОЛОЖЕНИЕ:",
+            zh: "地点:",
+            es: "UBICACIÓN:"
+        },
+        "card.hostileActivity": {
+            en: "HOSTILE ACTIVITY CONFIRMED",
+            ru: "ВРАЖДЕБНАЯ АКТИВНОСТЬ ПОДТВЕРЖДЕНА",
+            zh: "已确认敌对活动",
+            es: "ACTIVIDAD HOSTIL CONFIRMADA"
+        },
+        "card.localTimeLabel": {
+            en: "LOCAL TIME:",
+            ru: "МЕСТНОЕ ВРЕМЯ:",
+            zh: "当地时间:",
+            es: "HORA LOCAL:"
+        },
+        "card.utcTimeLabel": {
+            en: "UTC TIME:",
+            ru: "ВРЕМЯ UTC:",
+            zh: "UTC 时间:",
+            es: "HORA UTC:"
+        }
       	// Extend further as needed...
 };
 

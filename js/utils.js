@@ -92,10 +92,22 @@ function toggleTimezone() {
             '<i class="far fa-clock"></i> Show Local';
     }
 
-    // Update label text
-    const timestampLabels = document.querySelectorAll('.detail-label[data-translate="card.timestamp"]');
+    // Update label text for timestamp dynamically
+    const timestampLabels = document.querySelectorAll('.timestamp-row .detail-label');
+    const currentLang = document.documentElement.lang || (typeof languages !== 'undefined' ? languages[0] : 'en');
+
     [...timestampLabels].map(label => {
-        label.textContent = showLocalTime ? 'LOCAL TIME:' : 'UTC TIME:';
+        const newKey = showLocalTime ? "card.localTimeLabel" : "card.utcTimeLabel";
+        label.setAttribute("data-translate", newKey);
+
+        if (typeof translations !== 'undefined' && translations[newKey] && translations[newKey][currentLang]) {
+            label.textContent = translations[newKey][currentLang];
+        } else {
+            let fallbackText = newKey.replace('card.', '').replace('Label', '');
+            fallbackText = `${fallbackText.charAt(0).toUpperCase() + fallbackText.slice(1)} TIME:`;
+            label.textContent = fallbackText;
+            console.warn(`Translation not found for key: ${newKey}, lang: ${currentLang}. Using fallback.`);
+        }
     });
 }
 
@@ -159,13 +171,11 @@ function getTimeElapsed(timestamp) {
  * @returns {HTMLElement} - The created card element
  */
 function createIncidentCard(item) {
-    // Validation
     if (!item || typeof item !== "object") {
         console.warn("Invalid item passed to createIncidentCard:", item);
         return null;
     }
 
-    // Check if all essential fields would result in "N/A"
     const isEffectivelyEmpty = (
         !item.killer_name &&
         !item.victim_name &&
@@ -182,29 +192,26 @@ function createIncidentCard(item) {
     const card = document.createElement("div");
     card.classList.add("data-card", "incident-card");
 
-    // Store the raw timestamp for timezone toggling
     if (item.time_stamp) {
         card.dataset.timestamp = item.time_stamp;
     }
 
-    // Determine base path for assets based on the HTML page's location
     const isIndexPage = window.location.pathname.endsWith("index.html") || window.location.pathname === "/";
     const assetBasePath = isIndexPage ? '' : '../';
 
-    // Format timestamp in local time and get elapsed time
-    const formattedTimestamp = item.time_stamp ? formatTimestamp(item.time_stamp, true) : 'N/A';
+    const formattedTimestamp = item.time_stamp ? formatTimestamp(item.time_stamp, showLocalTime) : 'N/A';
     const timeElapsed = item.time_stamp ? getTimeElapsed(item.time_stamp) : '';
 
-    const timeLabel = showLocalTime ? 'LOCAL TIME:' : 'UTC TIME:';
+    const timeLabelKey = showLocalTime ? "card.localTimeLabel" : "card.utcTimeLabel";
 
     card.innerHTML = `
         <div class="incident-header">
             <div class="incident-status">
                 <i class="fas fa-skull-crossbones"></i>
-                <span class="status-text">COMBAT INCIDENT</span>
+                <span class="status-text" data-translate="card.combatIncident"></span>
             </div>
             <div class="incident-id">
-                <span class="id-label">ID:</span>
+                <span class="id-label" data-translate="card.idLabel"></span>
                 <span class="id-value">${item.solar_system_id || 'UNKNOWN'}</span>
             </div>
         </div>
@@ -213,7 +220,7 @@ function createIncidentCard(item) {
             <div class="combatant killer-section">
                 <div class="combatant-label">
                     <i class="fas fa-crosshairs"></i>
-                    <span data-translate="card.aggressor">AGGRESSOR</span>
+                    <span data-translate="card.aggressor"></span>
                 </div>
                 <div class="combatant-name killer">${item.killer_name || 'UNKNOWN'}</div>
             </div>
@@ -226,7 +233,7 @@ function createIncidentCard(item) {
             <div class="combatant victim-section">
                 <div class="combatant-label">
                     <i class="fas fa-shield-halved"></i>
-                    <span data-translate="card.casualty">CASUALTY</span>
+                    <span data-translate="card.casualty"></span>
                 </div>
                 <div class="combatant-name victim">${item.victim_name || 'UNKNOWN'}</div>
             </div>
@@ -236,7 +243,7 @@ function createIncidentCard(item) {
             <div class="detail-row">
                 <div class="detail-item">
                     <i class="fas fa-tag"></i>
-                    <span class="detail-label" data-translate="card.lossType">LOSS TYPE:</span>
+                    <span class="detail-label" data-translate="card.lossType"></span>
                     <span class="detail-value">${item.loss_type || 'CLASSIFIED'}</span>
                 </div>
             </div>
@@ -244,7 +251,7 @@ function createIncidentCard(item) {
             <div class="detail-row">
                 <div class="detail-item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span class="detail-label" data-translate="card.location">LOCATION:</span>
+                    <span class="detail-label" data-translate="card.location"></span>
                     <span class="detail-value">${item.solar_system_name || 'UNKNOWN SECTOR'}</span>
                 </div>
             </div>
@@ -252,7 +259,7 @@ function createIncidentCard(item) {
             <div class="detail-row timestamp-row">
                 <div class="detail-item">
                     <i class="far fa-clock"></i>
-                    <span class="detail-label" data-translate="card.timestamp">${timeLabel}</span>
+                    <span class="detail-label" data-translate="${timeLabelKey}"></span>
                     <span class="detail-value timestamp-value">${formattedTimestamp}</span>
                 </div>
                 ${timeElapsed ? `<div class="time-elapsed">${timeElapsed}</div>` : ''}
@@ -262,7 +269,7 @@ function createIncidentCard(item) {
         <div class="incident-footer">
             <div class="threat-level">
                 <span class="threat-indicator"></span>
-                <span class="threat-text">HOSTILE ACTIVITY CONFIRMED</span>
+                <span class="threat-text" data-translate="card.hostileActivity"></span>
             </div>
         </div>
     `;
