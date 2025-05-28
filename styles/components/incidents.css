@@ -1,0 +1,322 @@
+/* Data container */
+#data-container {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--color-text-light);
+    width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Incident list items fill their wrapper */
+.incident-list-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 20px;
+    margin-bottom:var(--spacing-sm);
+    background: var(--gradient-medium);
+    border: var(--border-primary);
+    border-radius:var(--spacing-sm);
+    color: var(--color-text-primary);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.incident-list-item:hover {
+    background: linear-gradient(135deg, rgba(54, 54, 54, 0.95) 0%, rgba(42, 42, 42, 0.98) 100%);
+    border-color: rgba(211, 47, 47, 0.5);
+    box-shadow: 0 0 15px rgba(211, 47, 47, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Photo section */
+.incident-photos {
+    display: flex;
+    align-items: center;
+    gap:var(--spacing-sm);
+    flex-shrink: 0;
+}
+
+.photo-container {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    background-color: var(--color-bg-medium);
+    clip-path: polygon(15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%, 0% 15%);
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+}
+
+.killer-photo {
+    border-color: rgba(255, 167, 38, 0.6);
+    box-shadow: 0 0var(--spacing-sm) rgba(255, 167, 38, 0.3), inset 0 0 5px rgba(0,0,0,0.5);
+}
+
+.victim-photo {
+    border-color: rgba(255, 82, 82, 0.6);
+    box-shadow: 0 0var(--spacing-sm) rgba(255, 82, 82, 0.3), inset 0 0 5px rgba(0,0,0,0.5);
+}
+
+.combatant-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.vs-indicator {
+    color: rgba(211, 47, 47, 0.8);
+    font-size: 0.8rem;
+    margin: 0 var(--spacing-xs);
+}
+
+/* Combatants section */
+.incident-combatants {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    min-width: 200px;
+    flex: 1;
+}
+
+.combatant-info {
+    display: flex;
+    align-items: center;
+    gap:var(--spacing-sm);
+}
+
+.combatant-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #aaa;
+    min-width: 60px;
+}
+
+.combatant-name {
+    font-family: 'Exo 2', monospace;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    text-decoration: underline;
+}
+
+.clickable-system {
+    text-decoration: underline;
+}
+
+.combatant-name.killer {
+    color: var(--color-secondary);
+    text-shadow: 0 0 5px rgba(255, 167, 38, 0.3);
+}
+
+.combatant-name.victim {
+    color: var(--color-primary-light);
+    text-shadow: 0 0 5px rgba(255, 82, 82, 0.3);
+}
+
+/* Details section */
+.incident-details-compact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    min-width: 180px;
+    flex: 1;
+}
+
+.detail-group {
+    display: flex;
+    align-items: center;
+    gap:var(--spacing-sm);
+}
+
+.detail-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-light);
+    min-width: 70px;
+}
+
+.detail-value {
+    font-family: 'Exo 2', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+/* Timestamp section */
+.incident-timestamp {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 160px;
+    flex-shrink: 0;
+}
+
+.timestamp-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.timestamp-label {
+    font-size: 0.6rem;
+    color: var(--color-text-muted);
+}
+
+.timestamp-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--color-primary);
+    text-shadow: 0 0 5px rgba(211, 47, 47, 0.4);
+}
+
+.time-elapsed {
+    font-family: 'Exo 2', monospace;
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+/* ID section */
+.incident-id-compact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+.id-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.6rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+}
+
+.id-value {
+    font-family: 'Exo 2', monospace;
+    font-size: 0.8rem;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Container adjustments for list view */
+.container {
+    max-width: 95%;
+    width: fit-content;
+}
+
+@media screen and (max-width: 1000px) {
+    .incident-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .incident-card {
+        max-width: 100%;
+    }
+
+    .incident-list-item {
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px;
+        align-items: stretch;
+    }
+    
+    .incident-photos {
+        justify-content: center;
+        gap: 12px;
+    }
+    
+    .photo-container {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .incident-combatants {
+        min-width: auto;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .incident-details-compact {
+        min-width: auto;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .incident-timestamp {
+        align-items: center;
+        min-width: auto;
+    }
+    
+    .timestamp-group {
+        align-items: center;
+        text-align: center;
+    }
+    
+    .incident-id-compact {
+        min-width: auto;
+    }
+    /* Reduce glow effects on mobile for performance */
+    h1 {
+        text-shadow:
+            0 0 15px rgba(211, 47, 47, 0.5),
+            0 2px var(--spacing-xs) rgba(0, 0, 0, 0.8);
+    }
+
+    .topnav {
+        box-shadow:
+            0 2px 15px rgba(211, 47, 47, 0.2),
+            0 1px 5px rgba(0, 0, 0, 0.4);
+    }
+
+    .vs-divider {
+        transform: rotate(90deg);
+        margin: 10px 0;
+    }
+
+    .vs-line {
+        width: 30px;
+        height: 2px;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .detail-label {
+        min-width: auto;
+    }
+    
+}
+
+/* Further responsive adjustments for smaller screens if needed for photos */
+@media screen and (max-width: 400px) {
+    .combatant-photo-container {
+        width: 50px; /* Even smaller on very small screens */
+        height: 50px;
+    }
+    .combatant-name {
+        font-size: 1rem; /* Slightly smaller name on very small screens */
+    }
+    .container {
+        max-width: 95%;
+        padding: 15px;
+    }
+}

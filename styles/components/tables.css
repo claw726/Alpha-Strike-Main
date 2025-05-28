@@ -1,0 +1,116 @@
+/* Container variant for monthly tables */
+.container.monthly-tables {
+    margin: auto;
+    background:
+        linear-gradient(135deg, rgba(24, 24, 24, 0.95) 0%, rgba(32, 32, 32, 0.9) 100%);
+    border: 1px solid rgba(211, 47, 47, 0.4);
+    max-width: fit-content;
+}
+
+/* Table styles */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius:var(--spacing-sm);
+    border: var(--border-primary);
+}
+
+table {
+    margin: auto;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background:
+        linear-gradient(135deg, rgba(28, 28, 28, 0.95) 0%, rgba(20, 20, 20, 0.98) 100%);
+    font-family: 'Exo 2', monospace;
+}
+
+th, td {
+    padding: 1var(--spacing-xs);
+    border: 1px solid rgba(211, 47, 47, 0.2);
+    text-align: left;
+    position: relative;
+}
+
+th {
+    background: linear-gradient(135deg,
+        rgba(211, 47, 47, 0.9) 0%,
+        rgba(139, 0, 0, 1) 50%,
+        rgba(211, 47, 47, 0.9) 100%);
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    box-shadow: var(--shadow-inset);
+}
+
+th:last-child,
+td:last-child {
+    text-align: right;
+}
+
+/* Sci-fi table row hover effect */
+tbody tr {
+    transition: all 0.3s ease;
+}
+
+tbody tr:hover {
+    background: rgba(211, 47, 47, 0.1);
+    box-shadow: inset 0 0 20px rgba(211, 47, 47, 0.2);
+}
+
+/* Table Styling for .monthly-tables */
+.monthly-tables table {
+    width: fit-content;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.95em;
+    box-shadow:
+        0 0 30px rgba(211, 47, 47, 0.2),
+        0var(--spacing-sm)var(--spacing-xl) rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    overflow: hidden;
+    border: var(--border-primary);
+}
+
+.monthly-tables th,
+.monthly-tables td {
+    padding:var(--spacing-md) 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(211, 47, 47, 0.2);
+}
+
+.monthly-tables th {
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Orbitron', monospace;
+}
+
+.monthly-tables tbody tr:nth-child(even) {
+    background-color: rgba(57, 58, 58, 0.3);
+}
+
+.monthly-tables tbody tr:hover {
+    background: rgba(211, 47, 47, 0.1);
+    box-shadow: inset 0 0 20px rgba(211, 47, 47, 0.2);
+}
+
+.monthly-tables tbody tr:last-child td {
+    border-bottom: none;
+}
+
+@media screen and (max-width: 1000px) {
+.table-responsive {
+    border-radius: 6px;
+}
+
+.monthly-tables th,
+.monthly-tables td {
+    padding: 12pxvar(--spacing-sm);
+    font-size: 0.85rem;
+}
+    
+}
