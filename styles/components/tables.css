@@ -1,48 +1,63 @@
 /* Container variant for monthly tables */
-.container.monthly-tables {
-    margin: auto;
-    background:
-        linear-gradient(135deg, rgba(24, 24, 24, 0.95) 0%, rgba(32, 32, 32, 0.9) 100%);
-    border: 1px solid rgba(211, 47, 47, 0.4);
-    max-width: fit-content;
+/* Container variant for monthly tables */  
+.container.monthly-tables {  
+    margin: var(--spacing-lg) auto;  
+    background: linear-gradient(135deg, rgba(20, 20, 20, 0.97) 0%, rgba(28, 28, 28, 0.92) 100%); /* Reversed for depth */  
+    border: 1px solid rgba(var(--color-primary), 0.6);  
+    max-width: fit-content;  
+    padding: var(--spacing-sm); /* Reduced padding slightly */  
+    border-radius: 6px; /* Sharper corners */  
+    box-shadow: var(--shadow-glow-primary);  
+}
+ 
+.table-responsive {  
+    overflow-x: auto;  
+    -webkit-overflow-scrolling: touch;  
+    border-radius: 5px; /* Slightly sharper */  
+    border: 1px solid rgba(30,30,30,0.7); /* Dark border for the responsive container */  
 }
 
-/* Table styles */
-.table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius:var(--spacing-sm);
-    border: var(--border-primary);
+table {  
+    margin: auto;  
+    width: 100%;  
+    border-collapse: separate; /* Allows border-spacing */  
+    border-spacing: 0;  
+    background: var(--gradient-dark);  
+    font-family: var(--font-primary);  
+    border-radius: 4px; /* Sharper table corners */  
+    overflow: hidden;  
+    box-shadow: var(--shadow-inset);  
 }
 
-table {
-    margin: auto;
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background:
-        linear-gradient(135deg, rgba(28, 28, 28, 0.95) 0%, rgba(20, 20, 20, 0.98) 100%);
-    font-family: 'Exo 2', monospace;
+th, td {  
+    padding: var(--spacing-sm) var(--spacing-md);  
+    border: none; /* Remove individual borders first */  
+    text-align: left;  
+    position: relative;  
+    color: var(--color-text-light);  
+    text-shadow: var(--shadow-text-muted);  
+    border-bottom: var(--border-primary); /* Apply only bottom border to cells for row separation */  
 }
 
-th, td {
-    padding: 1var(--spacing-xs);
-    border: 1px solid rgba(211, 47, 47, 0.2);
-    text-align: left;
-    position: relative;
+table th:first-child,  
+table td:first-child {  
+    padding-left: var(--spacing-lg);  
 }
 
-th {
-    background: linear-gradient(135deg,
-        rgba(211, 47, 47, 0.9) 0%,
-        rgba(139, 0, 0, 1) 50%,
-        rgba(211, 47, 47, 0.9) 100%);
-    color: #fff;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-    box-shadow: var(--shadow-inset);
+table th:last-child,  
+table td:last-child {  
+    padding-right: var(--spacing-lg);  
+}
+
+th {  
+    background: VAR(--gradient-primary);
+    color: var(--color-text-primary);  
+    font-family: var(--font-secondary);  
+    font-weight: 700;  
+    text-transform: uppercase;  
+    letter-spacing: 1.2px; /* Adjusted for Orbitron */  
+    text-shadow: var(--shadow-glow-primary);  
+    border-bottom: var(--border-primary-strong); /* Strong red underline for headers */  
 }
 
 th:last-child,
@@ -51,66 +66,77 @@ td:last-child {
 }
 
 /* Sci-fi table row hover effect */
-tbody tr {
-    transition: all 0.3s ease;
+tbody tr {  
+    transition: background-color 0.25s ease-out, box-shadow 0.25s ease-out, color 0.2s ease-in-out;  
 }
 
-tbody tr:hover {
-    background: rgba(211, 47, 47, 0.1);
-    box-shadow: inset 0 0 20px rgba(211, 47, 47, 0.2);
+tbody tr:nth-child(even) {  
+    background-color: rgba(0, 0, 0, 0.25); /* Darker, more pronounced striping */  
 }
 
-/* Table Styling for .monthly-tables */
-.monthly-tables table {
-    width: fit-content;
-    border-collapse: collapse;
-    margin-top: 20px;
-    font-size: 0.95em;
-    box-shadow:
-        0 0 30px rgba(211, 47, 47, 0.2),
-        0var(--spacing-sm)var(--spacing-xl) rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-    overflow: hidden;
-    border: var(--border-primary);
+tbody tr:nth-child(odd) {  
+    background-color: rgba(10, 10, 10, 0.15); /* Subtle dark for odd rows */  
 }
 
-.monthly-tables th,
-.monthly-tables td {
-    padding:var(--spacing-md) 20px;
-    text-align: center;
-    border-bottom: 1px solid rgba(211, 47, 47, 0.2);
+tbody tr:hover {  
+    background-color: var(--color-primary-light);  
+    box-shadow: var(--shadow-inset);  
+    color: #fff; /* Ensure text is bright on hover */  
 }
 
-.monthly-tables th {
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-family: 'Orbitron', monospace;
+tbody tr:last-child td {  
+    border-bottom: none; /* No border for the last row's cells */  
 }
+  
+.monthly-tables th,  
+.monthly-tables td {  
+    text-align: center; /* Center text for monthly tables */  
+}  
+  
+/* Ensure last child in monthly tables is also centered if it was right-aligned by general rule */  
+.monthly-tables th:last-child,  
+.monthly-tables td:last-child {  
+    text-align: center;  
+}  
 
-.monthly-tables tbody tr:nth-child(even) {
-    background-color: rgba(57, 58, 58, 0.3);
-}
-
-.monthly-tables tbody tr:hover {
-    background: rgba(211, 47, 47, 0.1);
-    box-shadow: inset 0 0 20px rgba(211, 47, 47, 0.2);
-}
-
-.monthly-tables tbody tr:last-child td {
-    border-bottom: none;
-}
 
 @media screen and (max-width: 1000px) {
-.table-responsive {
-    border-radius: 6px;
+.table-responsive {  
+        border-radius: 3px;  
+    }  
+  
+    th, td {  
+        padding: var(--spacing-xs) var(--spacing-sm);  
+        font-size: 0.9rem;  
+    }  
+      
+    .monthly-tables th,  
+    .monthly-tables td {  
+        font-size: 0.85rem;  
+    }  
+  
+    th {  
+        letter-spacing: 1px;  
+    }
+    
 }
 
-.monthly-tables th,
-.monthly-tables td {
-    padding: 12pxvar(--spacing-sm);
-    font-size: 0.85rem;
-}
-    
+@media screen and (max-width: 600px) {  
+    th, td {  
+        font-size: 0.8rem;  
+        letter-spacing: 0.5px; /* Reduce letter spacing on small screens */  
+    }  
+    .monthly-tables th,  
+    .monthly-tables td {  
+        font-size: 0.75rem;  
+    }  
+    table th:first-child,  
+    table td:first-child {  
+        padding-left: var(--spacing-md);  
+    }  
+  
+    table th:last-child,  
+    table td:last-child {  
+        padding-right: var(--spacing-md);  
+    }  
 }

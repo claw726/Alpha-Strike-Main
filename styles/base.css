@@ -131,6 +131,8 @@ h1 > i,
     box-shadow: 0 -5px 20px rgba(211, 47, 47, 0.1);
 }
 
+
+
 @media screen and (max-width: 600px) {
     body {
         background-attachment: scroll;
