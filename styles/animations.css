@@ -1,8 +1,16 @@
 /* Sci-fi loading animation */
 @keyframes dataStream {
-    0% { opacity: 0.3; transform: translateX(-100%); }
-    50% { opacity: 1; }
-    100% { opacity: 0.3; transform: translateX(100%); }
+    0% {
+        opacity: 0.3;
+        transform: translateX(-100%);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.3;
+        transform: translateX(100%);
+    }
 }
 
 /* Add subtle animation to data cards */
@@ -22,7 +30,8 @@
 }
 
 @keyframes threatPulse {
-    0%, 100% {
+    0%,
+    100% {
         opacity: 1;
         transform: scale(1);
     }
@@ -33,6 +42,10 @@
 }
 
 @keyframes floatingButtonGlow {
-    0% { opacity: 0.4; }
-    100% { opacity: 0.8; }
+    0% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 0.8;
+    }
 }

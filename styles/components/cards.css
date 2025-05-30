@@ -18,7 +18,7 @@
 /* Sci-fi corner accents */
 .data-card::before,
 .data-card::after {
-    content: '';
+    content: "";
     position: absolute;
     width: 20px;
     height: 20px;
@@ -44,7 +44,7 @@
     margin-bottom: 15px;
     color: var(--color-primary);
     text-shadow: 0 0 10px rgba(211, 47, 47, 0.4);
-    font-family: 'Orbitron', monospace;
+    font-family: "Orbitron", monospace;
     letter-spacing: 1px;
 }
 
@@ -59,18 +59,19 @@
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
-
-
 #totals-card {
     text-align: center;
-    background:
-        linear-gradient(135deg, rgba(32, 32, 32, 0.95) 0%, rgba(24, 24, 24, 0.98) 100%);
+    background: linear-gradient(
+        135deg,
+        rgba(32, 32, 32, 0.95) 0%,
+        rgba(24, 24, 24, 0.98) 100%
+    );
     padding: 20px;
     border-radius: 0;
     margin-top: 20px;
     border: var(--border-primary);
     box-shadow: 0 0 15px rgba(211, 47, 47, 0.1);
-    margin-bottom: 3rem;;
+    margin-bottom: 3rem;
 }
 
 .timestamp {
@@ -85,13 +86,13 @@
 .victim {
     color: var(--color-primary-light);
     font-weight: 600;
-    text-shadow: 0 0var(--spacing-sm) rgba(255, 82, 82, 0.4);
+    text-shadow: 0 0var (--spacing-sm) rgba(255, 82, 82, 0.4);
 }
 
 .killer {
     color: var(--color-secondary);
     font-weight: 600;
-    text-shadow: 0 0var(--spacing-sm) rgba(255, 167, 38, 0.4);
+    text-shadow: 0 0var (--spacing-sm) rgba(255, 167, 38, 0.4);
 }
 
 @media screen and (max-width: 800px) {

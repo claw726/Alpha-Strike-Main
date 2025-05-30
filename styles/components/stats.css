@@ -5,9 +5,9 @@
 
 .enhanced-player-card .player-status,
 .enhanced-system-card .system-id {
-    font-family: 'Exo 2', monospace;
+    font-family: "Exo 2", monospace;
     font-size: 0.8rem;
-    color: #C0C0C0 !important;
+    color: #c0c0c0 !important;
     text-transform: uppercase;
     letter-spacing: 1px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
@@ -16,10 +16,12 @@
 
 .card-header {
     padding: 20px;
-    background: linear-gradient(135deg,
+    background: linear-gradient(
+        135deg,
         rgba(211, 47, 47, 0.9) 0%,
         rgba(139, 0, 0, 1) 50%,
-        rgba(211, 47, 47, 0.9) 100%);
+        rgba(211, 47, 47, 0.9) 100%
+    );
     border-bottom: 1px solid rgba(211, 47, 47, 0.3);
     display: flex;
     align-items: center;
@@ -48,7 +50,16 @@
 
 .system-image-container {
     border-radius: 0;
-    clip-path: polygon(15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%, 0% 15%);
+    clip-path: polygon(
+        15% 0%,
+        85% 0%,
+        100% 15%,
+        100% 85%,
+        85% 100%,
+        15% 100%,
+        0% 85%,
+        0% 15%
+    );
 }
 
 .profile-image,
@@ -82,7 +93,7 @@
 
 /* New styling for system region - less prominent */
 .enhanced-system-card .system-region {
-    font-family: 'Exo 2', monospace;
+    font-family: "Exo 2", monospace;
     font-size: 0.7rem; /* Smaller than system-id */
     color: #888 !important; /* More muted color */
     text-transform: uppercase;
@@ -100,9 +111,9 @@
     font-family: var(--font-primary);
     font-size: 1.6rem; /* Slightly smaller to fit better */
     font-weight: 700;
-    color: #FFFFFF !important;
-    text-shadow: 
-        0 0 15px rgba(255, 255, 255, 0.5), 
+    color: #ffffff !important;
+    text-shadow:
+        0 0 15px rgba(255, 255, 255, 0.5),
         0 2px 4px rgba(0, 0, 0, 0.8) !important;
 }
 
@@ -110,7 +121,7 @@
 .enhanced-system-card .system-id {
     font-family: var(--font-secondary);
     font-size: 0.8rem;
-    color: #C0C0C0 !important;
+    color: #c0c0c0 !important;
     text-transform: uppercase;
     letter-spacing: 1px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
@@ -168,19 +179,22 @@
 }
 
 .header-stat-value.threat-medium {
-    color:  var(--color-secondary);
+    color: var(--color-secondary);
     text-shadow: 0 0 15px rgba(255, 167, 38, 0.4);
 }
 
 .header-stat-value.threat-low {
-    color: #4CAF50;
+    color: #4caf50;
     text-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
 }
 
 /* Compact stats grid - for remaining stats */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Smaller minimum width */
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(180px, 1fr)
+    ); /* Smaller minimum width */
     gap: 12px; /* Reduced gap */
     padding: 15px 20px; /* Reduced padding */
 }
@@ -233,7 +247,7 @@
 }
 
 .stat-value {
-    font-family: 'Exo 2', monospace;
+    font-family: "Exo 2", monospace;
     font-size: 1.2rem; /* Smaller value */
     font-weight: 700;
     color: #fff;
@@ -242,20 +256,19 @@
 }
 
 .stat-label {
-    font-family: 'Orbitron', monospace;
+    font-family: "Orbitron", monospace;
     font-size: 0.7rem; /* Smaller label */
     color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-
 @media screen and (max-width: 600px) {
     .header-stats {
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .header-stat {
         min-width: auto;
     }
@@ -266,39 +279,38 @@
         text-align: center;
         gap: 15px;
     }
-    
+
     .profile-image-container,
     .system-image-container {
         width: 60px;
         height: 60px;
     }
-    
+
     .player-name,
     .system-name {
         font-size: 1.4rem;
     }
-    
+
     .stats-grid {
         grid-template-columns: 1fr;
         gap: 10px;
         padding: 15px;
     }
-    
+
     .stat-item {
         padding: 12px;
     }
-    
+
     .stat-icon {
         width: 35px;
         height: 35px;
         font-size: 1rem;
     }
-    
+
     .stat-value {
         font-size: 1.2rem;
     }
 }
-
 
 @media screen and (max-width: 800px) {
     .card-header {
@@ -306,55 +318,55 @@
         gap: 15px;
         text-align: center;
     }
-    
+
     .profile-section,
     .system-section {
         flex-direction: column;
         text-align: center;
         gap: 15px;
     }
-    
+
     .header-stats {
         justify-content: center;
         gap: 20px;
     }
-    
+
     .profile-image-container,
     .system-image-container {
         width: 60px;
         height: 60px;
     }
-    
+
     .enhanced-player-card .player-name,
     .enhanced-system-card .system-name {
         font-size: 1.4rem;
     }
-    
+
     .enhanced-player-card .player-status,
     .enhanced-system-card .system-region {
-        color: #C0C0C0 !important; /* Maintain consistent mobile styling */
+        color: #c0c0c0 !important; /* Maintain consistent mobile styling */
     }
-    
+
     .header-stat-value {
         font-size: 1.5rem;
     }
-    
+
     .stats-grid {
         grid-template-columns: 1fr;
         gap: 10px;
         padding: 15px;
     }
-    
+
     .stat-item {
         padding: 10px;
     }
-    
+
     .stat-icon {
         width: 28px;
         height: 28px;
         font-size: 0.9rem;
     }
-    
+
     .stat-value {
         font-size: 1.1rem;
     }
