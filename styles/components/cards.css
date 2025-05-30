@@ -1,7 +1,7 @@
 .data-card {
     background: var(--gradient-medium);
     border: var(--border-primary);
-    border-radius: 10px;
+    border-radius: 0;
     padding: 25px;
     margin-bottom: 25px;
     box-shadow:
@@ -66,10 +66,11 @@
     background:
         linear-gradient(135deg, rgba(32, 32, 32, 0.95) 0%, rgba(24, 24, 24, 0.98) 100%);
     padding: 20px;
-    border-radius:var(--spacing-sm);
+    border-radius: 0;
     margin-top: 20px;
     border: var(--border-primary);
     box-shadow: 0 0 15px rgba(211, 47, 47, 0.1);
+    margin-bottom: 3rem;;
 }
 
 .timestamp {

@@ -43,7 +43,6 @@
     letter-spacing: 1px;
     position: relative;
     transition: all 0.3s ease;
-    border-radius: var(--spacing-xs);
     margin: 0 2px;
 }
 
@@ -61,7 +60,6 @@
         rgba(211, 47, 47, 0.1) 100%);
     opacity: 0;
     transition: opacity 0.3s ease;
-    border-radius: var(--spacing-xs);
     z-index: -1;
 }
 
@@ -116,7 +114,6 @@
     background: transparent;
     color: var(--color-text-secondary);
     border: var(--border-primary);
-    border-radius: var(--spacing-xs);
     cursor: pointer;
     opacity: 1;
     position: relative;
@@ -137,7 +134,6 @@
         rgba(211, 47, 47, 0.1) 100%);
     opacity: 0;
     transition: opacity 0.3s ease;
-    border-radius: var(--spacing-xs);
     z-index: -1;
 }
 

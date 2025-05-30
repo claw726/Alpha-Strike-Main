@@ -2,18 +2,18 @@
 /* Container variant for monthly tables */  
 .container.monthly-tables {  
     margin: var(--spacing-lg) auto;  
-    background: linear-gradient(135deg, rgba(20, 20, 20, 0.97) 0%, rgba(28, 28, 28, 0.92) 100%); /* Reversed for depth */  
+    background: linear-gradient(135deg, rgba(20, 20, 20, 0.97) 0%, rgba(28, 28, 28, 0.92) 100%);
     border: 1px solid rgba(var(--color-primary), 0.6);  
     max-width: fit-content;  
-    padding: var(--spacing-sm); /* Reduced padding slightly */  
-    border-radius: 6px; /* Sharper corners */  
+    padding: 2rem; /* Reduced padding slightly */  
+    border-radius: 0px; /* Sharper corners */  
     box-shadow: var(--shadow-glow-primary);  
 }
  
 .table-responsive {  
     overflow-x: auto;  
     -webkit-overflow-scrolling: touch;  
-    border-radius: 5px; /* Slightly sharper */  
+    border-radius: 0px; /* Slightly sharper */  
     border: 1px solid rgba(30,30,30,0.7); /* Dark border for the responsive container */  
 }
 
@@ -24,19 +24,20 @@ table {
     border-spacing: 0;  
     background: var(--gradient-dark);  
     font-family: var(--font-primary);  
-    border-radius: 4px; /* Sharper table corners */  
+    border-radius: 0px; /* Sharper table corners */  
     overflow: hidden;  
     box-shadow: var(--shadow-inset);  
 }
 
 th, td {  
-    padding: var(--spacing-sm) var(--spacing-md);  
+    padding: var(--spacing-md) var(--spacing-md);  
     border: none; /* Remove individual borders first */  
     text-align: left;  
     position: relative;  
     color: var(--color-text-light);  
     text-shadow: var(--shadow-text-muted);  
     border-bottom: var(--border-primary); /* Apply only bottom border to cells for row separation */  
+    font-weight: bold;
 }
 
 table th:first-child,  
@@ -81,7 +82,8 @@ tbody tr:nth-child(odd) {
 tbody tr:hover {  
     background-color: var(--color-primary-light);  
     box-shadow: var(--shadow-inset);  
-    color: #fff; /* Ensure text is bright on hover */  
+    color: #fff; /* Ensure text is bright on hover */
+    font-weight: bolder;
 }
 
 tbody tr:last-child td {  
@@ -102,7 +104,7 @@ tbody tr:last-child td {
 
 @media screen and (max-width: 1000px) {
 .table-responsive {  
-        border-radius: 3px;  
+        border-radius: 0px;  
     }  
   
     th, td {  

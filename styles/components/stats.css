@@ -39,7 +39,7 @@
     position: relative;
     width: 80px;
     height: 80px;
-    border-radius: 50%;
+    border-radius: 0;
     overflow: hidden;
     border: 3px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 0 20px rgba(211, 47, 47, 0.4);
@@ -47,7 +47,7 @@
 }
 
 .system-image-container {
-    border-radius: 12px;
+    border-radius: 0;
     clip-path: polygon(15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%, 0% 15%);
 }
 
@@ -191,7 +191,7 @@
     gap: 10px; /* Reduced gap */
     padding: 12px; /* Reduced padding */
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px; /* Smaller radius */
+    border-radius: 0; /* Smaller radius */
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
 }
@@ -209,6 +209,8 @@
 
 .stat-item.secondary {
     border-color: rgba(255, 255, 255, 0.2);
+    width: fit-content;
+    margin: auto;
 }
 
 .stat-icon {
@@ -218,7 +220,7 @@
     align-items: center;
     justify-content: center;
     background: rgba(211, 47, 47, 0.2);
-    border-radius: 50%;
+    border-radius: 0;
     color: #fff;
     font-size: 1rem; /* Smaller icon */
     flex-shrink: 0;
