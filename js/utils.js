@@ -1,4 +1,3 @@
-
 // Global var to track timezone prefs
 let showLocalTime = true;
 
@@ -75,6 +74,9 @@ function formatTimestamp(timestamp, showLocal = true) {
 function toggleTimezone() {
     showLocalTime = !showLocalTime;
 
+    // Get current language from HTML tag once at the beginning
+    const currentLang = document.documentElement.lang || (typeof languages !== 'undefined' ? languages[0] : 'en');
+
     // Update all timestamp displays
     const timestampElements = document.querySelectorAll('.timestamp-value');
     [...timestampElements].map(element => {
@@ -84,17 +86,30 @@ function toggleTimezone() {
         }
     });
 
-    // Update toggle button text
+    // Update toggle button text using localization
     const toggleBtn = document.getElementById('timezone-toggle');
     if (toggleBtn) {
-        toggleBtn.innerHTML = showLocalTime ?
-            '<i class="far fa-clock"></i> Show UTC' :
-            '<i class="far fa-clock"></i> Show Local';
+        const toggleSpan = toggleBtn.querySelector('span[data-translate]');
+        if (toggleSpan) {
+            const newKey = showLocalTime ? "timezone.showUtc" : "timezone.showLocal";
+            toggleSpan.setAttribute("data-translate", newKey);
+
+            // Look up the translation
+            const translationEntry = translations[newKey];
+            const translation = translationEntry ? translationEntry[currentLang] : undefined;
+
+            if (translation) {
+                toggleSpan.textContent = translation;
+            } else {
+                // Fallback to English or key if translation is missing
+                toggleSpan.textContent = translationEntry ? translationEntry['en'] : newKey;
+                console.warn(`Translation not found for key: ${newKey}, lang: ${currentLang}. Using fallback.`);
+            }
+        }
     }
 
     // Update label text for timestamp dynamically
-    const timestampLabels = document.querySelectorAll('.timestamp-row .detail-label');
-    const currentLang = document.documentElement.lang || (typeof languages !== 'undefined' ? languages[0] : 'en');
+    const timestampLabels = document.querySelectorAll('.timestamp-group .detail-label'); // Corrected selector
 
     [...timestampLabels].map(label => {
         const newKey = showLocalTime ? "card.localTimeLabel" : "card.utcTimeLabel";
@@ -217,18 +232,18 @@ function createIncidentCard(item) {
                 <img src="${placeholderProfileImage}" alt="Victim" class="combatant-photo"/>
             </div>
         </div>
-        
+
         <div class="incident-combatants">
             <div class="combatant-info killer-info">
                 <span class="combatant-label" data-translate="card.aggressor"></span>
-                <span class="combatant-name killer clickable-name" data-name="${item.killer_name || ''}" title="Click to search for ${item.killer_name || 'UNKNOWN'}">${item.killer_name || 'UNKNOWN'}</span>
+                <span class="combatant-name killer clickable-name" data-name="${item.killer_name || ''}" title="Click to search for ${item.killer_name || 'UNKNOWN'}">${item.killer_name  || 'UNKNOWN'}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
             </div>
             <div class="combatant-info victim-info">
                 <span class="combatant-label" data-translate="card.casualty"></span>
-                <span class="combatant-name victim clickable-name" data-name="${item.victim_name || ''}" title="Click to search for ${item.victim_name || 'UNKNOWN'}">${item.victim_name || 'UNKNOWN'}</span>
+                <span class="combatant-name victim clickable-name" data-name="${item.victim_name || ''}" title="Click to search for ${item.victim_name || 'UNKNOWN'}">${item.victim_name || 'UNKNOWN'}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
             </div>
         </div>
-        
+
         <div class="incident-details-compact">
             <div class="detail-group">
                 <span class="detail-label" data-translate="card.lossType"></span>
@@ -236,10 +251,10 @@ function createIncidentCard(item) {
             </div>
             <div class="detail-group">
                 <span class="detail-label" data-translate="card.location"></span>
-                <span class="detail-value clickable-system" data-system="${item.solar_system_name || ''}" title="Click to search for ${item.solar_system_name || 'UNKNOWN'}">${item.solar_system_name || 'UNKNOWN'}</span>
+                <span class="detail-value clickable-system" data-system="${item.solar_system_name || ''}" title="Click to search for ${item.solar_system_name || 'UNKNOWN'}">${item.solar_system_name || 'UNKNOWN'}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
             </div>
         </div>
-        
+
         <div class="incident-timestamp">
             <div class="timestamp-group">
                 <span class="detail-label timestamp-label" data-translate="${timeLabelKey}"></span>
@@ -266,10 +281,10 @@ function navigateToSearch(query, type) {
     // Determine the correct path to search.html based on current page
     const isIndexPage = window.location.pathname.endsWith("index.html") || window.location.pathname === "/";
     const searchPagePath = isIndexPage ? 'pages/search.html' : 'search.html';
-    
+
     // Create URL with search parameters
     const searchUrl = `${searchPagePath}?query=${encodeURIComponent(query)}&type=${type}`;
-    
+
     // Navigate to search page
     window.location.href = searchUrl;
 }

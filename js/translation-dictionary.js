@@ -186,13 +186,13 @@ const translations = {
             es: "ID:"
         },
         "card.aggressor": {
-            en: "AGGRESSOR",
-            ru: "АТАКУЮЩИЙ", // "Attacker"
-            zh: "攻击方",     // "Attacking Side"
-            es: "AGRESOR"
+            en: "AGGRESSOR:",
+            ru: "АТАКУЮЩИЙ:", // "Attacker"
+            zh: "攻击方:",     // "Attacking Side"
+            es: "AGRESOR:"
         },
         "card.casualty": {
-            en: "CASUALTY",
+            en: "CASUALTY:", // "&nbsp;" is used to ensure proper spacing in HTML
             ru: "ПОСТРАДАВШИЙ", // "The one who suffered/casualty"
             zh: "受损方",       // "Damaged Party / Casualty Side"
             es: "BAJA"          // "Casualty (military term)"
@@ -268,7 +268,57 @@ const translations = {
         ru: "Регион",
         zh: "区域",
         es: "Región"
+    },
+	    // Hero Section Localizations
+    "hero.title": {
+        en: 'Alpha-Strike Killboard',
+        ru: 'Alpha-Strike Доска Убийств',
+        zh: "Alpha-Strike 击杀榜",
+        es: "Tablero de Muertes Alpha-Strike"
+    },
+    "hero.tagline": {
+        en: "Track the fiercest PvP action in the EVE Frontier galaxy.",
+        ru: "Отслеживайте самые ожесточенные PvP-сражения в галактике EVE Frontier.",
+        zh: "追踪 EVE Frontier 星系中最激烈的 PvP 行动。",
+        es: "Sigue la acción PvP más feroz en la galaxia EVE Frontier."
+    },
+    "intro.heading": {
+        en: "Welcome to the Alpha-Strike Killboard",
+        ru: "Добро пожаловать на Доску Убийств Alpha-Strike",
+        zh: "欢迎来到 Alpha-Strike 击杀榜",
+        es: "Bienvenido al Tablero de Muertes Alpha-Strike"
+    },
+    "intro.paragraph1": {
+        en: "This is your ultimate source for tracking the most tenacious killers and the deadliest battles in EVE Frontier. Whether you're a seasoned pilot or a newcomer, our killboard provides detailed statistics and leaderboards to keep you informed about the ongoing PvP action across the galaxy.",
+        ru: "Это ваш главный источник информации о самых упорных убийцах и смертоносных сражениях в EVE Frontier. Независимо от того, являетесь ли вы опытным пилотом или новичком, наша доска убийств предоставляет подробную статистику и таблицы лидеров, чтобы держать вас в курсе текущих PvP-событий по всей галактике.",
+        zh: "这是您追踪 EVE Frontier 中最顽强的杀手和最致命的战斗的终极来源。无论您是经验丰富的飞行员还是新手，我们的击杀榜都提供详细的统计数据和排行榜，让您了解整个星系正在进行的 PvP 行动。",
+        es: "Esta es tu fuente definitiva para rastrear a los asesinos más tenaces y las batallas más mortíferas en EVE Frontier. Ya seas un piloto experimentado o un recién llegado, nuestro tablero de muertes proporciona estadísticas detalladas y tablas de clasificación para mantenerte informado sobre la acción PvP en curso en toda la galaxia."
+    },
+    "intro.paragraph2": {
+        en: "Explore monthly rolling averages, top killers, and much more. Stay sharp, stay informed, and dominate the frontier.",
+        ru: "Изучите скользящие средние за месяц, лучших убийц и многое другое. Оставайтесь бдительными, будьте в курсе и доминируйте на фронтире.",
+        zh: "探索月度滚动平均、顶级杀手等等。保持敏锐，保持信息灵通，主宰前沿。",
+        es: "Explora promedios mensuales móviles, los mejores asesinos y mucho más. Mantente alerta, mantente informado y domina la frontera."
+    },
+    "cta.viewKillers": {
+        en: "View Top Killers",
+        ru: "Посмотреть Лучших Убийц",
+        zh: "查看顶级杀手",
+        es: "Ver Principales Asesinos"
+    },
+	    "timezone.showUtc": {
+        en: "Show UTC",
+        ru: "Показать UTC",
+        zh: "显示 UTC",
+        es: "Mostrar UTC"
+    },
+    "timezone.showLocal": {
+        en: "Show Local",
+        ru: "Показать местное",
+        zh: "显示本地时间",
+        es: "Mostrar hora local"
     }
+
       	// Extend further as needed...
 };
 
