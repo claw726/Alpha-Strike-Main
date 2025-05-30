@@ -132,7 +132,7 @@
   text-transform: uppercase;
   letter-spacing: 0.3px;
   text-decoration: underline;
-  min-width: 200px; /* Ensure enough space for name */
+  min-width: 300px; /* Ensure enough space for name */
   margin-left: 1.5rem;
   cursor: pointer;
 }
@@ -204,6 +204,7 @@
 .timestamp-label {
   font-size: 0.6rem;
   color: var(--color-text-muted);
+  text-align: right;
 }
 
 .timestamp-value {
