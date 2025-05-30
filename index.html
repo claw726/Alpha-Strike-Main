@@ -30,51 +30,53 @@
         />
     </head>
     <body>
-        <!-- Navigation will be inserted here -->
-        <div id="navigation-container"></div>
+        <main>
+            <!-- Navigation will be inserted here -->
+            <div id="navigation-container"></div>
 
-        <div class="landing-content">
-            <section class="hero-section">
-                <h1>
-                    <i class="fa-solid fa-skull-crossbones"></i>
-                    <span data-translate="hero.title"></span>
-                </h1>
-                <p class="tagline" data-translate="hero.tagline"></p>
-            </section>
+            <div class="landing-content">
+                <section class="hero-section">
+                    <h1>
+                        <i class="fa-solid fa-skull-crossbones"></i>
+                        <span data-translate="hero.title"></span>
+                    </h1>
+                    <p class="tagline" data-translate="hero.tagline"></p>
+                </section>
 
-            <section class="intro-section">
-                <h2 data-translate="intro.heading"></h2>
-                <p data-translate="intro.paragraph1"></p>
-                <p data-translate="intro.paragraph2"></p>
-            </section>
+                <section class="intro-section">
+                    <h2 data-translate="intro.heading"></h2>
+                    <p data-translate="intro.paragraph1"></p>
+                    <p data-translate="intro.paragraph2"></p>
+                </section>
 
-            <section class="call-to-action">
-                <a
-                    href="pages/killers.html"
-                    class="btn-primary"
-                    data-translate="cta.viewKillers"
-                    >View Top Killers</a
+                <section class="call-to-action">
+                    <a
+                        href="pages/killers.html"
+                        class="btn-primary"
+                        data-translate="cta.viewKillers"
+                        >View Top Killers</a
+                    >
+                </section>
+            </div>
+
+            <h1>
+                <i class="fa-sharp fa-solid fa-trophy"></i>
+                <span data-translate="page.stamped-header"
+                    >Recently Stamped Mails</span
                 >
-            </section>
-        </div>
+            </h1>
+            <div id="data-container" class="container"></div>
 
-        <h1>
-            <i class="fa-sharp fa-solid fa-trophy"></i>
-            <span data-translate="page.stamped-header"
-                >Recently Stamped Mails</span
+            <!-- Floating timezone toggle button -->
+            <button
+                id="timezone-toggle"
+                class="timezone-toggle-floating"
+                onclick="toggleTimezone()"
             >
-        </h1>
-        <div id="data-container" class="container"></div>
-
-        <!-- Floating timezone toggle button -->
-        <button
-            id="timezone-toggle"
-            class="timezone-toggle-floating"
-            onclick="toggleTimezone()"
-        >
-            <i class="far fa-clock"></i>
-            <span data-translate="timezone.showUtc">Show UTC</span>
-        </button>
+                <i class="far fa-clock"></i>
+                <span data-translate="timezone.showUtc">Show UTC</span>
+            </button>
+        </main>
 
         <!-- Added Footer -->
         <footer class="site-footer">

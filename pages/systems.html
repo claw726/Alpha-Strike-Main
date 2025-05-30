@@ -30,32 +30,34 @@
         />
     </head>
     <body>
-        <!-- Top Navigation Bar with Language Switcher -->
-        <div id="navigation-container"></div>
+        <main>
+            <!-- Top Navigation Bar with Language Switcher -->
+            <div id="navigation-container"></div>
 
-        <h1>
-            <i class="fa-solid fa-map-location-dot"></i>
-            <span data-translate="header.leadingSystemsByIncidents"
-                >Systems by Incidents</span
-            >
-        </h1>
-        <div class="container monthly-tables">
-            <h1 data-translate="header.rollingMonthly">
-                Rolling Monthly Average
+            <h1>
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span data-translate="header.leadingSystemsByIncidents"
+                    >Systems by Incidents</span
+                >
             </h1>
-            <div id="data-container">Loading data...</div>
-            <table id="systemTable" style="display: none">
-                <thead>
-                    <tr>
-                        <th data-translate="table.name">Name</th>
-                        <th data-translate="table.numIncidents">
-                            Number of Incidents
-                        </th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+            <div class="container monthly-tables">
+                <h1 data-translate="header.rollingMonthly">
+                    Rolling Monthly Average
+                </h1>
+                <div id="data-container">Loading data...</div>
+                <table id="systemTable" style="display: none">
+                    <thead>
+                        <tr>
+                            <th data-translate="table.name">Name</th>
+                            <th data-translate="table.numIncidents">
+                                Number of Incidents
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </main>
         <!-- Scripts -->
         <script src="../js/translation-dictionary.js"></script>
         <script src="../js/utils.js"></script>
