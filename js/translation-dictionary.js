@@ -1,6 +1,6 @@
 // Translation dictionary for selected elements.
 // Translation dictionary for selected elements.
-var translations = {};
+var translations = {}; // This will be populated by the JSON file loaded at runtime. (e.g., from .localization/translations.json)
 
 const languages = ["en", "es", "ru", "zh"];
 
