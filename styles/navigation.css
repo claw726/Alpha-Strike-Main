@@ -100,7 +100,7 @@
     rgba(211, 47, 47, 0.8) 100%
   );
   color: #ffff;
-  transform: translateY(-2px);
+  transform: translateY(2px);
   box-shadow:
     0 6px 20px rgba(211, 47, 47, 0.4),
     var(--shadow-inset);
