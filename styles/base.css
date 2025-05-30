@@ -15,7 +15,7 @@ body {
             rgba(139, 0, 0, 0.15) 0%,
             transparent 50%
         ),
-        url("../assets/images/blackholes2.avif");
+        url("../assets/images/synth_field.avif");
     background-size: cover, cover, cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -59,7 +59,7 @@ body::before {
     box-shadow:
         0 0 30px rgba(211, 47, 47, 0.2),
         var(--shadow-inset),
-        0var (--spacing-sm) var(--spacing-xl) rgba(0, 0, 0, 0.6);
+        0 var(--spacing-sm) var(--spacing-xl) rgba(0, 0, 0, 0.6);
     position: relative;
     backdrop-filter: blur(10px);
     overflow: hidden;
