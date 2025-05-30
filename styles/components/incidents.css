@@ -59,14 +59,14 @@
 .killer-photo {
     border-color: rgba(255, 167, 38, 0.6);
     box-shadow:
-        0 0var (--spacing-sm) rgba(255, 167, 38, 0.3),
+        0 0 var(--spacing-sm) rgba(255, 167, 38, 0.3),
         inset 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .victim-photo {
     border-color: rgba(255, 82, 82, 0.6);
     box-shadow:
-        0 0var (--spacing-sm) rgba(255, 82, 82, 0.3),
+        0 0 var(--spacing-sm) rgba(255, 82, 82, 0.3),
         inset 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
@@ -219,6 +219,47 @@
     font-size: 0.7rem;
     color: var(--color-text-muted);
     font-style: italic;
+}
+
+/* Container for the detail link, helps with positioning within the card */
+.incident-detail-link-container {
+    display: flex;
+    justify-content: flex-end; /* Example: align to the right */
+    align-items: center;
+    padding-top: var(--spacing-sm); /* Add some space above the link */
+    /* If your card items are in a grid/flex layout, this might need different positioning */
+}
+
+a.view-killmail-details-link.icon-only-link {
+    display: inline-flex; /* Or flex, to help center the icon */
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-sm); /* Adjust padding to get desired button size */
+    color: var(--color-text-secondary); /* Icon color */
+    border: 1px solid var(--color-primary-dark); /* Subtle border */
+    border-radius: var(--radius-sm); /* Rounded corners */
+    background-color: rgba(var(--color-bg-medium-rgb, 26, 26, 26), 0.5); /* Slightly transparent background, define --color-bg-medium-rgb or use a direct rgba value */
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+a.view-killmail-details-link.icon-only-link:hover,
+a.view-killmail-details-link.icon-only-link:focus {
+    color: #fff; /* Brighter icon color on hover/focus */
+    background-color: var(--color-primary); /* Use primary color for background */
+    border-color: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary-dark);
+}
+
+a.view-killmail-details-link.icon-only-link i {
+    font-size: 1rem; /* Adjust icon size as needed */
+    line-height: 1; /* Ensure icon is vertically centered if padding causes issues */
+}
+
+.no-detail-link {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    padding: var(--spacing-sm);
 }
 
 /* ID section */

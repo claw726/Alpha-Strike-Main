@@ -153,6 +153,17 @@ h1 > i,
     box-shadow: 0 -5px 20px rgba(211, 47, 47, 0.1);
 }
 
+.note {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-top: 20px;
+    text-align: center;
+    padding: 10px;
+    background: rgba(18, 18, 18, 0.8);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(211, 47, 47, 0.2);
+}
+
 @media screen and (max-width: 600px) {
     body {
         background-attachment: scroll;

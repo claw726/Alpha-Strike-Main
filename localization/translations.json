@@ -83,12 +83,6 @@
     "zh": "事件数量",
     "es": "Número de Incidentes"
   },
-  "header.rollingMonthly": {
-    "en": "Rolling Monthly Average",
-    "ru": "Скользящее среднее за месяц",
-    "zh": "滚动月平均",
-    "es": "Promedio Mensual Móvil"
-  },
   "search.byName": {
     "en": "Search by Name",
     "ru": "Поиск по имени",
@@ -328,5 +322,66 @@
     "ru": "Нет данных для этой метрики.",
     "zh": "此指标无可用数据。",
     "es": "No hay datos disponibles para esta métrica."
+  },
+  "button.rangeDay": {
+    "en": "Day",
+    "ru": "День",
+    "zh": "日",
+    "es": "Día"
+  },
+  "button.rangeWeek": {
+    "en": "Week",
+    "ru": "Неделя",
+    "zh": "周",
+    "es": "Semana"
+  },
+  "button.rangeMonth": {
+    "en": "Month",
+    "ru": "Месяц",
+    "zh": "月",
+    "es": "Mes"
+  },
+  "header.rollingDay": {
+    "en": "Rolling Daily Average",
+    "ru": "Скользящее среднее за день",
+    "zh": "每日滚动平均",
+    "es": "Promedio Móvil Diario"
+  },
+  "header.rollingWeek": {
+    "en": "Rolling Weekly Average",
+    "ru": "Скользящее среднее за неделю",
+    "zh": "每周滚动平均",
+    "es": "Promedio Móvil Semanal"
+  },
+  "header.rollingMonth": {
+    "en": "Rolling Monthly Average",
+    "ru": "Скользящее среднее за месяц",
+    "zh": "每月滚动平均",
+    "es": "Promedio Móvil Mensual"
+  },
+  "link.viewKillmailDetails": {
+    "en": "View Details",
+    "ru": "Подробнее",
+    "zh": "查看详情",
+    "es": "Ver Detalles"
+  },
+  "link.noDetailsAvailableError": {
+    "en": "Details N/A (Error)",
+    "ru": "Детали Н/Д (Ошибка)",
+    "zh": "详情不可用 (错误)",
+    "es": "Detalles N/D (Error)"
+  },
+  "tooltip.searchFor": {
+    "en": "Search for {itemName}",
+    "ru": "Поиск {itemName}",
+    "zh": "搜索 {itemName}",
+    "es": "Buscar {itemName}"
+  },
+  "tooltip.viewKillmailDetails": {
+    "en": "View details for killmail {killmailId}",
+    "ru": "Посмотреть детали отчёта {killmailId}",
+    "zh": "查看击杀报告 {killmailId} 的详情",
+    "es": "Ver detalles del reporte de muerte {killmailId}"
   }
+  
 }
