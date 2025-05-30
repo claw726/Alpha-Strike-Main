@@ -4,74 +4,141 @@
  * @param {string} tableId - The ID of the table element to display the data in.
  */
 async function fetchAndDisplayMetric(metric, tableId) {
-  try {
-    const data = await fetchMonthlyTotals();
-    const metricData = data[metric];
+  const CACHE_KEY_PREFIX = "monthly_totals_";
+  const CACHE_DURATION_MS = 10 * 60 * 1000; // 10 minutes in milliseconds
 
-    // Remove the "Loading" message
-    const dataContainer = document.getElementById("data-container");
+  const cacheKey = `${CACHE_KEY_PREFIX}${metric}`;
+  const dataContainer = document.getElementById("data-container");
+  const table = document.getElementById(tableId);
+  const tableBody = table ? table.querySelector("tbody") : null;
+
+  if (!table || !tableBody) {
+    console.error(`Table or table body not found for ID ${tableId}`);
     if (dataContainer) {
-      dataContainer.textContent = "";
+      dataContainer.textContent = "Error: UI Elements Missing.";
     }
+    return;
+  }
 
-    // Show the table
-    const table = document.getElementById(tableId);
-    if (!table) {
-      console.error(`Table with ID ${tableId} not found.`);
-      return;
-    }
-    table.style.display = "table";
-
-    // Get the table body and clear any existing rows
-    const tableBody = table.querySelector("tbody");
-    if (!tableBody) {
-      console.error(`Table body not found in table with ID ${tableId}.`);
-      return;
-    }
-    tableBody.innerHTML = "";
-
-    // Create table rows based on metric type
-    if (metricData && Array.isArray(metricData)) {
-      metricData.forEach((item) => {
-        const tr = document.createElement("tr");
-        let nameCellContent = "";
-        let valueCellContent = "";
-
-        if (metric === "top_systems") {
-          const systemName = item.solar_system_name || "UNKNOWN";
-          nameCellContent = `<span class="clickable-system" data-system="${systemName}" title="Click to search for ${systemName}">${systemName}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>`;
-          valueCellContent = item.incident_count;
-        } else if (metric === "top_killers") {
-          const killerName = item.name || "UNKNOWN";
-          nameCellContent = `<span class="clickable-name" data-name="${killerName}" title="Click to search for ${killerName}">${killerName}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>`;
-          valueCellContent = item.kills;
-        } else if (metric === "top_victims") {
-          const victimName = item.name || "UNKNOWN";
-          nameCellContent = `<span class="clickable-name" data-name="${victimName}" title="Click to search for ${victimName}">${victimName}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>`;
-          valueCellContent = item.losses;
-        }
-
-        tr.innerHTML = `
-                    <td>${nameCellContent}</td>
-                    <td>${valueCellContent}</td>
-                `;
-        tableBody.appendChild(tr);
-      });
-    } else {
-      console.warn(`No data or invalid data format for metric: ${metric}`);
-      if (dataContainer) {
-        dataContainer.textContent = "No data available for this metric.";
+  // Attempt to load from cache first
+  try {
+    const cachedItem = localStorage.getItem(cacheKey);
+    if (cachedItem) {
+      const { timestamp, data } = JSON.parse(cachedItem);
+      if (Date.now() - timestamp < CACHE_DURATION_MS) {
+        console.log(`Using cached data for metric: ${metric}`);
+        const metricData = data[metric];
+        displayMetricDataInTable(
+          metricData,
+          table,
+          tableBody,
+          metric,
+          dataContainer,
+        );
+        return;
+      } else {
+        console.log(`Cache expired for metric: ${metric}`);
+        localStorage.removeItem(cacheKey);
       }
     }
-
-    // Add event listeners after table is populated
-    addTableClickListeners(tableId);
   } catch (error) {
-    console.error("Error fetching or displaying metric data:", error);
-    const dataContainer = document.getElementById("data-container");
+    console.error("Error reading from localstorage:", error);
+  }
+
+  try {
     if (dataContainer) {
-      dataContainer.textContent = "Failed to load data.";
+      dataContainer.innerHTML = `<p data-translate="loading.data">Loading data...</p>`;
     }
+
+    const apiData = await fetchMonthlyTotals();
+
+    try {
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({ timestamp: Date.now(), data: apiData }),
+      );
+    } catch (error) {
+      console.error("Error writing to localstorage:", error);
+    }
+
+    const metricData = apiData[metric];
+    displayMetricDataInTable(
+      metricData,
+      table,
+      tableBody,
+      metric,
+      dataContainer,
+    );
+  } catch (error) {
+    dataContainer.innerHTML = `<p data-translate="error.loadFailed">Failed to load data.</p>`;
+  }
+}
+
+/**
+ * Helper function to display metric data in the table.
+ * This separates the display logic from the fetching/caching logic.
+ * @param {Array} metricData - The actual data array for the metric (e.g., data.top_killers)
+ * @param {HTMLElement} table - The table element
+ * @param {HTMLElement} tableBody - The tbody element of the table
+ * @param {string} metric - The metric type ("top_systems", "top_killers", "top_victims")
+ * @param {HTMLElement} dataContainer - The loading/message container
+ */
+function displayMetricDataInTable(
+  metricData,
+  table,
+  tableBody,
+  metric,
+  dataContainer,
+) {
+  if (dataContainer) {
+    dataContainer.innerHTML = "";
+  }
+  table.style.display = "table";
+  tableBody.innerHTML = "";
+
+  if (metricData && Array.isArray(metricData) && metricData.length > 0) {
+    [...metricData].map((item) => {
+      const tr = document.createElement("tr");
+      let nameCellContent = "";
+      let valueCellContent = "";
+
+      if (metric === "top_systems") {
+        const systemName = item.solar_system_name || "UNKNOWN";
+        nameCellContent = `<span class="clickable-system" data-system="${systemName}" title="Click to search for ${systemName}">${systemName}<i class="fas fa-arrow-up-right-from-square"></i></span>`;
+        valueCellContent = item.kills || item.incident_count || 0;
+      } else if (metric === "top_killers" || metric === "top_victims") {
+        const characterName = item.name || "UNKNOWN";
+        nameCellContent = `<span class="clickable-name" data-name="${characterName}" title="Click to search for ${characterName}">${characterName}<i class="fas fa-arrow-up-right-from-square"></i></span>`;
+        valueCellContent =
+          metric === "top_killers"
+            ? item.kills || item.incident_count || 0
+            : item.losses || item.incident_count || 0;
+      }
+
+      tr.innerHTML = `
+        <td>${nameCellContent}</td>
+        <td>${valueCellContent}</td>
+      `;
+      tableBody.appendChild(tr);
+    });
+  } else {
+    console.warn(`No data or invalid data for metric: ${metric}`);
+    if (dataContainer) {
+      dataContainer.innerHTML = `<p data-translate="error.noData">No data or invalid data for metric: ${metric}</p>`;
+      table.style.display = "none";
+    }
+  }
+
+  addTableClickListeners(table.id);
+
+  if (
+    typeof setLanguage === "function" &&
+    typeof languages !== "undefined" &&
+    languages.length > 0
+  ) {
+    const currentLang =
+      localStorage.getItem("preferredLanguage") || languages[0];
+    setLanguage(currentLang);
   }
 }
 
@@ -82,7 +149,10 @@ async function fetchAndDisplayMetric(metric, tableId) {
  */
 function addTableClickListeners(tableId) {
   const table = document.getElementById(tableId);
-  if (!table) return;
+  if (!table) {
+    console.error(`Table with ID ${tableId} not found.`);
+    return;
+  }
 
   // Add listeners for clickable names
   table.querySelectorAll(".clickable-name").forEach((element) => {

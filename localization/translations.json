@@ -310,5 +310,23 @@
     "ru": "Показать местное",
     "zh": "显示本地时间",
     "es": "Mostrar hora local"
+  },
+  "loading.data": {
+    "en": "Loading data...",
+    "ru": "Загрузка данных...",
+    "zh": "正在加载数据...",
+    "es": "Cargando datos..."
+  },
+  "error.loadFailed": {
+    "en": "Failed to load data.",
+    "ru": "Не удалось загрузить данные.",
+    "zh": "数据加载失败。",
+    "es": "Error al cargar los datos."
+  },
+  "error.noData": {
+    "en": "No data available for this metric.",
+    "ru": "Нет данных для этой метрики.",
+    "zh": "此指标无可用数据。",
+    "es": "No hay datos disponibles para esta métrica."
   }
 }
