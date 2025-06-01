@@ -4,9 +4,20 @@
     <meta charset="UTF-8" />
     <title>Killmail Details - Alpha-Strike</title> <link rel="shortcut icon" href="../favicon.png" />
     <link rel="stylesheet" href="../styles/main.css" />
-    <link rel="stylesheet" href="../styles/navigation.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" ... />
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2..." rel="stylesheet" />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+            integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+            rel="stylesheet"
+        />
 </head>
 <body>
     <div id="navigation-container"></div>
@@ -23,14 +34,10 @@
         <p>All EVE-Frontier related materials are property of CCP Games</p>
     </footer>
 
-    <script src="../js/translation-dictionary.js"></script>
-    <script src="../js/utils.js"></script> <script src="../js/api.js"></script>   <script src="../components/navigation.js"></script>
-    <script src="../js/common.js"></script>
-
-    
-
-    <script>
-    document.addEventListener("DOMContentLoaded", async () => {
+    <script type="module">
+        import { initializePage } from '../js/common.js'; // Path adjusted
+        import { formatTimestamp, showLocalTime, addIncidentCardListeners } from '../js/utils.js'; // Path adjusted. Export 'showLocalTime' from utils if used directly.
+        document.addEventListener("DOMContentLoaded", async () => {
         initializePage("killmail_detail"); // Or a suitable identifier
 
         const urlParams = new URLSearchParams(window.location.search);

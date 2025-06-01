@@ -1,10 +1,14 @@
+import { translations, setLanguage } from './translation-dictionary.js';
+import { fetchDailyTotals, fetchWeeklyTotals, fetchMonthlyTotals } from './api.js';
+import { navigateToSearch } from './utils.js';
+
 /**
  * Fetches the totals data from the API for a specific time range and renders the appropriate metric, with caching.
  * @param {string} metric - One of "top_systems", "top_killers", or "top_victims"
  * @param {string} tableId - The ID of the table element to display the data in.
  * @param {string} timeRange - The time range for the filter ('day', 'week', 'month'). Default is 'month'.
  */
-async function fetchAndDisplayMetric(metric, tableId, timeRange = 'month') {
+export async function fetchAndDisplayMetric(metric, tableId, timeRange = 'month') {
     const CACHE_KEY_PREFIX = "totals_"; // Updated prefix
     const CACHE_DURATION_MS = { // Different durations for different ranges
         'day': 5 * 60 * 1000,    // 5 minutes for daily
@@ -105,7 +109,7 @@ async function fetchAndDisplayMetric(metric, tableId, timeRange = 'month') {
  * Helper function to display metric data in the table.
  * (Slightly modified to accept timeRange for context if needed, and update table header)
  */
-function displayMetricDataInTable(metricData, table, tableBody, metric, dataContainer, timeRange) {
+export function displayMetricDataInTable(metricData, table, tableBody, metric, dataContainer, timeRange) {
     // Update the table's main header dynamically (the H1 above the table)
     // Example: "Rolling Daily Average", "Rolling Weekly Average"
     // This requires the H1 element to have an ID or be selectable.
@@ -184,7 +188,7 @@ function displayMetricDataInTable(metricData, table, tableBody, metric, dataCont
  * This should be called after the table is populated.
  * @param {string} tableId - The ID of the table to add listeners to.
  */
-function addTableClickListeners(tableId) {
+export function addTableClickListeners(tableId) {
   const table = document.getElementById(tableId);
   if (!table) {
     console.error(`Table with ID ${tableId} not found.`);
@@ -233,7 +237,7 @@ function addTableClickListeners(tableId) {
 }
 
 // Helper function to update active button states
-function updateActiveButtonStates(activeTimeRange) {
+export function updateActiveButtonStates(activeTimeRange) {
   const buttons = document.querySelectorAll(".time-range-btn");
   [...buttons].map((button) => {
     if (button.dataset.timeRange === activeTimeRange) {

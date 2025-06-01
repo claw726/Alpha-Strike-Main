@@ -3,7 +3,7 @@
  * @param {string} url - The API endpoint URL
  * @returns {Promise<Object>} - The JSON response
  */
-async function fetchApiData(url) {
+export async function fetchApiData(url) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -20,7 +20,7 @@ async function fetchApiData(url) {
  * Fetch recent incidents data
  * @returns {Promise<Incident>} - Array of incident objects
  */
-async function fetchRecentIncidents() {
+export async function fetchRecentIncidents() {
   return await fetchApiData(
     "https://api.alpha-strike.space/incident?filter=month",
   );
@@ -31,7 +31,7 @@ async function fetchRecentIncidents() {
  * @param {string} filter - Optional filter parameter
  * @returns {Promise<TotalsResponse>} - Monthly totals data
  */
-async function fetchMonthlyTotals(filter = "month") {
+export async function fetchMonthlyTotals(filter = "month") {
   return await fetchApiData(
     `https://api.alpha-strike.space/totals?filter=${filter}`,
   );
@@ -42,7 +42,7 @@ async function fetchMonthlyTotals(filter = "month") {
  * @param {string} filter - Optional filter parameter
  * @returns {Promise<TotalsResponse>} - Weekly totals data
  */
-async function fetchWeeklyTotals(filter = "week") {
+export async function fetchWeeklyTotals(filter = "week") {
   return await fetchApiData(
     `https://api.alpha-strike.space/totals?filter=${filter}`,
   );
@@ -52,7 +52,7 @@ async function fetchWeeklyTotals(filter = "week") {
  * @param {string} filter - Optional filter parameter
  * @returns {Promise<TotalsResponse>} - Daily totals data
  */
-async function fetchDailyTotals(filter = "day") {
+export async function fetchDailyTotals(filter = "day") {
   return await fetchApiData(
     `https://api.alpha-strike.space/totals?filter=${filter}`,
   );
@@ -64,7 +64,7 @@ async function fetchDailyTotals(filter = "day") {
  * @param {string} type - 'name' or 'system'
  * @returns {Promise<Incident>} - Array of search results
  */
-async function searchIncidents(query, type) {
+export async function searchIncidents(query, type) {
   const endpoint =
     type === "system"
       ? `https://api.alpha-strike.space/incident?system=${encodeURIComponent(query)}`
@@ -78,7 +78,7 @@ async function searchIncidents(query, type) {
  * @param {string} type - 'name' or 'system'
  * @returns {Promise<Array>} - Array of total results
  */
-async function searchTotals(query, type) {
+export async function searchTotals(query, type) {
   const endpoint =
     type === "system"
       ? `https://api.alpha-strike.space/totals?system=${encodeURIComponent(query)}`

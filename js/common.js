@@ -1,3 +1,7 @@
+import { initializeNavigation } from '../components/navigation.js';
+import { initializeLanguageSwitcher, setLanguage, languages } from './translation-dictionary.js';
+import { addIncidentCardListeners } from './utils.js';
+
 /**
  * Common functionality shared across pages
  */
@@ -6,7 +10,7 @@
  * Initialize common page elements
  * @param {string} activePage - The currently active page
  */
-function initializePage(activePage) {
+export function initializePage(activePage) {
   // Initialize navigation (this creates the #animatedLangBtn in the DOM)
   if (typeof initializeNavigation === "function") {
     initializeNavigation(activePage);
@@ -54,7 +58,7 @@ function initializePage(activePage) {
  * @param {Function} createCardFn - Function to create card elements
  * @param {Object} options - Additional options
  */
-function displayDataInContainer(data, containerId, createCardFn, options = {}) {
+export function displayDataInContainer(data, containerId, createCardFn, options = {}) {
   const container = document.getElementById(containerId);
   if (!container) {
     console.error(`Container with ID ${containerId} not found`);

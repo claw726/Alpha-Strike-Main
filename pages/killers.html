@@ -12,7 +12,7 @@
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Alpha-Strike, Find your Content on the Frontier!</title>
-        <link rel="shortcut icon" href="../favicon.png" />
+        <link rel="shortcut icon" href="/../favicon.png" />
         <link rel="stylesheet" href="../styles/main.css" />
         <link
             rel="stylesheet"
@@ -63,14 +63,11 @@
         </main>
 
         <!-- Scripts -->
-        <script src="../js/translation-dictionary.js"></script>
-        <script src="../js/utils.js"></script>
-        <script src="../js/api.js"></script>
-        <script src="../components/navigation.js"></script>
-        <script src="../js/common.js"></script>
-        <script src="../js/monthly-tables.js"></script>
+        <script type="module">
+            import { initializePage } from '../js/common.js'; // Path adjusted for /pages/ location
+            import { fetchAndDisplayMetric } from '../js/monthly-tables.js'; // Path adjusted
 
-        <script>
+
             document.addEventListener("DOMContentLoaded", () => {
                 // Determine the metric for the current page
                 let currentMetric = "top_killers"; // Default or determine from page context

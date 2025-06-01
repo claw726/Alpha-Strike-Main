@@ -1,7 +1,7 @@
 /**
  * Navigation component manager
  */
-function createNavigation(activePage) {
+export function createNavigation(activePage) {
   return `
     <div class="topnav">
     <a ${activePage === "home" ? 'class="active"' : ""} href="../index.html" data-translate="navbar.home"><i class="fa-sharp fa-solid fa-trophy"></i>Recently Stamped</a>
@@ -18,7 +18,7 @@ function createNavigation(activePage) {
  * Initialize navigation on page load
  * @param {string} activePage - The currently active page identifier
  */
-function initializeNavigation(activePage) {
+export function initializeNavigation(activePage) {
   const navContainer = document.getElementById("navigation-container");
   if (navContainer) {
     // Determine base path for links based on current page depth

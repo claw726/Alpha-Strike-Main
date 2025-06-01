@@ -1,5 +1,7 @@
+import { translations, languages } from './translation-dictionary.js';
+
 // Global var to track timezone prefs
-let showLocalTime = true;
+export let showLocalTime = true;
 
 /**
  * Function to format the timestamp in user's local time
@@ -7,7 +9,7 @@ let showLocalTime = true;
  * @param {boolean} showLocal - Whether to show local time (default: true)
  * @returns {string} - Formatted timestamp string
  */
-function formatTimestamp(timestamp, showLocal = true) {
+export function formatTimestamp(timestamp, showLocal = true) {
   let date;
 
   // Try different timestamp formats to determine the correct one
@@ -78,7 +80,7 @@ function formatTimestamp(timestamp, showLocal = true) {
 /**
  * Toggle between local time and UTC display
  */
-function toggleTimezone() {
+export function toggleTimezone() {
   showLocalTime = !showLocalTime;
 
   // Get current language from HTML tag once at the beginning
@@ -218,7 +220,7 @@ function getTimeElapsed(timestamp) {
  * @param {Object} item - The incident data
  * @returns {HTMLElement} - The created card element
  */
-function createIncidentCard(item) {
+export function createIncidentCard(item) {
   if (!item || typeof item !== "object") {
     console.warn("Invalid item passed to createIncidentCard:", item);
     return null;
@@ -250,7 +252,7 @@ function createIncidentCard(item) {
     window.location.pathname.endsWith("index.html") ||
     window.location.pathname === "/" ||
     window.location.pathname.endsWith("/Alpha-Strike-Main/");
-  const assetBasePath = isIndexPage ? "" : "../";
+  const assetBasePath = isIndexPage ? "./" : "../";
   const pagesBasePath = isIndexPage ? "pages/" : "";
 
   const formattedTimestamp = item.time_stamp
@@ -363,7 +365,7 @@ function createIncidentCard(item) {
  * @param {string} query - The search query
  * @param {string} type - The search type ('name' or 'system')
  */
-function navigateToSearch(query, type) {
+export function navigateToSearch(query, type) {
   if (!query || query === "UNKNOWN" || query === "CLASSIFIED") {
     console.warn("Cannot search for empty, unknown, or classified values");
     return;
@@ -386,7 +388,7 @@ function navigateToSearch(query, type) {
  * Add click event listeners to incident cards for navigation
  * This should be called after cards are added to the DOM
  */
-function addIncidentCardListeners() {
+export function addIncidentCardListeners() {
   // Add listeners for clickable names
   for (const element of document.querySelectorAll(".clickable-name")) {
     element.addEventListener("click", (e) => {

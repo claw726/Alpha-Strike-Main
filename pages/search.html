@@ -81,16 +81,10 @@
             </button>
         </main>
 
-        <!-- External JavaScript files -->
-        <script src="../js/translation-dictionary.js"></script>
-        <script src="../js/utils.js"></script>
-        <!-- Contains formatTimestamp and createIncidentCard -->
-        <script src="../js/api.js"></script>
-        <!-- Contains searchIncidents and searchTotals -->
-        <script src="../components/navigation.js"></script>
-        <script src="../js/common.js"></script>
-
-        <script>
+        <script type="module">
+            import { initializePage } from '../js/common.js'; // Path adjusted
+            import { searchIncidents, searchTotals } from '../js/api.js'; // Path adjusted
+            import { createIncidentCard, addIncidentCardListeners } from '../js/utils.js'; // Path adjusted
             /**
              * Get URL parameters for pre-filling search
              */

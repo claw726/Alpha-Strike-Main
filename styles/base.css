@@ -15,7 +15,7 @@ body {
             rgba(139, 0, 0, 0.15) 0%,
             transparent 50%
         ),
-        url("../assets/images/synth_field.avif");
+        url("/assets/images/synth_field.avif");
     background-size: cover, cover, cover;
     background-position: center;
     background-repeat: no-repeat;

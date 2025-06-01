@@ -1,7 +1,9 @@
+import { createIncidentCard } from './utils.js';
+
 /**
  * WebSocket connection manager for live updates
  */
-class WebSocketManager {
+export class WebSocketManager {
   constructor(url, containerId) {
     this.url = url;
     this.containerId = containerId;

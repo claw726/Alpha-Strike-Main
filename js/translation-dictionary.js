@@ -1,13 +1,13 @@
 // Translation dictionary for selected elements.
 // Translation dictionary for selected elements.
-var translations = {}; // This will be populated by the JSON file loaded at runtime. (e.g., from .localization/translations.json)
-
-const languages = ["en", "es", "ru", "zh"];
+export let translations = {}; // This will be populated by the JSON file loaded at runtime. (e.g., from .localization/translations.json)
+export const languages = ["en", "es", "ru", "zh"];
+export let currentLanguageIndex = 0; // Index of the currently selected language in the languages array
 
 /**
  * Sets the language for the page and updates UI elements.
  */
-function setLanguage(lang) {
+export function setLanguage(lang) {
   document.documentElement.lang = lang;
   localStorage.setItem("preferredLanguage", lang);
 
@@ -75,7 +75,7 @@ function cycleLanguage() {
  * Initializes the language switcher button.
  * This function will be called after the navigation is rendered.
  */
-function initializeLanguageSwitcher() {
+export function initializeLanguageSwitcher() {
   const animatedBtn = document.getElementById("animatedLangBtn");
   if (animatedBtn) {
     // Set initial button text from localStorage or default
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // It will be called by initializePage after navigation is built.
 });
 
-async function loadTranslations() {
+export async function loadTranslations() {
   try {
     const response = await fetch("../localization/translations.json");
     if (!response.ok) {
