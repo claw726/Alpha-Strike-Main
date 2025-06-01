@@ -1,9 +1,16 @@
+html {
+    height: 100%;
+}
+
 /* Base styles */
 body {
+    display: flex; /* Make body a flex container */
+    flex-direction: column; /* Stack children vertically */
+    min-height: 100%; /* Ensure body is at least viewport height */
     margin: 0;
-    padding: 0;
-    padding-top: 60px; /* Adjusted for fixed topnav */
-    font-family: "Orbitron", var(--font-secondary);
+    padding: 0; /* Remove default padding */
+    padding-top: 70px; /* Adjusted for fixed topnav - ensure this value matches or is greater than your topnav's height */
+    font-family: var(--font-secondary), "Exo 2", "Segoe UI", monospace, sans-serif; /* Fallback fonts added */
     background-image:
         radial-gradient(
             circle at 20% 80%,
@@ -15,14 +22,14 @@ body {
             rgba(139, 0, 0, 0.15) 0%,
             transparent 50%
         ),
-        url("/assets/images/synth_field.avif");
+        url("/assets/images/synth_field.avif"); /* Ensure this path is correct relative to your CSS or use an absolute path if Vite handles it */
     background-size: cover, cover, cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     color: var(--color-text-secondary);
-    min-height: 100vh;
-    position: relative;
+    /* min-height: 100vh; Removed this as we are using flex for full height */
+    position: relative; /* For ::before pseudo-element positioning */
 }
 
 /* Sci-fi overlay effect */
@@ -41,6 +48,15 @@ body::before {
         50px 50px;
     pointer-events: none;
     z-index: -1;
+}
+
+/* This is your main content area that should expand */
+/* If you don't have a single <main> tag wrapping all content between nav and footer,
+   you might need to add one in your HTML files or target a different primary content wrapper */
+main { /* Or your primary content wrapper class/id */
+    flex-grow: 1; /* This makes the main content take up available space */
+    /* You might want to add some default width/max-width and centering for the main content block here
+       if it's not already handled by .container or other wrappers inside <main> */
 }
 
 /* Container adjustments to accommodate wider cards */

@@ -9,7 +9,10 @@ export async function fetchApiData(url) {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    return await response.json();
+    // Log the response data for debugging
+    const data = await response.json();
+    console.log("API Response Data:", data);
+    return data;
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
