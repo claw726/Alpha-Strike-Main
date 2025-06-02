@@ -30,6 +30,17 @@ export async function fetchRecentIncidents() {
 }
 
 /**
+ * Fetch a single incident by its mail_id
+ * @param {string} mail_id - The ID of the killmail
+ * @returns {Promise<Incident>} - An incident object
+ */
+export async function fetchIncidentById(mail_id) {
+  return await fetchApiData(
+    `https://api.alpha-strike.space/incident?mail_id=${mail_id}`
+  );
+}
+
+/**
  * Fetch monthly totals data
  * @param {string} filter - Optional filter parameter
  * @returns {Promise<TotalsResponse>} - Monthly totals data

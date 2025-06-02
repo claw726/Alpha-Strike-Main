@@ -44,10 +44,15 @@ body.killmail-page { /* Apply specific body font for this page if needed, or inh
 
 .combatants-grid-km {
     display: flex;
-    justify-content: space-between; /* Pushes columns to sides */
+    justify-content: space-between; /* Keeps killer on left, victim on right */
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-lg);
-    /* flex-wrap: wrap; */
+    /* New properties for centering the grid block itself */
+    width: fit-content; /* Grid takes up only as much width as its content needs */
+    max-width: 100%; /* Ensures it doesn't overflow on very small viewports before wrapping */
+    margin-left: auto;   /* Center the grid block */
+    margin-right: auto;  /* Center the grid block */
+    /* flex-wrap: wrap; -- keep this commented unless needed for specific responsive behavior */
 }
 
 .combatant-column-km {
@@ -150,11 +155,6 @@ body.killmail-page { /* Apply specific body font for this page if needed, or inh
     line-height: 1.6;
 }
 
-.fitting-table-km details {
-    margin-bottom: var(--spacing-sm);
-    background: rgba(var(--color-bg-light-rgb, 44, 44, 44), 0.3);
-    border: 1px solid rgba(var(--color-text-primary-rgb, 240, 240, 240), 0.1);
-}
 .fitting-table-km summary {
     padding: var(--spacing-sm) var(--spacing-md);
     font-weight: bold;
@@ -166,7 +166,38 @@ body.killmail-page { /* Apply specific body font for this page if needed, or inh
     font-size: 1.1em;
     display: flex; /* For aligning icon and text */
     align-items: center; /* For aligning icon and text */
+    justify-content: center; /* Added to center all content (icon and text) */
+    position: relative; /* For positioning the pseudo-element if needed, and default marker hiding */
+    list-style: none; /* Hide default marker in some browsers */
 }
+
+/* Hide default disclosure marker for WebKit/Blink browsers */
+.fitting-table-km summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Hide default disclosure marker for Firefox */
+.fitting-table-km summary::marker { /* Standard way, but ::-moz-list-bullet is sometimes needed */
+    display: none;
+    content: ""; /* Ensure it's fully gone */
+}
+.fitting-table-km summary::-moz-list-bullet { /* Firefox specific */
+    font-size: 0; /* Another way to hide in FF if display:none isn't enough for ::marker */
+    display: none; /* Should work */
+}
+
+
+/* Add custom expansion indicator */
+.fitting-table-km summary::after { /* Using ::after to place it after the text/icon group */
+    font-weight: 900; /* For Solid icons */
+    font-size: 0.8em;
+    margin-left: auto; /* Pushes the indicator to the far right */
+    padding-left: var(--spacing-md); /* Some space from the content */
+    color: var(--color-text-muted);
+    transition: transform 0.2s ease-in-out; /* For rotating effect if desired */
+}
+
+
 .fitting-table-km details[open] summary {
      border-bottom-left-radius: 0;
      border-bottom-right-radius: 0;
@@ -176,12 +207,15 @@ body.killmail-page { /* Apply specific body font for this page if needed, or inh
 .fitting-table-km summary:hover {
     background: rgba(var(--color-primary-rgb, 211, 47, 47), 0.2);
 }
+
+/* The existing icon (fa-crosshairs etc.) remains as is */
 .fitting-table-km summary i {
-    margin-right: var(--spacing-sm);
-    color: var(--color-text-muted);
-    width: 1.2em; /* Ensure icons align well */
+    margin-right: var(--spacing-sm); /* Keep space between main icon and text */
+    color: var(--color-text-muted); /* Original color */
+    width: 1.2em;
     text-align: center;
 }
+
 .fitting-table-km details[open] summary i {
     color: var(--color-secondary); /* Or var(--color-text-primary) */
 }

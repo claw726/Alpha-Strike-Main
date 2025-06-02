@@ -1,6 +1,6 @@
 import { initializeNavigation } from '../components/navigation.js';
 import { initializeLanguageSwitcher, setLanguage, languages } from './translation-dictionary.js';
-import { addIncidentCardListeners } from './utils.js';
+import { addIncidentCardListeners, toggleTimezone } from './utils.js';
 
 /**
  * Common functionality shared across pages
@@ -30,6 +30,17 @@ export function initializePage(activePage) {
     console.error(
       "initializeLanguageSwitcher function not found. Ensure translation-dictionary.js is loaded correctly and defines it.",
     );
+  }
+
+  // Attach event listener for the timezone toggle button
+  const timezoneToggleButton = document.getElementById('timezone-toggle');
+  if (timezoneToggleButton) {
+    // Check if a listener is already attached to prevent duplicates if initializePage were called multiple times
+    // (though it should typically run once per full page load).
+    if (!timezoneToggleButton.hasAttribute('data-listener-attached')) {
+        timezoneToggleButton.addEventListener('click', toggleTimezone);
+        timezoneToggleButton.setAttribute('data-listener-attached', 'true'); // Mark as attached
+    }
   }
 
   // Apply/re-apply translations to ensure all content (static and dynamic) is translated.

@@ -72,8 +72,7 @@
             <button
                 id="timezone-toggle"
                 class="timezone-toggle-floating"
-                onclick="toggleTimezone()"
-            >
+                >
                 <i class="far fa-clock"></i>
                 <span data-translate="timezone.showUtc">Show UTC</span>
             </button>
@@ -88,7 +87,7 @@
         <script type="module">
             import { initializePage, displayDataInContainer } from './js/common.js';
             import { fetchRecentIncidents } from './js/api.js';
-            import { createIncidentCard } from './js/utils.js';
+            import { createIncidentCard, toggleTimezone } from './js/utils.js';
             import { WebSocketManager } from './js/websocket.js';
             // Page-specific initialization
             document.addEventListener("DOMContentLoaded", async () => {

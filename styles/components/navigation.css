@@ -27,12 +27,12 @@
 
 /* Logo styling (new) */
 .nav-logo.alpha-strike-logo {
-    font-family: var(--font-secondary); /* Orbitron for logo */
+    font-family: "Orbitron", sans-serif; /* Orbitron for logo */
     font-size: 1.5rem; /* Adjust size as needed */
     color: var(--color-primary);
     text-decoration: none;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
     padding: var(--spacing-sm) 0; /* Match link padding vertically if needed */
     margin-right: auto; /* Pushes other items (like hamburger on mobile, or links on desktop) to the right */
 }

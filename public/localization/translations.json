@@ -382,6 +382,208 @@
     "ru": "Посмотреть детали отчёта {killmailId}",
     "zh": "查看击杀报告 {killmailId} 的详情",
     "es": "Ver detalles del reporte de muerte {killmailId}"
+  },
+    "killmail.pageTitlePattern": {
+    "en": "Killmail: {killerName} vs {victimName}",
+    "ru": "Отчет о потерях: {killerName} против {victimName}",
+    "zh": "击杀报告: {killerName} 对战 {victimName}",
+    "es": "Informe de Muerte: {killerName} vs {victimName}"
+  },
+  "killmail.headerVs": {
+    "en": "vs",
+    "ru": "против",
+    "zh": "对战",
+    "es": "vs"
+  },
+  "killmail.headerIncidentIn": {
+    "en": "Incident in",
+    "ru": "Инцидент в",
+    "zh": "事件发生于",
+    "es": "Incidente en"
+  },
+  "killmail.killerLabel": {
+    "en": "KILLER",
+    "ru": "АТАКУЮЩИЙ",
+    "zh": "攻击方",
+    "es": "AGRESOR"
+  },
+  "killmail.victimLabel": {
+    "en": "VICTIM",
+    "ru": "ЖЕРТВА",
+    "zh": "受害者",
+    "es": "VÍCTIMA"
+  },
+  "killmail.corporationLabel": {
+    "en": "Corporation:",
+    "ru": "Корпорация:",
+    "zh": "公司:",
+    "es": "Corporación:"
+  },
+  "killmail.shipLabel": {
+    "en": "Ship:",
+    "ru": "Корабль:",
+    "zh": "舰船:",
+    "es": "Nave:"
+  },
+  "killmail.engagementDetailsTitle": {
+    "en": "Engagement Details",
+    "ru": "Детали боя",
+    "zh": "交战详情",
+    "es": "Detalles del Combate"
+  },
+  "killmail.lossTypeLabel": {
+    "en": "Loss Type:",
+    "ru": "Тип потери:",
+    "zh": "损失类型:",
+    "es": "Tipo de Pérdida:"
+  },
+  "killmail.timeLabel": {
+    "en": "Time:",
+    "ru": "Время:",
+    "zh": "时间:",
+    "es": "Hora:"
+  },
+  "killmail.locationLabel": {
+    "en": "Location:",
+    "ru": "Местоположение:",
+    "zh": "地点:",
+    "es": "Ubicación:"
+  },
+  "killmail.fittingTitle": {
+    "en": "Ship Fitting & Contents",
+    "ru": "Оснастка корабля и содержимое",
+    "zh": "舰船配置与物品",
+    "es": "Equipamiento y Contenido de la Nave"
+  },
+  "killmail.fittingNote": {
+    "en": "Note: Ship fitting, contents, and some combatant details below are illustrative placeholders. The current API does not provide this specific data.",
+    "ru": "Примечание: Оснастка корабля, содержимое и некоторые детали участников ниже являются иллюстративными заменителями. Текущий API не предоставляет эти специфические данные.",
+    "zh": "注意：下方的舰船配置、物品以及部分战斗人员详情均为示例占位符。当前 API 未提供此特定数据。",
+    "es": "Nota: El equipamiento de la nave, su contenido y algunos detalles de los combatientes a continuación son marcadores de posición ilustrativos. La API actual no proporciona estos datos específicos."
+  },
+  "killmail.fitting.highSlots": {
+    "en": "High Slots",
+    "ru": "Верхние разъемы",
+    "zh": "高槽",
+    "es": "Ranuras Superiores"
+  },
+  "killmail.fitting.midSlots": {
+    "en": "Mid Slots",
+    "ru": "Средние разъемы",
+    "zh": "中槽",
+    "es": "Ranuras Medias"
+  },
+  "killmail.fitting.lowSlots": {
+    "en": "Low Slots",
+    "ru": "Нижние разъемы",
+    "zh": "低槽",
+    "es": "Ranuras Inferiores"
+  },
+  "killmail.fitting.rigs": {
+    "en": "Rigs",
+    "ru": "Модификаторы",
+    "zh": "改装件",
+    "es": "Optimizadores"
+  },
+  "killmail.fitting.drones": {
+    "en": "Drones",
+    "ru": "Дроны",
+    "zh": "无人机",
+    "es": "Drones"
+  },
+  "killmail.fitting.ammoCharges": {
+    "en": "Ammunition / Charges",
+    "ru": "Боеприпасы / Заряды",
+    "zh": "弹药 / 装料",
+    "es": "Munición / Cargas"
+  },
+  "killmail.fitting.cargoHold": {
+    "en": "Cargo Hold",
+    "ru": "Грузовой отсек",
+    "zh": "货舱",
+    "es": "Bodega de Carga"
+  },
+  "killmail.placeholder.victimCorp": {
+    "en": "[Victim Corp Placeholder]",
+    "ru": "[Корпорация жертвы Placeholder]",
+    "zh": "[受害者公司 占位符]",
+    "es": "[Corporación Víctima Placeholder]"
+  },
+  "killmail.placeholder.victimShip": {
+    "en": "[Ship Placeholder]",
+    "ru": "[Корабль Placeholder]",
+    "zh": "[舰船 占位符]",
+    "es": "[Nave Placeholder]"
+  },
+  "killmail.placeholder.killerCorp": {
+    "en": "[Killer Corp Placeholder]",
+    "ru": "[Корпорация убийцы Placeholder]",
+    "zh": "[攻击方公司 占位符]",
+    "es": "[Corporación Agresor Placeholder]"
+  },
+  "killmail.placeholder.killerShip": {
+    "en": "[Killer Ship Placeholder]",
+    "ru": "[Корабль убийцы Placeholder]",
+    "zh": "[攻击方舰船 占位符]",
+    "es": "[Nave Agresor Placeholder]"
+  },
+  "killmail.placeholder.highSlotItem1": { "en": "Focused Medium Pulse Laser II" },
+  "killmail.placeholder.highSlotAmmo1": { "en": "(Scorch M)" },
+  "killmail.placeholder.highSlotItem2": { "en": "Small Remote Armor Repairer I" },
+  "killmail.placeholder.emptyHighSlot": { "en": "[Empty High Slot]" },
+  "killmail.placeholder.midSlotItem1": { "en": "50MN Cold-Gas Enduring Microwarpdrive" },
+  "killmail.placeholder.midSlotItem2": { "en": "Medium Cap Battery II" },
+  "killmail.placeholder.midSlotItem3": { "en": "Warp Disruptor II" },
+  "killmail.placeholder.lowSlotItem1": { "en": "Damage Control II" },
+  "killmail.placeholder.lowSlotItem2": { "en": "Medium Armor Repairer II" },
+  "killmail.placeholder.lowSlotItem3": { "en": "Heat Sink II" },
+  "killmail.placeholder.rigSlotItem1": { "en": "Medium Energy Locus Coordinator I" },
+  "killmail.placeholder.rigSlotItem2": { "en": "Medium Auxiliary Nano Pump I" },
+  "killmail.placeholder.rigSlotItem3": { "en": "Medium Ancillary Current Router I" },
+  "killmail.placeholder.droneItem1": { "en": "Acolyte II x5" },
+  "killmail.placeholder.droneItem2": { "en": "Warrior II x5" },
+  "killmail.placeholder.ammoItem1": { "en": "Scorch M x1024" },
+  "killmail.placeholder.ammoItem2": { "en": "Imperial Navy Multifrequency M x2048" },
+  "killmail.placeholder.ammoItem3": { "en": "Nanite Repair Paste x100" },
+  "killmail.placeholder.cargoItem1": { "en": "Exotic Dancers, Female x10" },
+  "killmail.placeholder.cargoItem2": { "en": "Quafe Ultra x50" },
+  "killmail.placeholder.cargoItem3": { "en": "A Lumpsucker's Severed Foot (Left) x1" },
+
+  "loading.killmail": {
+    "en": "Loading killmail data...",
+    "ru": "Загрузка данных отчета о потерях...",
+    "zh": "正在加载击杀报告数据...",
+    "es": "Cargando datos del informe de muerte..."
+  },
+  "error.killmailLoadFailed": {
+    "en": "Failed to load killmail data.",
+    "ru": "Не удалось загрузить данные отчета о потерях.",
+    "zh": "加载击杀报告数据失败。",
+    "es": "Error al cargar los datos del informe de muerte."
+  },
+  "error.noKillmailId": {
+    "en": "No killmail reference provided.",
+    "ru": "Ссылка на отчет о потерях не предоставлена.",
+    "zh": "未提供击杀报告参考。",
+    "es": "No se proporcionó referencia del informe de muerte."
+  },
+  "general.unknown": {
+    "en": "UNKNOWN",
+    "ru": "НЕИЗВЕСТНО",
+    "zh": "未知",
+    "es": "DESCONOCIDO"
+  },
+  "general.notApplicable": {
+    "en": "N/A",
+    "ru": "Н/Д",
+    "zh": "不适用",
+    "es": "N/D"
+  },
+  "general.classified": {
+    "en": "CLASSIFIED",
+    "ru": "ЗАСЕКРЕЧЕНО",
+    "zh": "保密",
+    "es": "CLASIFICADO"
   }
   
 }

@@ -2,6 +2,28 @@ import { translations, setLanguage } from './translation-dictionary.js';
 import { fetchDailyTotals, fetchWeeklyTotals, fetchMonthlyTotals } from './api.js';
 import { navigateToSearch } from './utils.js';
 
+export function updateRollingAverageHeaderText(timeRange) {
+    const rollingHeader = document.getElementById("rollingAverageHeader");
+    if (rollingHeader && timeRange) {
+        let headerText = `Rolling ${timeRange.charAt(0).toUpperCase() + timeRange.slice(1)} Average`; // Default English
+        const headerKey = `header.rolling${timeRange.charAt(0).toUpperCase() + timeRange.slice(1)}`; // e.g., header.rollingDay
+
+        const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
+        if (typeof translations !== 'undefined' && translations[headerKey]?.[preferredLang]) {
+            headerText = translations[headerKey][preferredLang];
+        } else if (typeof translations !== 'undefined' && translations[headerKey]?.en) {
+             headerText = translations[headerKey].en;
+        }
+        // If translations object itself is undefined or key completely missing, headerText remains the default English.
+        
+        rollingHeader.textContent = headerText;
+        console.log(`Rolling average header updated via updateRollingAverageHeaderText for timeRange: ${timeRange}`);
+    } else {
+        if (!rollingHeader) console.warn("updateRollingAverageHeaderText: rollingAverageHeader element not found.");
+        if (!timeRange) console.warn("updateRollingAverageHeaderText: timeRange parameter is missing.");
+    }
+}
+
 /**
  * Fetches the totals data from the API for a specific time range and renders the appropriate metric, with caching.
  * @param {string} metric - One of "top_systems", "top_killers", or "top_victims"
@@ -40,7 +62,7 @@ export async function fetchAndDisplayMetric(metric, tableId, timeRange = 'month'
       dataContainer.innerHTML = `<p data-translate="loading.data">${loadingText}</p>`;
     }
 
-    updateActiveButtonStates(timeRange); // Helper to update UI button states
+    // updateActiveButtonStates(timeRange); // Helper to update UI button states
 
     // Try to load from cache first
     try {
@@ -110,10 +132,6 @@ export async function fetchAndDisplayMetric(metric, tableId, timeRange = 'month'
  * (Slightly modified to accept timeRange for context if needed, and update table header)
  */
 export function displayMetricDataInTable(metricData, table, tableBody, metric, dataContainer, timeRange) {
-    // Update the table's main header dynamically (the H1 above the table)
-    // Example: "Rolling Daily Average", "Rolling Weekly Average"
-    // This requires the H1 element to have an ID or be selectable.
-    // Let's assume the H1 element has an ID like "rollingAverageHeader"
     const rollingHeader = document.getElementById("rollingAverageHeader"); // You'll need to add this ID to your H1
     if (rollingHeader) {
         // This part needs new translation keys as well if you want it localized.
@@ -123,9 +141,9 @@ export function displayMetricDataInTable(metricData, table, tableBody, metric, d
 
         // Attempt to translate
         const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
-        if (translations[headerKey]?.[preferredLang]) {
+        if (typeof translations !== 'undefined' && translations[headerKey]?.[preferredLang]) {
             headerText = translations[headerKey][preferredLang];
-        } else if (translations[headerKey]?.en) { // Fallback to English
+        } else if (typeof translations !== 'undefined' && translations[headerKey]?.en) { // Fallback to English from translations object
              headerText = translations[headerKey].en;
         }
         // If you're using data-translate attribute:
@@ -236,14 +254,14 @@ export function addTableClickListeners(tableId) {
   });
 }
 
-// Helper function to update active button states
-export function updateActiveButtonStates(activeTimeRange) {
-  const buttons = document.querySelectorAll(".time-range-btn");
-  [...buttons].map((button) => {
-    if (button.dataset.timeRange === activeTimeRange) {
-      button.classList.add("active");
-    } else {
-      button.classList.remove("active");
-    }
-  });
-}
+// // Helper function to update active button states
+// export function updateActiveButtonStates(activeTimeRange) {
+//   const buttons = document.querySelectorAll(".time-range-btn");
+//   [...buttons].map((button) => {
+//     if (button.dataset.timeRange === activeTimeRange) {
+//       button.classList.add("active");
+//     } else {
+//       button.classList.remove("active");
+//     }
+//   });
+// }
