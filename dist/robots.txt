@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 Disallow: /ws/
 
-Sitemap: https://alpha-strike.space/sitemap.xml 
+Sitemap: https://alpha-strike.space/sitemap.xml
