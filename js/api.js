@@ -11,7 +11,6 @@ export async function fetchApiData(url) {
     }
     // Log the response data for debugging
     const data = await response.json();
-    console.log("API Response Data:", data);
     return data;
   } catch (error) {
     console.error("Error fetching data:", error);

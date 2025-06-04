@@ -568,10 +568,10 @@
     "es": "No se proporcionó referencia del informe de muerte."
   },
   "general.unknown": {
-    "en": "UNKNOWN",
-    "ru": "НЕИЗВЕСТНО",
-    "zh": "未知",
-    "es": "DESCONOCIDO"
+    "en": "Unknown",
+    "es": "Desconocido",
+    "ru": "Неизвестно",
+    "zh": "未知"
   },
   "general.notApplicable": {
     "en": "N/A",
@@ -584,6 +584,59 @@
     "ru": "ЗАСЕКРЕЧЕНО",
     "zh": "保密",
     "es": "CLASIFICADO"
+  },
+  "general": {
+    "unknown": {
+      "en": "Unknown",
+      "es": "Desconocido",
+      "ru": "Неизвестно",
+      "zh": "未知"
+    }
+  },
+  "card": {
+    "kdRatio": {
+      "en": "K/D Ratio",
+      "es": "Ratio K/D",
+      "ru": "K/D Соотношение",
+      "zh": "击杀/死亡比"
+    },
+    "winRate": {
+      "en": "Win Rate",
+      "es": "Tasa de Victoria",
+      "ru": "Процент Побед",
+      "zh": "胜率"
+    },
+    "totalEngagements": {
+      "en": "Total Engagements",
+      "es": "Encuentros Totales",
+      "ru": "Всего Сражений",
+      "zh": "总交战次数"
+    },
+    "incidents": {
+      "en": "Incidents",
+      "es": "Incidentes",
+      "ru": "Инциденты",
+      "zh": "事件数"
+    },
+    "avgPerDay": {
+      "en": "Per Day",
+      "es": "Por Día",
+      "ru": "В День",
+      "zh": "每日平均"
+    },
+    "activeDays": {
+      "en": "Active Days",
+      "es": "Días Activos",
+      "ru": "Активные Дни",
+      "zh": "活跃天数"
+    }
+  },
+  "search": {
+    "noAggregatedData": {
+      "en": "No aggregated data found.",
+      "es": "No se encontraron datos agregados.",
+      "ru": "Агрегированные данные не найдены.",
+      "zh": "未找到汇总数据。"
+    }
   }
-  
 }

@@ -1,4 +1,5 @@
 import { translations, languages } from './translation-dictionary.js';
+import { lazyLoader } from './utils/lazyLoading.js';
 
 // Global var to track timezone prefs
 export let showLocalTime = true;
@@ -233,8 +234,6 @@ export function createIncidentCard(item) {
   }
 
   // Check for the presence of 'id' for the killmail link.
-  // The API response shows 'id', but the old code used 'time_stamp' for a temporary key.
-  // We will now rely on 'item.id' for generating the link.
   if (item.id === undefined || item.id === null) {
       console.warn("Skipping card creation for item missing 'id':", item);
       return null;
@@ -248,23 +247,27 @@ export function createIncidentCard(item) {
     !item.time_stamp;
 
   if (isEffectivelyEmpty) {
-    console.warn(
-      "Skipping card creation for item with many essential fields missing (excluding id check):",
-      item,
-    );
+    console.warn("Skipping card creation for effectively empty item:", item);
     return null;
   }
 
-  const listItem = document.createElement("div");
-  listItem.classList.add("incident-list-item");
+  const card = document.createElement("div");
+  card.className = "incident-list-item";
+  card.dataset.timestamp = item.time_stamp;
 
-  if (item.time_stamp) {
-      // Ensure timestamp is stored as a number if it's a numeric string
-      listItem.dataset.timestamp = typeof item.time_stamp === 'string' && !Number.isNaN(item.time_stamp)
-                                      ? Number(item.time_stamp)
-                                      : item.time_stamp;
-  }
+  // Create killer image with lazy loading
+  const killerImg = document.createElement("img");
+  killerImg.className = "profile-image";
+  killerImg.alt = `Killer ${item.killer_name || 'Unknown'}`;
+  killerImg.dataset.src = "../assets/images/default-avatar.avif";
+  lazyLoader.addLazyLoading(killerImg, killerImg.dataset.src);
 
+  // Create victim image with lazy loading
+  const victimImg = document.createElement("img");
+  victimImg.className = "profile-image";
+  victimImg.alt = `Victim ${item.victim_name || 'Unknown'}`;
+  victimImg.dataset.src = "../assets/images/default-avatar.avif";
+  lazyLoader.addLazyLoading(victimImg, victimImg.dataset.src);
 
   const isIndexPage =
     window.location.pathname.endsWith("index.html") ||
@@ -280,7 +283,7 @@ export function createIncidentCard(item) {
   const timeLabelKey = showLocalTime
     ? "card.localTimeLabel"
     : "card.utcTimeLabel";
-  const placeholderProfileImage = `${assetBasePath}assets/images/awakened.avif`;
+  const placeholderProfileImage = `${assetBasePath}assets/images/default-avatar.avif`;
 
   const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
 
@@ -322,14 +325,14 @@ export function createIncidentCard(item) {
   `;
 
 
-  listItem.innerHTML = `
+  card.innerHTML = `
         <div class="incident-photos">
             <div class="photo-container killer-photo">
-                <img src="${placeholderProfileImage}" alt="Aggressor" class="combatant-photo"/>
+                <img src="${killerImg.dataset.src}" alt="Aggressor" class="combatant-photo"/>
             </div>
             <div class="vs-indicator"><i class="fas fa-bolt"></i></div>
             <div class="photo-container victim-photo">
-                <img src="${placeholderProfileImage}" alt="Victim" class="combatant-photo"/>
+                <img src="${victimImg.dataset.src}" alt="Victim" class="combatant-photo"/>
             </div>
         </div>
         <div class="incident-combatants">
@@ -362,7 +365,7 @@ export function createIncidentCard(item) {
         ${detailLinkHTML}
     `;
 
-  return listItem;
+  return card;
 }
 
 /**

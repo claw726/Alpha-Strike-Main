@@ -4,14 +4,21 @@
         <meta charset="UTF-8" />
         <meta
             name="description"
-            content="The Alpha-Strike Leaderboard or Killboard for Eve Frontier"
+            content="Alpha-Strike: The ultimate leaderboard and killboard for Eve Frontier. Track PVP statistics, view top killers, and stay updated with real-time combat data."
         />
         <meta
             name="keywords"
-            content="Eve Frontier, PVP, Leaderboard, Killboard"
+            content="Eve Frontier, PVP, Leaderboard, Killboard, Gaming Statistics, Combat Data, Space Game, MMO"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Alpha-Strike, Find your Content on the Frontier!</title>
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Alpha-Strike" />
+        <meta property="og:title" content="Alpha-Strike - Eve Frontier Leaderboard" />
+        <meta property="og:description" content="Track PVP statistics and view top killers in Eve Frontier" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://alpha-strike.space" />
+
+        <title>Alpha-Strike | Eve Frontier Leaderboard & Killboard</title>
         <link rel="shortcut icon" href="/favicon.png" />
         <base href="." />
         <link rel="stylesheet" href="/styles/main.css" />
@@ -29,6 +36,22 @@
             href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
             rel="stylesheet"
         />
+
+        <script type="module">
+            // Add lazy loading support for older browsers
+            if ('loading' in HTMLImageElement.prototype) {
+                // Browser supports native lazy loading
+                const images = document.querySelectorAll('img[loading="lazy"]');
+                images.forEach(img => {
+                    img.src = img.dataset.src;
+                });
+            } else {
+                // Fallback for browsers that don't support lazy loading
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+                document.body.appendChild(script);
+            }
+        </script>
     </head>
     <body>
         <main>

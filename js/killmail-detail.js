@@ -3,6 +3,7 @@ import { formatTimestamp, showLocalTime, addIncidentCardListeners, navigateToSea
 import { fetchIncidentById } from './api.js';
 // Import translations and language utilities from translation-dictionary.js
 import { translations, languages, currentLanguageIndex, setLanguage, loadTranslations } from './translation-dictionary.js';
+import { lazyLoader } from './utils/lazyLoading.js';
 
 let killmailDataStore = null; // Store fetched killmail data here
 
@@ -25,6 +26,173 @@ const getGeneralTranslationLocal = (value, generalKeyIfEmpty) => {
     }
     return String(value);
 };
+
+function createCombatantCard(data, type) {
+    const column = document.createElement('div');
+    column.className = `combatant-column-km ${type}-column`;
+
+    const card = document.createElement('div');
+    card.className = `combatant-card-km ${type}-card-km`;
+
+    const header = document.createElement('div');
+    header.className = 'combatant-header-km';
+
+    const image = document.createElement('img');
+    image.className = 'profile-image';
+    image.alt = getTranslationLocal(`altText.${type}Image`, `${type} ${data.name}`, { name: data.name });
+    image.src = '../assets/images/default-avatar.avif';
+
+    const info = document.createElement('div');
+    info.className = 'combatant-info-km';
+
+    const roleLabel = document.createElement('h3');
+    roleLabel.className = `combatant-role-label ${type}`;
+    roleLabel.textContent = getTranslationLocal(`killmail.${type}Label`, type.toUpperCase());
+
+    const name = document.createElement('h2');
+    name.className = `${type} clickable-name`;
+    name.dataset.name = data.name;
+    name.title = getTranslationLocal("tooltip.searchFor", "Search for {itemName}", { itemName: data.name });
+    name.textContent = data.name;
+
+    const corpInfo = document.createElement('p');
+    corpInfo.innerHTML = `${getTranslationLocal("killmail.corporationLabel", "Corporation:")} <span class="placeholder">${getTranslationLocal(`killmail.placeholder.${type}Corp`, `[${type} Corp Placeholder]`)}</span>`;
+
+    const shipInfo = document.createElement('p');
+    const shipPlaceholder = type === 'victim' && (data.loss_type === 'ship' || data.loss_type === 'pod')
+        ? data.loss_type
+        : getTranslationLocal(`killmail.placeholder.${type}Ship`, `[${type} Ship Placeholder]`);
+    shipInfo.innerHTML = `${getTranslationLocal("killmail.shipLabel", "Ship:")} <span class="placeholder">${shipPlaceholder}</span>`;
+
+    info.appendChild(roleLabel);
+    info.appendChild(name);
+    info.appendChild(corpInfo);
+    info.appendChild(shipInfo);
+
+    header.appendChild(image);
+    header.appendChild(info);
+    card.appendChild(header);
+    column.appendChild(card);
+
+    return column;
+}
+
+function createEngagementDetails(data) {
+    const details = document.createElement('div');
+    details.className = 'engagement-details-km data-card';
+
+    const title = document.createElement('h3');
+    title.textContent = getTranslationLocal("killmail.engagementDetailsTitle", "Engagement Details");
+
+    const lossType = document.createElement('p');
+    lossType.innerHTML = `<strong>${getTranslationLocal("killmail.lossTypeLabel", "Loss Type:")}</strong> ${data.loss_type}`;
+
+    const time = document.createElement('p');
+    time.innerHTML = `<strong>${getTranslationLocal("killmail.timeLabel", "Time:")}</strong> ${formatTimestamp(data.time_stamp, showLocalTime)}`;
+
+    const location = document.createElement('p');
+    const locationSpan = document.createElement('span');
+    locationSpan.className = 'clickable-system';
+    locationSpan.dataset.system = data.solar_system_name;
+    locationSpan.title = getTranslationLocal("tooltip.searchFor", "Search for {itemName}", { itemName: data.solar_system_name });
+    locationSpan.textContent = data.solar_system_name;
+    location.innerHTML = `<strong>${getTranslationLocal("killmail.locationLabel", "Location:")}</strong> `;
+    location.appendChild(locationSpan);
+    location.innerHTML += ` (${getTranslationLocal("card.idLabel", "ID:")} ${data.solar_system_id})`;
+
+    details.appendChild(title);
+    details.appendChild(lossType);
+    details.appendChild(time);
+    details.appendChild(location);
+
+    return details;
+}
+
+function createFittingCategory(title, icon, items) {
+    const details = document.createElement('details');
+    details.className = 'fitting-category';
+    details.setAttribute('open', '');
+
+    const summary = document.createElement('summary');
+    summary.innerHTML = `<i class="fas fa-${icon}"></i> ${title}`;
+
+    const list = document.createElement('ul');
+    items.forEach(item => {
+        const li = document.createElement('li');
+        const span = document.createElement('span');
+        span.className = 'placeholder';
+        span.textContent = item;
+        li.appendChild(span);
+        list.appendChild(li);
+    });
+
+    details.appendChild(summary);
+    details.appendChild(list);
+
+    return details;
+}
+
+function createFittingSection() {
+    const section = document.createElement('div');
+    section.className = 'fitting-section-km data-card';
+
+    const title = document.createElement('h3');
+    title.textContent = getTranslationLocal("killmail.fittingTitle", "Ship Fitting & Contents");
+
+    const note = document.createElement('p');
+    note.className = 'note';
+    note.innerHTML = `<i class="fas fa-info-circle"></i> ${getTranslationLocal("killmail.fittingNote", "Note: Fitting data is placeholder.")}`;
+
+    const table = document.createElement('div');
+    table.className = 'fitting-table-km';
+
+    const categories = [
+        { title: getTranslationLocal("killmail.fitting.highSlots", "High Slots"), icon: 'crosshairs', items: [
+            getTranslationLocal("killmail.placeholder.highSlotItem1", "[High Slot Item 1]"),
+            getTranslationLocal("killmail.placeholder.highSlotItem2", "[High Slot Item 2]"),
+            getTranslationLocal("killmail.placeholder.emptyHighSlot", "[Empty High Slot]")
+        ]},
+        { title: getTranslationLocal("killmail.fitting.midSlots", "Mid Slots"), icon: 'shield-alt', items: [
+            getTranslationLocal("killmail.placeholder.midSlotItem1", "[Mid Slot Item 1]"),
+            getTranslationLocal("killmail.placeholder.midSlotItem2", "[Mid Slot Item 2]"),
+            getTranslationLocal("killmail.placeholder.midSlotItem3", "[Mid Slot Item 3]")
+        ]},
+        { title: getTranslationLocal("killmail.fitting.lowSlots", "Low Slots"), icon: 'cogs', items: [
+            getTranslationLocal("killmail.placeholder.lowSlotItem1", "[Low Slot Item 1]"),
+            getTranslationLocal("killmail.placeholder.lowSlotItem2", "[Low Slot Item 2]"),
+            getTranslationLocal("killmail.placeholder.lowSlotItem3", "[Low Slot Item 3]")
+        ]},
+        { title: getTranslationLocal("killmail.fitting.rigs", "Rigs"), icon: 'microchip', items: [
+            getTranslationLocal("killmail.placeholder.rigSlotItem1", "[Rig Slot Item 1]"),
+            getTranslationLocal("killmail.placeholder.rigSlotItem2", "[Rig Slot Item 2]"),
+            getTranslationLocal("killmail.placeholder.rigSlotItem3", "[Rig Slot Item 3]")
+        ]},
+        { title: getTranslationLocal("killmail.fitting.drones", "Drones"), icon: 'fighter-jet', items: [
+            getTranslationLocal("killmail.placeholder.droneItem1", "[Drone Item 1]"),
+            getTranslationLocal("killmail.placeholder.droneItem2", "[Drone Item 2]")
+        ]},
+        { title: getTranslationLocal("killmail.fitting.ammoCharges", "Ammunition / Charges"), icon: 'cubes', items: [
+            getTranslationLocal("killmail.placeholder.ammoItem1", "[Ammo Item 1]"),
+            getTranslationLocal("killmail.placeholder.ammoItem2", "[Ammo Item 2]"),
+            getTranslationLocal("killmail.placeholder.ammoItem3", "[Ammo Item 3]")
+        ]},
+        { title: getTranslationLocal("killmail.fitting.cargoHold", "Cargo Hold"), icon: 'box-open', items: [
+            getTranslationLocal("killmail.placeholder.cargoItem1", "[Cargo Item 1]"),
+            getTranslationLocal("killmail.placeholder.cargoItem2", "[Cargo Item 2]"),
+            getTranslationLocal("killmail.placeholder.cargoItem3", "[Cargo Item 3]")
+        ]}
+    ];
+
+    categories.forEach(category => {
+        table.appendChild(createFittingCategory(category.title, category.icon, category.items));
+    });
+
+    section.appendChild(title);
+    section.appendChild(note);
+    section.appendChild(table);
+
+    return section;
+}
 
 // This function now only focuses on rendering the HTML using provided data
 function renderKillmailDetailsHTML(data) {
@@ -51,137 +219,70 @@ function renderKillmailDetailsHTML(data) {
 
     documentTitleEl.textContent = getTranslationLocal("killmail.pageTitlePattern", "Killmail: {killerName} vs {victimName}", { killerName: killerNameDisplay, victimName: victimName });
 
-    pageTitleContainerEl.innerHTML = `
-        <h1>
-            <span class="killer clickable-name" data-name="${killerNameDisplay}" title="${getTranslationLocal("tooltip.searchFor", "Search for {itemName}", {itemName: killerNameDisplay})}">${killerNameDisplay}</span>
-            <span class="text-primary">${getTranslationLocal("killmail.headerVs", "vs")}</span>
-            <span class="victim clickable-name" data-name="${victimName}" title="${getTranslationLocal("tooltip.searchFor", "Search for {itemName}", {itemName: victimName})}">${victimName}</span>
-        </h1>
-        <p class="system-location">
-            ${getTranslationLocal("killmail.headerIncidentIn", "Incident in")}
-            <span class="clickable-system" data-system="${solarSystemName}" title="${getTranslationLocal("tooltip.searchFor", "Search for {itemName}", {itemName: solarSystemName})}">${solarSystemName}</span>
-        </p>
-    `;
+    // Create header section
+    const header = document.createElement('h1');
+    const killerSpan = document.createElement('span');
+    killerSpan.className = 'killer clickable-name';
+    killerSpan.dataset.name = killerNameDisplay;
+    killerSpan.title = getTranslationLocal("tooltip.searchFor", "Search for {itemName}", { itemName: killerNameDisplay });
+    killerSpan.textContent = killerNameDisplay;
 
-    const profilePic = "../assets/images/awakened.avif";
-    const victimShipPlaceholder = data.loss_type === 'ship' || data.loss_type === 'pod'
-        ? lossType
-        : getTranslationLocal("killmail.placeholder.victimShip", "[Ship Placeholder]");
+    const vsSpan = document.createElement('span');
+    vsSpan.className = 'text-primary';
+    vsSpan.textContent = ` ${getTranslationLocal("killmail.headerVs", "vs")} `;
 
-    // The rest of your HTML generation logic using getTranslationLocal...
-    // Ensure all text uses getTranslationLocal for dynamic updates.
-    const html = `
-    <div class="combatants-grid-km">
-        <div class="combatant-column-km killer-column">
-             <div class="combatant-card-km killer-card-km">
-                <div class="combatant-header-km">
-                    <img src="${profilePic}" alt="${getTranslationLocal('altText.killerImage', 'Killer {killerName}', { killerName: killerNameDisplay })}" class="profile-image">
-                    <div class="combatant-info-km">
-                        <h3 class="combatant-role-label killer">${getTranslationLocal("killmail.killerLabel", "KILLER")}</h3>
-                        <h2 class="killer clickable-name" data-name="${killerNameDisplay}" title="${getTranslationLocal("tooltip.searchFor", "Search for {itemName}", {itemName: killerNameDisplay})}">${killerNameDisplay}</h2>
-                        <p>${getTranslationLocal("killmail.corporationLabel", "Corporation:")} <span class="placeholder">${getTranslationLocal("killmail.placeholder.killerCorp", "[Killer Corp Placeholder]")}</span></p>
-                        <p>${getTranslationLocal("killmail.shipLabel", "Ship:")} <span class="placeholder">${getTranslationLocal("killmail.placeholder.killerShip", "[Killer Ship Placeholder]")}</span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    const victimSpan = document.createElement('span');
+    victimSpan.className = 'victim clickable-name';
+    victimSpan.dataset.name = victimName;
+    victimSpan.title = getTranslationLocal("tooltip.searchFor", "Search for {itemName}", { itemName: victimName });
+    victimSpan.textContent = victimName;
 
-        <div class="combatant-column-km victim-column">
-            <div class="combatant-card-km victim-card-km">
-                <div class="combatant-header-km">
-                    <img src="${profilePic}" alt="${getTranslationLocal('altText.victimImage', 'Victim {victimName}', { victimName: victimName })}" class="profile-image">
-                    <div class="combatant-info-km">
-                        <h3 class="combatant-role-label victim">${getTranslationLocal("killmail.victimLabel", "VICTIM")}</h3>
-                        <h2 class="victim clickable-name" data-name="${victimName}" title="${getTranslationLocal("tooltip.searchFor", "Search for {itemName}", {itemName: victimName})}">${victimName}</h2>
-                        <p>${getTranslationLocal("killmail.corporationLabel", "Corporation:")} <span class="placeholder">${getTranslationLocal("killmail.placeholder.victimCorp", "[Victim Corp Placeholder]")}</span></p>
-                        <p>${getTranslationLocal("killmail.shipLabel", "Ship:")} <span class="placeholder">${victimShipPlaceholder}</span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    header.appendChild(killerSpan);
+    header.appendChild(vsSpan);
+    header.appendChild(victimSpan);
 
-    <div class="engagement-details-km data-card">
-        <h3>${getTranslationLocal("killmail.engagementDetailsTitle", "Engagement Details")}</h3>
-        <p><strong>${getTranslationLocal("killmail.lossTypeLabel", "Loss Type:")}</strong> ${lossType}</p>
-        <p><strong>${getTranslationLocal("killmail.timeLabel", "Time:")}</strong> ${formatTimestamp(data.time_stamp, showLocalTime)}</p>
-        <p><strong>${getTranslationLocal("killmail.locationLabel", "Location:")}</strong> <span class="clickable-system" data-system="${solarSystemName}" title="${getTranslationLocal("tooltip.searchFor", "Search for {itemName}", {itemName: solarSystemName})}">${solarSystemName}</span> (${getTranslationLocal("card.idLabel", "ID:")} ${solarSystemId})</p>
-    </div>
+    const location = document.createElement('p');
+    location.className = 'system-location';
+    const locationText = document.createTextNode(getTranslationLocal("killmail.headerIncidentIn", "Incident in") + ' ');
+    const systemSpan = document.createElement('span');
+    systemSpan.className = 'clickable-system';
+    systemSpan.dataset.system = solarSystemName;
+    systemSpan.title = getTranslationLocal("tooltip.searchFor", "Search for {itemName}", { itemName: solarSystemName });
+    systemSpan.textContent = solarSystemName;
 
-    <div class="fitting-section-km data-card">
-        <h3>${getTranslationLocal("killmail.fittingTitle", "Ship Fitting & Contents")}</h3>
-        <p class="note">
-            <i class="fas fa-info-circle"></i> ${getTranslationLocal("killmail.fittingNote", "Note: Fitting data is placeholder.")}
-        </p>
-        <div class="fitting-table-km">
-            <details class="fitting-category" open>
-                <summary><i class="fas fa-crosshairs"></i> ${getTranslationLocal("killmail.fitting.highSlots", "High Slots")}</summary>
-                <ul>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.highSlotItem1", "[High Slot Item 1]")}</span> <span class="placeholder">${getTranslationLocal("killmail.placeholder.highSlotAmmo1", "[Ammo]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.highSlotItem1", "[High Slot Item 1]")}</span> <span class="placeholder">${getTranslationLocal("killmail.placeholder.highSlotAmmo1", "[Ammo]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.highSlotItem2", "[High Slot Item 2]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.emptyHighSlot", "[Empty High Slot]")}</span></li>
-                </ul>
-            </details>
-            <details class="fitting-category" open>
-                <summary><i class="fas fa-shield-alt"></i> ${getTranslationLocal("killmail.fitting.midSlots", "Mid Slots")}</summary>
-                <ul>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.midSlotItem1", "[Mid Slot Item 1]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.midSlotItem2", "[Mid Slot Item 2]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.midSlotItem3", "[Mid Slot Item 3]")}</span></li>
-                </ul>
-            </details>
-            <details class="fitting-category" open>
-                <summary><i class="fas fa-cogs"></i> ${getTranslationLocal("killmail.fitting.lowSlots", "Low Slots")}</summary>
-                <ul>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.lowSlotItem1", "[Low Slot Item 1]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.lowSlotItem2", "[Low Slot Item 2]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.lowSlotItem3", "[Low Slot Item 3]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.lowSlotItem3", "[Low Slot Item 3]")}</span></li>
-                </ul>
-            </details>
-            <details class="fitting-category" open>
-                <summary><i class="fas fa-microchip"></i> ${getTranslationLocal("killmail.fitting.rigs", "Rigs")}</summary>
-                <ul>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.rigSlotItem1", "[Rig Slot Item 1]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.rigSlotItem2", "[Rig Slot Item 2]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.rigSlotItem3", "[Rig Slot Item 3]")}</span></li>
-                </ul>
-            </details>
-            <details class="fitting-category" open>
-                <summary><i class="fas fa-fighter-jet"></i> ${getTranslationLocal("killmail.fitting.drones", "Drones")}</summary>
-                <ul>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.droneItem1", "[Drone Item 1]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.droneItem2", "[Drone Item 2]")}</span></li>
-                </ul>
-            </details>
-             <details class="fitting-category" open>
-                <summary><i class="fas fa-cubes"></i> ${getTranslationLocal("killmail.fitting.ammoCharges", "Ammunition / Charges")}</summary>
-                <ul>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.ammoItem1", "[Ammo Item 1]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.ammoItem2", "[Ammo Item 2]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.ammoItem3", "[Ammo Item 3]")}</span></li>
-                </ul>
-            </details>
-            <details class="fitting-category" open>
-                <summary><i class="fas fa-box-open"></i> ${getTranslationLocal("killmail.fitting.cargoHold", "Cargo Hold")}</summary>
-                <ul>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.cargoItem1", "[Cargo Item 1]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.cargoItem2", "[Cargo Item 2]")}</span></li>
-                    <li><span class="placeholder">${getTranslationLocal("killmail.placeholder.cargoItem3", "[Cargo Item 3]")}</span></li>
-                </ul>
-            </details>
-        </div>
-    </div>
-    `;
-    killmailContentEl.innerHTML = html;
+    location.appendChild(locationText);
+    location.appendChild(systemSpan);
+
+    pageTitleContainerEl.innerHTML = '';
+    pageTitleContainerEl.appendChild(header);
+    pageTitleContainerEl.appendChild(location);
+
+    // Create combatants grid
+    const combatantsGrid = document.createElement('div');
+    combatantsGrid.className = 'combatants-grid-km';
+
+    const killerData = { name: killerNameDisplay, loss_type: lossType };
+    const victimData = { name: victimName, loss_type: lossType };
+
+    combatantsGrid.appendChild(createCombatantCard(killerData, 'killer'));
+    combatantsGrid.appendChild(createCombatantCard(victimData, 'victim'));
+
+    // Create engagement details
+    const engagementDetails = createEngagementDetails(data);
+
+    // Create fitting section
+    const fittingSection = createFittingSection();
+
+    // Clear and append all sections
+    killmailContentEl.innerHTML = '';
+    killmailContentEl.appendChild(combatantsGrid);
+    killmailContentEl.appendChild(engagementDetails);
+    killmailContentEl.appendChild(fittingSection);
 
     if (typeof addIncidentCardListeners === 'function') {
-        addIncidentCardListeners(); // Re-attach listeners to new DOM elements
+        addIncidentCardListeners();
     }
-    // The main setLanguage will be called by translation-dictionary when this is triggered by a language change.
 }
-
 
 async function loadAndRenderKillmailPageContent() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -257,3 +358,23 @@ document.addEventListener("DOMContentLoaded", async () => {
         // We only needed to re-render the killmail-specific content.
     };
 });
+
+function createKillmailCard(killmail) {
+    const card = document.createElement('div');
+    card.className = 'killmail-card';
+    
+    // Create image elements with lazy loading
+    const killerImg = document.createElement('img');
+    killerImg.className = 'profile-image';
+    killerImg.alt = `Killer ${killmail.killer_name}`;
+    killerImg.dataset.src = '../assets/images/awakened.avif';
+    lazyLoader.addLazyLoading(killerImg, killerImg.dataset.src);
+    
+    const victimImg = document.createElement('img');
+    victimImg.className = 'profile-image';
+    victimImg.alt = `Victim ${killmail.victim_name}`;
+    victimImg.dataset.src = '../assets/images/awakened.avif';
+    lazyLoader.addLazyLoading(victimImg, victimImg.dataset.src);
+    
+    // ... rest of your card creation code ...
+}
