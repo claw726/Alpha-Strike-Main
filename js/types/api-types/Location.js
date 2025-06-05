@@ -7,7 +7,11 @@
 
 /**
  * @typedef {Object} Location
- * @property {string} solar_system_id - The ID of the solar system.
+ * @property {number} solar_system_id - The ID of the solar system.
  * @property {string} solar_system_name - The name of the solar system.
- * @property {Coordinates} coordinates - The coordinates of the solar system in the format [x, y, z].
+ * @property {Coordinates} coordinates - The coordinates of the solar system.
+ */
+
+/**
+ * @typedef {Location[]} LocationResponse - Array of location objects returned by the API
  */
