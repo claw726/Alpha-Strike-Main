@@ -29,7 +29,11 @@
 }
 
 .incident-list-item:hover {
-  background: linear-gradient(135deg, rgba(54, 54, 54, 0.95) 0%, rgba(42, 42, 42, 0.98) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(54, 54, 54, 0.95) 0%,
+    rgba(42, 42, 42, 0.98) 100%
+  );
   border-color: rgba(211, 47, 47, 0.5);
   box-shadow: 0 0 15px rgba(211, 47, 47, 0.2);
   transform: translateY(-1px);
@@ -54,12 +58,16 @@
 
 .killer-photo {
   border-color: rgba(255, 167, 38, 0.6);
-  box-shadow: 0 0 var(--spacing-sm) rgba(255, 167, 38, 0.3), inset 0 0 5px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 0 var(--spacing-sm) rgba(255, 167, 38, 0.3),
+    inset 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .victim-photo {
   border-color: rgba(255, 82, 82, 0.6);
-  box-shadow: 0 0 var(--spacing-sm) rgba(255, 82, 82, 0.3), inset 0 0 5px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 0 var(--spacing-sm) rgba(255, 82, 82, 0.3),
+    inset 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .combatant-photo {
@@ -230,7 +238,10 @@ a.view-killmail-details-link.icon-only-link {
   color: var(--color-text-secondary); /* Icon color */
   border: 1px solid var(--color-primary-dark); /* Subtle border */
   border-radius: var(--radius-sm); /* Rounded corners */
-  background-color: rgba(var(--color-bg-medium-rgb, 26, 26, 26), 0.5); /* Slightly transparent background, define --color-bg-medium-rgb or use a direct rgba value */
+  background-color: rgba(
+    var(--color-bg-medium-rgb, 26, 26, 26),
+    0.5
+  ); /* Slightly transparent background, define --color-bg-medium-rgb or use a direct rgba value */
   text-decoration: none;
   transition: all 0.2s ease-in-out;
 }
@@ -283,7 +294,67 @@ a.view-killmail-details-link.icon-only-link i {
   width: fit-content;
 }
 
-@media screen and (max-width: 1200px) {
+/* Compact mode for medium-large screens */
+@media screen and (min-width: 801px) and (max-width: 1200px) {
+  .incident-list-item {
+    padding: var(--spacing-sm) var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+
+  .photo-container {
+    width: 40px;
+    height: 40px;
+  }
+
+  .incident-combatants {
+    min-width: 160px;
+  }
+
+  .combatant-name {
+    font-size: 0.8rem;
+    min-width: 200px;
+  }
+
+  .combatant-label {
+    font-size: 0.6rem;
+    min-width: 50px;
+  }
+
+  .incident-details-compact {
+    min-width: 140px;
+  }
+
+  .detail-label {
+    font-size: 0.6rem;
+    min-width: 60px;
+  }
+
+  .detail-value {
+    font-size: 0.75rem;
+  }
+
+  .incident-timestamp {
+    min-width: 140px;
+  }
+
+  .timestamp-value {
+    font-size: 0.75rem;
+  }
+
+  .time-elapsed {
+    font-size: 0.65rem;
+  }
+
+  .incident-id-compact {
+    min-width: 60px;
+  }
+
+  .id-value {
+    font-size: 0.75rem;
+  }
+}
+
+@media screen and (max-width: 800px) {
   .incident-header {
     flex-direction: column;
     gap: 10px;
@@ -343,11 +414,15 @@ a.view-killmail-details-link.icon-only-link i {
   }
   /* Reduce glow effects on mobile for performance */
   h1 {
-    text-shadow: 0 0 15px rgba(211, 47, 47, 0.5), 0 2px var(--spacing-xs) rgba(0, 0, 0, 0.8);
+    text-shadow:
+      0 0 15px rgba(211, 47, 47, 0.5),
+      0 2px var(--spacing-xs) rgba(0, 0, 0, 0.8);
   }
 
   .topnav {
-    box-shadow: 0 2px 15px rgba(211, 47, 47, 0.2), 0 1px 5px rgba(0, 0, 0, 0.4);
+    box-shadow:
+      0 2px 15px rgba(211, 47, 47, 0.2),
+      0 1px 5px rgba(0, 0, 0, 0.4);
   }
 
   .vs-divider {
