@@ -1,9 +1,9 @@
 /**
  * Import type definitions
  */
-import './types/api-types/Incidents.js';
-import './types/api-types/Totals.js';
-import './types/api-types/Location.js';
+import "./types/api-types/Incidents.js";
+import "./types/api-types/Totals.js";
+import "./types/api-types/Location.js";
 
 /**
  * Base API utilities
@@ -24,7 +24,7 @@ async function fetchApiData(url) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
     throw error;
   }
 }
@@ -38,7 +38,7 @@ async function fetchApiData(url) {
  * @returns {Promise<Object>} - Server health status
  */
 async function checkServerHealth() {
-  return await fetchApiData('https://api.alpha-strike.space/health');
+  return await fetchApiData("https://api.alpha-strike.space/health");
 }
 
 /**
@@ -50,7 +50,9 @@ async function checkServerHealth() {
  * @returns {Promise<Incident[]>} - Array of incident objects
  */
 async function fetchRecentIncidents() {
-  return await fetchApiData('https://api.alpha-strike.space/incident?filter=month');
+  return await fetchApiData(
+    "https://api.alpha-strike.space/incident?filter=month",
+  );
 }
 
 /**
@@ -59,7 +61,9 @@ async function fetchRecentIncidents() {
  * @returns {Promise<Incident>} - An incident object
  */
 async function fetchIncidentById(mail_id) {
-  return await fetchApiData(`https://api.alpha-strike.space/incident?mail_id=${mail_id}`);
+  return await fetchApiData(
+    `https://api.alpha-strike.space/incident?mail_id=${mail_id}`,
+  );
 }
 
 /**
@@ -70,7 +74,7 @@ async function fetchIncidentById(mail_id) {
  */
 async function searchIncidents(query, type) {
   const endpoint =
-    type === 'system'
+    type === "system"
       ? `https://api.alpha-strike.space/incident?system=${encodeURIComponent(query)}`
       : `https://api.alpha-strike.space/incident?name=${encodeURIComponent(query)}`;
   return await fetchApiData(endpoint);
@@ -87,7 +91,7 @@ async function searchIncidents(query, type) {
  */
 async function fetchLocationBySystem(system) {
   return await fetchApiData(
-    `https://api.alpha-strike.space/location?system=${encodeURIComponent(system)}`
+    `https://api.alpha-strike.space/location?system=${encodeURIComponent(system)}`,
   );
 }
 
@@ -100,8 +104,10 @@ async function fetchLocationBySystem(system) {
  * @param {string} filter - Optional filter parameter
  * @returns {Promise<TotalsResponse>} - Monthly totals data
  */
-async function fetchMonthlyTotals(filter = 'month') {
-  return await fetchApiData(`https://api.alpha-strike.space/totals?filter=${filter}`);
+async function fetchMonthlyTotals(filter = "month") {
+  return await fetchApiData(
+    `https://api.alpha-strike.space/totals?filter=${filter}`,
+  );
 }
 
 /**
@@ -109,8 +115,10 @@ async function fetchMonthlyTotals(filter = 'month') {
  * @param {string} filter - Optional filter parameter
  * @returns {Promise<TotalsResponse>} - Weekly totals data
  */
-async function fetchWeeklyTotals(filter = 'week') {
-  return await fetchApiData(`https://api.alpha-strike.space/totals?filter=${filter}`);
+async function fetchWeeklyTotals(filter = "week") {
+  return await fetchApiData(
+    `https://api.alpha-strike.space/totals?filter=${filter}`,
+  );
 }
 
 /**
@@ -118,8 +126,10 @@ async function fetchWeeklyTotals(filter = 'week') {
  * @param {string} filter - Optional filter parameter
  * @returns {Promise<TotalsResponse>} - Daily totals data
  */
-async function fetchDailyTotals(filter = 'day') {
-  return await fetchApiData(`https://api.alpha-strike.space/totals?filter=${filter}`);
+async function fetchDailyTotals(filter = "day") {
+  return await fetchApiData(
+    `https://api.alpha-strike.space/totals?filter=${filter}`,
+  );
 }
 
 /**
@@ -130,7 +140,7 @@ async function fetchDailyTotals(filter = 'day') {
  */
 async function searchTotals(query, type) {
   const endpoint =
-    type === 'system'
+    type === "system"
       ? `https://api.alpha-strike.space/totals?system=${encodeURIComponent(query)}`
       : `https://api.alpha-strike.space/totals?name=${encodeURIComponent(query)}`;
   return await fetchApiData(endpoint);

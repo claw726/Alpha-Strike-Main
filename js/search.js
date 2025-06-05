@@ -1,7 +1,7 @@
-import { searchIncidents, searchTotals } from './api.js';
-import { initializePage } from './common.js';
-import { displayAggregateCard } from './components/cards.js';
-import { addIncidentCardListeners, createIncidentCard } from './utils.js';
+import { searchIncidents, searchTotals } from "./api.js";
+import { initializePage } from "./common.js";
+import { displayAggregateCard } from "./components/cards.js";
+import { addIncidentCardListeners, createIncidentCard } from "./utils.js";
 
 /**
  * Get URL parameters for pre-filling search
@@ -9,35 +9,88 @@ import { addIncidentCardListeners, createIncidentCard } from './utils.js';
 function getUrlParameters() {
   const urlParams = new URLSearchParams(window.location.search);
   return {
-    query: urlParams.get('query'),
-    type: urlParams.get('type'),
+    query: urlParams.get("query"),
+    type: urlParams.get("type"),
   };
 }
 
 /**
- * Pre-fill search form if URL parameters are present
+ * Initialize navbar search functionality
  */
-function prefillSearchForm() {
-  const { query, type } = getUrlParameters();
+function initializeNavSearch() {
+  const searchButton = document.getElementById("navSearchBtn");
+  const searchInput = document.getElementById("navSearchQuery");
+  const searchType = document.getElementById("navSearchType");
 
-  if (query) {
-    const searchInput = document.getElementById('searchQuery');
-    if (searchInput) {
-      searchInput.value = decodeURIComponent(query);
+  if (!searchButton || !searchInput || !searchType) return;
+
+  searchButton.addEventListener("click", () => {
+    const query = searchInput.value.trim();
+    if (query === "") {
+      alert("Please enter a search query.");
+      return;
     }
-  }
+    navigateToSearch(query, searchType.value);
+  });
 
-  if (type && (type === 'name' || type === 'system')) {
-    const searchTypeSelect = document.getElementById('searchType');
-    if (searchTypeSelect) {
-      searchTypeSelect.value = type;
+  searchInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      searchButton.click();
     }
+  });
+}
+
+/**
+ * Navigate to search page with query parameters
+ */
+function navigateToSearch(query, type) {
+  const searchUrl = `/pages/search.html?query=${encodeURIComponent(query)}&type=${type}`;
+  window.location.href = searchUrl;
+}
+
+/**
+ * Generate case variations of a search query
+ * @param {string} query - The original search query
+ * @param {string} type - The search type ('name' or 'system')
+ * @returns {string[]} Array of case variations
+ */
+function generateCaseVariations(query, type) {
+  // If query is empty or only whitespace, return empty array
+  if (!query || !query.trim()) return [];
+
+  // Remove any extra whitespace
+  query = query.trim();
+
+  // For system queries, only use uppercase
+  if (type === "system") {
+    return [query.toUpperCase()];
   }
 
-  // Auto-perform search if both parameters are present
-  if (query && type) {
-    performSearch(decodeURIComponent(query));
+  // For character names, use three different capitalizations
+  // If the query is already lowercase, we'll create variations by capitalizing different parts
+  if (query === query.toLowerCase()) {
+    return [
+      query, // Original (lowercase)
+      query.toUpperCase(), // All uppercase
+      query.charAt(0).toUpperCase() + query.slice(1), // First letter capitalized
+    ];
   }
+
+  // If the query is already uppercase, we'll create variations by lowercasing different parts
+  if (query === query.toUpperCase()) {
+    return [
+      query, // Original (uppercase)
+      query.toLowerCase(), // All lowercase
+      query.charAt(0).toLowerCase() + query.slice(1), // First letter lowercase
+    ];
+  }
+
+  // For mixed case, use the standard variations
+  return [
+    query, // Original
+    query.toLowerCase(), // All lowercase
+    query.toUpperCase(), // All uppercase
+  ];
 }
 
 /**
@@ -46,29 +99,59 @@ function prefillSearchForm() {
  *   2. Aggregated totals (all time totals) from a different URL.
  */
 async function performSearch(query) {
-  const searchType = document.getElementById('searchType').value;
-  const resultsContainer = document.getElementById('results-container');
-  const totalsCardContainer = document.getElementById('totals-card');
+  const { type } = getUrlParameters();
+  const searchType = type || "name";
 
-  resultsContainer.innerHTML = '<p data-translate="search.loading">Loading...</p>';
-  totalsCardContainer.innerHTML = '';
+  const resultsContainer = document.getElementById("results-container");
+  const totalsCardContainer = document.getElementById("totals-card");
+
+  if (!resultsContainer || !totalsCardContainer) return;
+
+  resultsContainer.innerHTML =
+    '<p data-translate="search.loading">Loading...</p>';
+  totalsCardContainer.innerHTML = "";
 
   try {
-    const [incidentData, totalsData] = await Promise.all([
-      searchIncidents(query, searchType),
-      searchTotals(query, searchType),
-    ]);
+    // Generate case variations of the search query
+    const queryVariations = generateCaseVariations(query, searchType);
 
-    displayAggregateCard(totalsData, searchType);
-    displaySearchResults(incidentData);
+    // Try each variation sequentially until we get results
+    let combinedIncidents = [];
+    let combinedTotals = [];
+
+    for (const variation of queryVariations) {
+      try {
+        const [incidents, totals] = await Promise.all([
+          searchIncidents(variation, searchType),
+          searchTotals(variation, searchType),
+        ]);
+
+        // If we got results, use them and break the loop
+        if (incidents && incidents.length > 0) {
+          combinedIncidents = incidents;
+          combinedTotals = totals || [];
+          break;
+        }
+      } catch (error) {
+        // Continue to next variation
+      }
+    }
+
+    // Display results if we found any
+    if (combinedIncidents.length > 0) {
+      displayAggregateCard(combinedTotals, searchType);
+      displaySearchResults(combinedIncidents);
+    } else {
+      resultsContainer.innerHTML = `<p data-translate="search.noResults">No results found.</p>`;
+    }
   } catch (error) {
-    console.error('Error fetching search data:', error);
+    console.error("Error fetching search data:", error);
     resultsContainer.innerHTML = `<p data-translate="search.error">Error loading search results.</p>`;
   }
 
   // Re-apply translations to new dynamic content
-  if (typeof setLanguage === 'function') {
-    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+  if (typeof setLanguage === "function") {
+    const currentLang = localStorage.getItem("preferredLanguage") || "en";
     setLanguage(currentLang);
   }
 }
@@ -77,8 +160,10 @@ async function performSearch(query) {
  * Display the search results using createIncidentCard from utils.js.
  */
 function displaySearchResults(data) {
-  const container = document.getElementById('results-container');
-  container.innerHTML = '';
+  const container = document.getElementById("results-container");
+  if (!container) return;
+
+  container.innerHTML = "";
 
   if (!data || data.length === 0) {
     container.innerHTML = `<p data-translate="search.noResults">No results found.</p>`;
@@ -92,7 +177,7 @@ function displaySearchResults(data) {
     }
   });
 
-  if (typeof addIncidentCardListeners === 'function') {
+  if (typeof addIncidentCardListeners === "function") {
     addIncidentCardListeners();
   }
 }
@@ -101,34 +186,23 @@ function displaySearchResults(data) {
  * Initialize search page functionality
  */
 export function initializeSearchPage() {
-  const searchButton = document.getElementById('searchBtn');
-  const searchInput = document.getElementById('searchQuery');
+  // Initialize navbar search on all pages
+  initializeNavSearch();
 
-  searchButton.addEventListener('click', () => {
-    const query = searchInput.value.trim();
-    if (query === '') {
-      alert('Please enter a search query.');
-      return;
-    }
-    performSearch(query);
-  });
+  // Only perform search and show results on the search page
+  const { query } = getUrlParameters();
+  if (query) {
+    performSearch(decodeURIComponent(query));
+  }
 
-  searchInput.addEventListener('keypress', (event) => {
-    if (event.key === 'Enter') {
-      searchButton.click();
-    }
-  });
-
-  prefillSearchForm();
-
-  if (typeof setLanguage === 'function') {
-    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+  if (typeof setLanguage === "function") {
+    const currentLang = localStorage.getItem("preferredLanguage") || "en";
     setLanguage(currentLang);
   }
 }
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  initializePage('search');
+document.addEventListener("DOMContentLoaded", () => {
+  initializePage("search");
   initializeSearchPage();
 });
