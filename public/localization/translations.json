@@ -383,7 +383,7 @@
     "zh": "查看击杀报告 {killmailId} 的详情",
     "es": "Ver detalles del reporte de muerte {killmailId}"
   },
-    "killmail.pageTitlePattern": {
+  "killmail.pageTitlePattern": {
     "en": "Killmail: {killerName} vs {victimName}",
     "ru": "Отчет о потерях: {killerName} против {victimName}",
     "zh": "击杀报告: {killerName} 对战 {victimName}",

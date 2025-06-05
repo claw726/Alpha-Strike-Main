@@ -13,7 +13,7 @@ export async function fetchApiData(url) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error('Error fetching data:', error);
     throw error;
   }
 }
@@ -23,9 +23,7 @@ export async function fetchApiData(url) {
  * @returns {Promise<Incident>} - Array of incident objects
  */
 export async function fetchRecentIncidents() {
-  return await fetchApiData(
-    "https://api.alpha-strike.space/incident?filter=month",
-  );
+  return await fetchApiData('https://api.alpha-strike.space/incident?filter=month');
 }
 
 /**
@@ -34,9 +32,7 @@ export async function fetchRecentIncidents() {
  * @returns {Promise<Incident>} - An incident object
  */
 export async function fetchIncidentById(mail_id) {
-  return await fetchApiData(
-    `https://api.alpha-strike.space/incident?mail_id=${mail_id}`
-  );
+  return await fetchApiData(`https://api.alpha-strike.space/incident?mail_id=${mail_id}`);
 }
 
 /**
@@ -44,10 +40,8 @@ export async function fetchIncidentById(mail_id) {
  * @param {string} filter - Optional filter parameter
  * @returns {Promise<TotalsResponse>} - Monthly totals data
  */
-export async function fetchMonthlyTotals(filter = "month") {
-  return await fetchApiData(
-    `https://api.alpha-strike.space/totals?filter=${filter}`,
-  );
+export async function fetchMonthlyTotals(filter = 'month') {
+  return await fetchApiData(`https://api.alpha-strike.space/totals?filter=${filter}`);
 }
 
 /**
@@ -55,20 +49,16 @@ export async function fetchMonthlyTotals(filter = "month") {
  * @param {string} filter - Optional filter parameter
  * @returns {Promise<TotalsResponse>} - Weekly totals data
  */
-export async function fetchWeeklyTotals(filter = "week") {
-  return await fetchApiData(
-    `https://api.alpha-strike.space/totals?filter=${filter}`,
-  );
+export async function fetchWeeklyTotals(filter = 'week') {
+  return await fetchApiData(`https://api.alpha-strike.space/totals?filter=${filter}`);
 }
 
 /** Fetch daily totals data
  * @param {string} filter - Optional filter parameter
  * @returns {Promise<TotalsResponse>} - Daily totals data
  */
-export async function fetchDailyTotals(filter = "day") {
-  return await fetchApiData(
-    `https://api.alpha-strike.space/totals?filter=${filter}`,
-  );
+export async function fetchDailyTotals(filter = 'day') {
+  return await fetchApiData(`https://api.alpha-strike.space/totals?filter=${filter}`);
 }
 
 /**
@@ -79,7 +69,7 @@ export async function fetchDailyTotals(filter = "day") {
  */
 export async function searchIncidents(query, type) {
   const endpoint =
-    type === "system"
+    type === 'system'
       ? `https://api.alpha-strike.space/incident?system=${encodeURIComponent(query)}`
       : `https://api.alpha-strike.space/incident?name=${encodeURIComponent(query)}`;
   return await fetchApiData(endpoint);
@@ -93,7 +83,7 @@ export async function searchIncidents(query, type) {
  */
 export async function searchTotals(query, type) {
   const endpoint =
-    type === "system"
+    type === 'system'
       ? `https://api.alpha-strike.space/totals?system=${encodeURIComponent(query)}`
       : `https://api.alpha-strike.space/totals?name=${encodeURIComponent(query)}`;
   return await fetchApiData(endpoint);
