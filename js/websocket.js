@@ -1,4 +1,4 @@
-import { createIncidentCard } from './utils.js';
+import { createIncidentCard } from "./incidentCard.js";
 
 /**
  * WebSocket connection manager for live updates
@@ -16,14 +16,14 @@ export class WebSocketManager {
       this.ws = new WebSocket(this.url);
       this.setupEventHandlers();
     } catch (error) {
-      console.error('WebSocket connection error:', error);
+      console.error("WebSocket connection error:", error);
       this.scheduleReconnect();
     }
   }
 
   setupEventHandlers() {
     this.ws.onopen = () => {
-      console.log('WebSocket connection established.');
+      console.log("WebSocket connection established.");
     };
 
     this.ws.onmessage = (event) => {
@@ -31,11 +31,13 @@ export class WebSocketManager {
     };
 
     this.ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
+      console.error("WebSocket error:", error);
     };
 
     this.ws.onclose = () => {
-      console.log(`WebSocket connection closed. Code: ${event.code}, Reason: ${event.reason}`);
+      console.log(
+        `WebSocket connection closed. Code: ${event.code}, Reason: ${event.reason}`,
+      );
       this.scheduleReconnect();
     };
   }
@@ -45,22 +47,28 @@ export class WebSocketManager {
     try {
       data = JSON.parse(event.data);
     } catch (error) {
-      console.log('WebSocket received non-JSON message or malformed JSON:', event.data);
+      console.log(
+        "WebSocket received non-JSON message or malformed JSON:",
+        event.data,
+      );
       return;
     }
     // Check if the data contains the expected incident structure
     if (
-      typeof data === 'object' &&
+      typeof data === "object" &&
       data !== null &&
-      (Object.prototype.hasOwnProperty.call(data, 'killer_name') ||
-        Object.prototype.hasOwnProperty.call(data, 'victim_name') ||
-        Object.prototype.hasOwnProperty.call(data, 'time_stamp'))
+      (Object.prototype.hasOwnProperty.call(data, "killer_name") ||
+        Object.prototype.hasOwnProperty.call(data, "victim_name") ||
+        Object.prototype.hasOwnProperty.call(data, "time_stamp"))
     ) {
       // It looks like an incident, proceed to add it.
       this.addNewIncident(data);
     } else {
       // It's valid JSON, but not structured like an incident we expect.
-      console.log('WebSocket received valid JSON, but not recognized as an incident:', data);
+      console.log(
+        "WebSocket received valid JSON, but not recognized as an incident:",
+        data,
+      );
     }
   }
 
@@ -72,10 +80,15 @@ export class WebSocketManager {
         // Check if card is valid
         container.insertBefore(card, container.firstChild);
       } else {
-        console.warn('Websocket: Incident item did not result in a displayable card:', item);
+        console.warn(
+          "Websocket: Incident item did not result in a displayable card:",
+          item,
+        );
       }
     } else {
-      console.error(`WebSocket: Container with ID ${this.containerId} not found for new incident.`);
+      console.error(
+        `WebSocket: Container with ID ${this.containerId} not found for new incident.`,
+      );
     }
   }
 
@@ -88,9 +101,9 @@ export class WebSocketManager {
   disconnect() {
     if (this.ws) {
       this.ws.onclose = null;
-      this.ws.close(1000, 'Client initiated disconnect');
+      this.ws.close(1000, "Client initiated disconnect");
       this.ws = null;
-      console.log('WebSocket connection intentionally closed.');
+      console.log("WebSocket connection intentionally closed.");
     }
   }
 }

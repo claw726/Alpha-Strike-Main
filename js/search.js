@@ -1,7 +1,11 @@
 import { searchIncidents, searchTotals } from "./api.js";
 import { initializePage } from "./common.js";
 import { displayAggregateCard } from "./components/cards.js";
-import { addIncidentCardListeners, createIncidentCard } from "./utils.js";
+import {
+  addIncidentCardListeners,
+  createIncidentCard,
+  navigateToSearch,
+} from "./incidentCard.js";
 
 /**
  * Get URL parameters for pre-filling search
@@ -38,14 +42,6 @@ function initializeNavSearch() {
       searchButton.click();
     }
   });
-}
-
-/**
- * Navigate to search page with query parameters
- */
-function navigateToSearch(query, type) {
-  const searchUrl = `/pages/search.html?query=${encodeURIComponent(query)}&type=${type}`;
-  window.location.href = searchUrl;
 }
 
 /**

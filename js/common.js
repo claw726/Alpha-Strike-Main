@@ -4,7 +4,8 @@ import {
   languages,
   setLanguage,
 } from "./translation-dictionary.js";
-import { addIncidentCardListeners, toggleTimezone } from "./utils.js";
+import { addIncidentCardListeners } from "./incidentCard.js";
+import { toggleTimezone } from "./utils.js";
 import { initializeSearchPage } from "./search.js";
 
 /**

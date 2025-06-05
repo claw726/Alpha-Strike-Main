@@ -1,29 +1,44 @@
-import { fetchDailyTotals, fetchMonthlyTotals, fetchWeeklyTotals } from './api.js';
-import { setLanguage, translations } from './translation-dictionary.js';
-import { navigateToSearch } from './utils.js';
+import {
+  fetchDailyTotals,
+  fetchMonthlyTotals,
+  fetchWeeklyTotals,
+} from "./api.js";
+import { setLanguage, translations } from "./translation-dictionary.js";
+import { navigateToSearch } from "./incidentCard.js";
 
 export function updateRollingAverageHeaderText(timeRange) {
-  const rollingHeader = document.getElementById('rollingAverageHeader');
+  const rollingHeader = document.getElementById("rollingAverageHeader");
   if (rollingHeader && timeRange) {
     let headerText = `Rolling ${timeRange.charAt(0).toUpperCase() + timeRange.slice(1)} Average`; // Default English
     const headerKey = `header.rolling${timeRange.charAt(0).toUpperCase() + timeRange.slice(1)}`; // e.g., header.rollingDay
 
-    const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
-    if (typeof translations !== 'undefined' && translations[headerKey]?.[preferredLang]) {
+    const preferredLang = localStorage.getItem("preferredLanguage") || "en";
+    if (
+      typeof translations !== "undefined" &&
+      translations[headerKey]?.[preferredLang]
+    ) {
       headerText = translations[headerKey][preferredLang];
-    } else if (typeof translations !== 'undefined' && translations[headerKey]?.en) {
+    } else if (
+      typeof translations !== "undefined" &&
+      translations[headerKey]?.en
+    ) {
       headerText = translations[headerKey].en;
     }
     // If translations object itself is undefined or key completely missing, headerText remains the default English.
 
     rollingHeader.textContent = headerText;
     console.log(
-      `Rolling average header updated via updateRollingAverageHeaderText for timeRange: ${timeRange}`
+      `Rolling average header updated via updateRollingAverageHeaderText for timeRange: ${timeRange}`,
     );
   } else {
     if (!rollingHeader)
-      console.warn('updateRollingAverageHeaderText: rollingAverageHeader element not found.');
-    if (!timeRange) console.warn('updateRollingAverageHeaderText: timeRange parameter is missing.');
+      console.warn(
+        "updateRollingAverageHeaderText: rollingAverageHeader element not found.",
+      );
+    if (!timeRange)
+      console.warn(
+        "updateRollingAverageHeaderText: timeRange parameter is missing.",
+      );
   }
 }
 
@@ -33,8 +48,12 @@ export function updateRollingAverageHeaderText(timeRange) {
  * @param {string} tableId - The ID of the table element to display the data in.
  * @param {string} timeRange - The time range for the filter ('day', 'week', 'month'). Default is 'month'.
  */
-export async function fetchAndDisplayMetric(metric, tableId, timeRange = 'month') {
-  const CACHE_KEY_PREFIX = 'totals_'; // Updated prefix
+export async function fetchAndDisplayMetric(
+  metric,
+  tableId,
+  timeRange = "month",
+) {
+  const CACHE_KEY_PREFIX = "totals_"; // Updated prefix
   const CACHE_DURATION_MS = {
     // Different durations for different ranges
     day: 5 * 60 * 1000, // 5 minutes for daily
@@ -45,23 +64,24 @@ export async function fetchAndDisplayMetric(metric, tableId, timeRange = 'month'
   const cacheKey = `${CACHE_KEY_PREFIX}${timeRange}_${metric}`;
   const cacheDuration = CACHE_DURATION_MS[timeRange] || CACHE_DURATION_MS.month; // Fallback to month's duration
 
-  const dataContainer = document.getElementById('data-container');
+  const dataContainer = document.getElementById("data-container");
   const table = document.getElementById(tableId);
-  const tableBody = table ? table.querySelector('tbody') : null;
+  const tableBody = table ? table.querySelector("tbody") : null;
 
   if (!table || !tableBody) {
     console.error(`Table or table body not found for ID: ${tableId}.`);
     if (dataContainer) {
-      dataContainer.textContent = 'Error: UI elements missing.'; // Consider making this translatable
+      dataContainer.textContent = "Error: UI elements missing."; // Consider making this translatable
     }
     return;
   }
 
-  if (table) table.style.display = 'none'; // Hide the table initially
+  if (table) table.style.display = "none"; // Hide the table initially
 
   if (dataContainer) {
-    const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
-    const loadingText = translations['loading.data']?.[preferredLang] || 'Loading data...';
+    const preferredLang = localStorage.getItem("preferredLanguage") || "en";
+    const loadingText =
+      translations["loading.data"]?.[preferredLang] || "Loading data...";
     dataContainer.innerHTML = `<p data-translate="loading.data">${loadingText}</p>`;
   }
 
@@ -73,64 +93,88 @@ export async function fetchAndDisplayMetric(metric, tableId, timeRange = 'month'
     if (cachedItem) {
       const { timestamp, data } = JSON.parse(cachedItem);
       if (Date.now() - timestamp < cacheDuration) {
-        console.log(`Using cached data for metric: ${metric}, timeRange: ${timeRange}`);
+        console.log(
+          `Using cached data for metric: ${metric}, timeRange: ${timeRange}`,
+        );
         const metricData = data[metric];
         // displayMetricDataInTable is the helper from the previous caching example
-        displayMetricDataInTable(metricData, table, tableBody, metric, dataContainer, timeRange);
+        displayMetricDataInTable(
+          metricData,
+          table,
+          tableBody,
+          metric,
+          dataContainer,
+          timeRange,
+        );
         return;
       }
-      console.log(`Cache expired for metric: ${metric}, timeRange: ${timeRange}`);
+      console.log(
+        `Cache expired for metric: ${metric}, timeRange: ${timeRange}`,
+      );
       localStorage.removeItem(cacheKey);
     }
   } catch (error) {
-    console.error('Error reading from localStorage:', error);
+    console.error("Error reading from localStorage:", error);
   }
 
   // If not in cache or cache expired, fetch from API
   try {
     let apiData;
     // Call the correct fetch function based on timeRange
-    if (timeRange === 'day') {
+    if (timeRange === "day") {
       apiData = await fetchDailyTotals(); // from js/api.js
-    } else if (timeRange === 'week') {
+    } else if (timeRange === "week") {
       apiData = await fetchWeeklyTotals(); // from js/api.js
     } else {
       // Default to month
       apiData = await fetchMonthlyTotals(); // from js/api.js
     }
 
-    if (!apiData || typeof apiData !== 'object' || !apiData[metric]) {
+    if (!apiData || typeof apiData !== "object" || !apiData[metric]) {
       // Added typeof apiData check
       console.error(
         `No data returned or invalid structure for metric: ${metric} in API response:`,
-        apiData
+        apiData,
       );
-      const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
+      const preferredLang = localStorage.getItem("preferredLanguage") || "en";
       const noDataText =
-        translations['error.noData']?.[preferredLang] || `No data available for metric: ${metric}`;
+        translations["error.noData"]?.[preferredLang] ||
+        `No data available for metric: ${metric}`;
       if (dataContainer) {
         dataContainer.innerHTML = `<p data-translate="error.noData">${noDataText}</p>`;
       }
-      if (table) table.style.display = 'none'; // Ensure table is hidden if no data
+      if (table) table.style.display = "none"; // Ensure table is hidden if no data
       return;
     }
 
     try {
-      localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data: apiData }));
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({ timestamp: Date.now(), data: apiData }),
+      );
     } catch (error) {
-      console.error('Error saving to localStorage:', error);
+      console.error("Error saving to localStorage:", error);
     }
 
     const metricData = apiData[metric];
-    displayMetricDataInTable(metricData, table, tableBody, metric, dataContainer, timeRange);
+    displayMetricDataInTable(
+      metricData,
+      table,
+      tableBody,
+      metric,
+      dataContainer,
+      timeRange,
+    );
   } catch (error) {
     console.error(`Error fetching data for metric: ${metric}`, error);
-    const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
-    const errorText = translations['error.loadFailed']?.[preferredLang] || 'Failed to load data.';
+    const preferredLang = localStorage.getItem("preferredLanguage") || "en";
+    const errorText =
+      translations["error.loadFailed"]?.[preferredLang] ||
+      "Failed to load data.";
     if (dataContainer) {
       dataContainer.innerHTML = `<p data-translate="error.loadFailed">${errorText}</p>`;
     }
-    if (table) table.style.display = 'none'; // Ensure table is hidden on error
+    if (table) table.style.display = "none"; // Ensure table is hidden on error
   }
 }
 
@@ -144,9 +188,9 @@ export function displayMetricDataInTable(
   tableBody,
   metric,
   dataContainer,
-  timeRange
+  timeRange,
 ) {
-  const rollingHeader = document.getElementById('rollingAverageHeader'); // You'll need to add this ID to your H1
+  const rollingHeader = document.getElementById("rollingAverageHeader"); // You'll need to add this ID to your H1
   if (rollingHeader) {
     // This part needs new translation keys as well if you want it localized.
     // e.g., "header.rollingDaily", "header.rollingWeekly", "header.rollingMonthly"
@@ -154,10 +198,16 @@ export function displayMetricDataInTable(
     const headerKey = `header.rolling${timeRange.charAt(0).toUpperCase() + timeRange.slice(1)}`; // e.g. header.rollingDay
 
     // Attempt to translate
-    const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
-    if (typeof translations !== 'undefined' && translations[headerKey]?.[preferredLang]) {
+    const preferredLang = localStorage.getItem("preferredLanguage") || "en";
+    if (
+      typeof translations !== "undefined" &&
+      translations[headerKey]?.[preferredLang]
+    ) {
       headerText = translations[headerKey][preferredLang];
-    } else if (typeof translations !== 'undefined' && translations[headerKey]?.en) {
+    } else if (
+      typeof translations !== "undefined" &&
+      translations[headerKey]?.en
+    ) {
       // Fallback to English from translations object
       headerText = translations[headerKey].en;
     }
@@ -169,30 +219,30 @@ export function displayMetricDataInTable(
   }
 
   if (dataContainer) {
-    dataContainer.textContent = '';
+    dataContainer.textContent = "";
   }
-  table.style.display = 'table';
-  tableBody.innerHTML = '';
+  table.style.display = "table";
+  tableBody.innerHTML = "";
 
   if (metricData && Array.isArray(metricData) && metricData.length > 0) {
     // ... (rest of the table population logic remains the same as your previous caching example) ...
     // Make sure it correctly uses item.kills, item.losses, item.incident_count
     // as per your data structure
     [...metricData].map((item) => {
-      const tr = document.createElement('tr');
-      let nameCellContent = '';
-      let valueCellContent = '';
+      const tr = document.createElement("tr");
+      let nameCellContent = "";
+      let valueCellContent = "";
 
-      if (metric === 'top_systems') {
-        const systemName = item.solar_system_name || 'UNKNOWN';
+      if (metric === "top_systems") {
+        const systemName = item.solar_system_name || "UNKNOWN";
         nameCellContent = `<span class="clickable-system" data-system="${systemName}" title="Click to search for ${systemName}">${systemName}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>`;
         valueCellContent = item.incident_count || item.kills;
-      } else if (metric === 'top_killers') {
-        const killerName = item.name || 'UNKNOWN';
+      } else if (metric === "top_killers") {
+        const killerName = item.name || "UNKNOWN";
         nameCellContent = `<span class="clickable-name" data-name="${killerName}" title="Click to search for ${killerName}">${killerName}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>`;
         valueCellContent = item.kills;
-      } else if (metric === 'top_victims') {
-        const victimName = item.name || 'UNKNOWN';
+      } else if (metric === "top_victims") {
+        const victimName = item.name || "UNKNOWN";
         nameCellContent = `<span class="clickable-name" data-name="${victimName}" title="Click to search for ${victimName}">${victimName}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>`;
         valueCellContent = item.losses;
       }
@@ -206,16 +256,17 @@ export function displayMetricDataInTable(
   } else {
     if (dataContainer) {
       dataContainer.innerHTML = `<p data-translate="error.noData">${
-        translations['error.noData']?.[localStorage.getItem('preferredLanguage') || 'en'] ||
-        'No data available for this metric.'
+        translations["error.noData"]?.[
+          localStorage.getItem("preferredLanguage") || "en"
+        ] || "No data available for this metric."
       }</p>`;
-      table.style.display = 'none';
+      table.style.display = "none";
     }
   }
   addTableClickListeners(table.id);
-  if (typeof setLanguage === 'function') {
+  if (typeof setLanguage === "function") {
     // Ensure dynamic content is re-translated
-    setLanguage(localStorage.getItem('preferredLanguage') || 'en');
+    setLanguage(localStorage.getItem("preferredLanguage") || "en");
   }
 }
 
@@ -232,29 +283,41 @@ export function addTableClickListeners(tableId) {
   }
 
   // Add listeners for clickable names
-  [...table.querySelectorAll('.clickable-name')].map((element) => {
-    element.style.cursor = 'pointer'; // Add pointer cursor
-    element.addEventListener('click', (e) => {
+  [...table.querySelectorAll(".clickable-name")].map((element) => {
+    element.style.cursor = "pointer"; // Add pointer cursor
+    element.addEventListener("click", (e) => {
       e.preventDefault();
       const name = element.dataset.name;
-      if (name && name !== 'UNKNOWN' && typeof navigateToSearch === 'function') {
-        navigateToSearch(name, 'name');
-      } else if (typeof navigateToSearch !== 'function') {
-        console.error('navigateToSearch function is not defined. Make sure utils.js is loaded.');
+      if (
+        name &&
+        name !== "UNKNOWN" &&
+        typeof navigateToSearch === "function"
+      ) {
+        navigateToSearch(name, "name");
+      } else if (typeof navigateToSearch !== "function") {
+        console.error(
+          "navigateToSearch function is not defined. Make sure utils.js is loaded.",
+        );
       }
     });
   });
 
   // Add listeners for clickable systems
-  [...table.querySelectorAll('.clickable-system')].map((element) => {
-    element.style.cursor = 'pointer'; // Add pointer cursor
-    element.addEventListener('click', (e) => {
+  [...table.querySelectorAll(".clickable-system")].map((element) => {
+    element.style.cursor = "pointer"; // Add pointer cursor
+    element.addEventListener("click", (e) => {
       e.preventDefault();
       const system = element.dataset.system;
-      if (system && system !== 'UNKNOWN' && typeof navigateToSearch === 'function') {
-        navigateToSearch(system, 'system');
-      } else if (typeof navigateToSearch !== 'function') {
-        console.error('navigateToSearch function is not defined. Make sure utils.js is loaded.');
+      if (
+        system &&
+        system !== "UNKNOWN" &&
+        typeof navigateToSearch === "function"
+      ) {
+        navigateToSearch(system, "system");
+      } else if (typeof navigateToSearch !== "function") {
+        console.error(
+          "navigateToSearch function is not defined. Make sure utils.js is loaded.",
+        );
       }
     });
   });
