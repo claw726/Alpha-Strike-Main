@@ -3,25 +3,29 @@
 This project is the main user interface for the Alpha-Strike Killboard, a leaderboard for the game Eve Frontier. It allows users to view recent activities, top-ranking players and systems, and search for specific killmails. The frontend is built using HTML, CSS, and vanilla JavaScript, and it is now bundled using Vite. The live website can be found at [https://www.alpha-strike.space/](https://www.alpha-strike.space/) and utilizes the API at [https://api.alpha-strike.space/](https://api.alpha-strike.space/) for data.
 
 ---
+
 ## About Alpha-Strike Killboard
 
 Alpha-Strike Killboard is designed to provide players of Eve Frontier with a comprehensive overview of PvP (Player versus Player) activities. It tracks and displays information such as:
-* Recent killmails ("Recently Stamped")
-* Leading killers
-* Leading victims
-* Most active systems
-* Search functionality for names or systems
-* Detailed killmail views
+
+- Recent killmails ("Recently Stamped")
+- Leading killers
+- Leading victims
+- Most active systems
+- Search functionality for names or systems
+- Detailed killmail views
 
 The interface supports multiple languages, including English, Spanish, Russian, and Chinese.
 
 ---
+
 ## Folder Structure
 
 The project is organized as follows:
 
 ```
-alpha-strike-main/
+alpha-strike-main/                  # Git version control directory
+├── .husky/                  # Git hooks for pre-commit and pre-push operations                 # Trunk.io configuration directory
 ├── public/                  # Static assets (favicon, images, localization files)
 │   ├── assets/
 │   │   └── images/
@@ -50,21 +54,29 @@ alpha-strike-main/
 │   ├── utilities.css
 │   ├── variables.css
 │   └── components/          # Component-specific styles
+├── dist/                    # Production build output directory
+├── node_modules/            # Project dependencies installed by npm/yarn
 ├── index.html               # Main entry point of the application
 ├── package.json             # Project metadata and dependencies
 ├── package-lock.json        # Exact versions of dependencies
 ├── vite.config.js           # Vite configuration file
+├── biome.json              # Biome linter and formatter configuration
+├── .gitignore              # Git ignore rules
+├── LICENSE                 # Project license file
 └── README.md                # This file
 ```
 
 ---
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
-* **Node.js**: (LTS version recommended)
-* **npm** (Node Package Manager) or **yarn**
+
+- **Node.js**: (LTS version recommended)
+- **npm** (Node Package Manager) or **yarn**
 
 ---
+
 ## Getting Started
 
 1.  **Clone the repository** (if you haven't already):
@@ -74,6 +86,7 @@ Before you begin, ensure you have the following installed:
     ```
 
 ---
+
 ## Installation
 
 1.  **Install project dependencies**:
@@ -88,6 +101,7 @@ Before you begin, ensure you have the following installed:
     This will install Vite and other necessary development dependencies listed in `package.json`.
 
 ---
+
 ## Running Locally (Development)
 
 1.  **Start the development server**:
@@ -103,6 +117,7 @@ Before you begin, ensure you have the following installed:
 2.  Open your browser and navigate to the local URL provided by Vite (usually `http://localhost:5173` or similar).
 
 ---
+
 ## Building for Production
 
 1.  **Build the project**:
@@ -117,6 +132,7 @@ Before you begin, ensure you have the following installed:
     This command, also found in `package.json`, will use Vite to bundle your HTML, CSS, and JavaScript files. The output will be placed in a `dist/` directory by default. The `vite.config.js` file specifies the input HTML files for the build process.
 
 ---
+
 ## Previewing Production Build
 
 1.  **Preview the production build locally**:
@@ -131,12 +147,14 @@ Before you begin, ensure you have the following installed:
     This command starts a local static web server that serves the files from your `dist/` directory.
 
 ---
+
 ## How to Contribute
 
 You may create a pull request to make any changes that you feel are necessary to improve the leaderboard. Please test your changes locally on your machine before submitting. Pull requests will be reviewed and either rejected or merged, after which they will be updated on the website.
 
 ---
+
 ## Credits
 
-* The black hole image used in the website's cascading style sheets was sourced from an article by Jean-Pierre Luminet, referenced at [https://www.engadget.com/2017-04-19-black-hole-image-jean-pierre-luminet.html](https://www.engadget.com/2017-04-19-black-hole-image-jean-pierre-luminet.html).
-* The favicon images were generated using the favicon generator hosted by [https://icons8.com/icons](https://icons8.com/icons).
+- The black hole image used in the website's cascading style sheets was sourced from an article by Jean-Pierre Luminet, referenced at [https://www.engadget.com/2017-04-19-black-hole-image-jean-pierre-luminet.html](https://www.engadget.com/2017-04-19-black-hole-image-jean-pierre-luminet.html).
+- The favicon images were generated using the favicon generator hosted by [https://icons8.com/icons](https://icons8.com/icons).
