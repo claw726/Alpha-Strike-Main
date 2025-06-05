@@ -12,7 +12,7 @@
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Alpha-Strike, Find your Content on the Frontier!</title>
-        <link rel="shortcut icon" href="../favicon.png" />
+        <link rel="shortcut icon" href="/../favicon.png" />
         <link rel="stylesheet" href="../styles/main.css" />
         <link
             rel="stylesheet"
@@ -31,19 +31,19 @@
     </head>
     <body>
         <main>
-            <!-- Navigation will be inserted here -->
             <div id="navigation-container"></div>
 
             <h1>
                 <i class="fa-solid fa-skull-crossbones"></i>
-                <span data-translate="header.tenaciousKillers"
-                    >Tenacious Killers</span
-                >
+                <span data-translate="header.tenaciousKillers">Tenacious Killers</span>
             </h1>
             <div class="container monthly-tables">
-                <h1 data-translate="header.rollingMonthly">
-                    Rolling Monthly Average
-                </h1>
+                <h1 id="rollingAverageHeader"></h1>
+                <div class="time-range-selector" style="text-align: center; margin-bottom: 20px;">
+                    <button class="time-range-btn" data-range="day" data-translate="button.rangeDay">Day</button>
+                    <button class="time-range-btn" data-range="week" data-translate="button.rangeWeek">Week</button>
+                    <button class="time-range-btn active" data-range="month" data-translate="button.rangeMonth">Month</button>
+                </div>
                 <div id="data-container">Loading data...</div>
                 <table id="killerTable" style="display: none">
                     <thead>
@@ -60,18 +60,68 @@
         </main>
 
         <!-- Scripts -->
-        <script src="../js/translation-dictionary.js"></script>
-        <script src="../js/utils.js"></script>
-        <script src="../js/api.js"></script>
-        <script src="../components/navigation.js"></script>
-        <script src="../js/common.js"></script>
-        <script src="../js/monthly-tables.js"></script>
+        <script type="module">
+    import { initializePage } from '../js/common.js';
+    // Import the new function specifically
+    import { fetchAndDisplayMetric, updateRollingAverageHeaderText } from '../js/monthly-tables.js';
+    import { loadTranslations } from '../js/translation-dictionary.js';
 
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                initializePage("killers");
-                fetchAndDisplayMetric("top_killers", "killerTable");
+    document.addEventListener("DOMContentLoaded", async () => {
+        await loadTranslations(); // Ensure translations are loaded first
+
+        let currentMetric = "top_killers";
+        let tableId = "killerTable";
+        let currentTimeRange = 'month'; // Variable to store the current time range
+
+        // Determine currentMetric and tableId (if dynamic for the page)
+        if (document.body.contains(document.getElementById("systemTable"))) {
+            currentMetric = "top_systems";
+            tableId = "systemTable";
+        } else if (document.body.contains(document.getElementById("victimTable"))) {
+            currentMetric = "top_victims";
+            tableId = "victimTable";
+        }
+
+        initializePage(currentMetric.replace('top_', ''));
+
+        function updateActiveButtonStates(activeRange) {
+            const buttons = document.querySelectorAll('.time-range-btn');
+            buttons.forEach(button => {
+                if (button.dataset.range === activeRange) {
+                    button.classList.add("active");
+                } else {
+                    button.classList.remove("active");
+                }
             });
-        </script>
+        }
+
+        function loadMetricData(timeRange) {
+            currentTimeRange = timeRange; // Update the stored current time range
+            updateActiveButtonStates(timeRange); // Update button UI
+            fetchAndDisplayMetric(currentMetric, tableId, timeRange); // This will also set the header
+        }
+
+        const timeRangeButtons = document.querySelectorAll('.time-range-btn');
+        timeRangeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const selectedRange = button.getAttribute('data-range');
+                loadMetricData(selectedRange);
+            });
+        });
+
+        loadMetricData(currentTimeRange); // Initial load, default to 'month'
+
+        // Setup callback for language changes
+        if (typeof window.AlphaStrike === 'undefined') {
+            window.AlphaStrike = {};
+        }
+        window.AlphaStrike.onLanguageChangeRenderContent = () => {
+            console.log(`Language change detected on ${currentMetric} page. Updating header for timeRange: ${currentTimeRange}`);
+            // Call the new function to only update the header text
+            updateRollingAverageHeaderText(currentTimeRange);
+            // Note: The main setLanguage in translation-dictionary.js will handle other data-translate elements.
+        };
+    });
+</script>
     </body>
 </html>

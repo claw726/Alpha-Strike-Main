@@ -1,65 +1,70 @@
 // Translation dictionary for selected elements.
-// Translation dictionary for selected elements.
-var translations = {}; // This will be populated by the JSON file loaded at runtime. (e.g., from .localization/translations.json)
-
-const languages = ["en", "es", "ru", "zh"];
+export let translations = {}; // This will be populated by the JSON file loaded at runtime. (e.g., from .localization/translations.json)
+export const languages = ["en", "es", "ru", "zh"];
+export let currentLanguageIndex = 0; // Index of the currently selected language in the languages array
 
 /**
  * Sets the language for the page and updates UI elements.
  */
-function setLanguage(lang) {
+export function setLanguage(lang) {
   document.documentElement.lang = lang;
   localStorage.setItem("preferredLanguage", lang);
 
   const elements = document.querySelectorAll("[data-translate]");
   [...elements].map((element) => {
     const key = element.getAttribute("data-translate");
-    // Navigate through nested keys if necessary (e.g., "navbar.home")
-    // Access the translation object for the given key first, then get the specific language string.
     const translationEntry = translations[key];
-    const translation = translationEntry ? translationEntry[lang] : undefined;
+    // Fallback to English if specific lang not found, then to key if English also not found for that key
+    const translation = translationEntry ? (translationEntry[lang] || translationEntry.en || key) : key;
+
 
     if (translation) {
-      // Preserve child elements like <img> by setting textContent only on text nodes
-      // or by being more specific if the element is known to only contain text.
-      if (
-        element.childNodes.length === 1 &&
-        element.childNodes[0].nodeType === Node.TEXT_NODE
-      ) {
-        element.textContent = translation;
-      } else {
-        // For more complex elements, you might need a more sophisticated update strategy
-        // or ensure data-translate is on the innermost text-bearing element.
-        // As a fallback, this might replace child elements if not handled carefully.
-        // A common practice is to have a specific span for text: <a data-translate-key="navbar.home"><span>Home</span></a>
-        // For now, let's assume direct text content or that your structure handles it.
-        if (element.tagName === "INPUT" || element.tagName === "BUTTON") {
-          if (
-            element.placeholder !== undefined &&
-            (key.includes(".placeholder") || key.includes("search.placeholder"))
-          ) {
-            element.placeholder = translation;
+      // Simplified update logic for brevity, ensure your existing logic for icons etc. is retained
+      if (element.tagName === "INPUT" && element.placeholder !== undefined && (key.includes(".placeholder") || key.endsWith("Placeholder"))) {
+        element.placeholder = translation;
+      } else if (element.tagName === "BUTTON" || element.classList.contains("timezone-toggle-floating")) {
+          const iconElement = element.querySelector('i');
+          const textSpan = element.querySelector('span[data-translate]'); // Preferentially update span if it exists
+          if (textSpan && textSpan.getAttribute('data-translate') === key) {
+              textSpan.textContent = translation;
+          } else if (iconElement) {
+            element.innerHTML = `${iconElement.outerHTML} ${translation}`;
           } else {
             element.textContent = translation;
           }
+      }
+      else {
+        // For most elements, try to preserve child <i> tags if they are the first child
+        const firstChild = element.firstChild;
+        if (firstChild && firstChild.nodeType === Node.ELEMENT_NODE && firstChild.tagName === 'I') {
+            element.innerHTML = `${firstChild.outerHTML} ${translation}`;
         } else {
-          element.innerHTML = translation;
+            element.textContent = translation;
         }
       }
     }
   });
 
-  // Update the language button text
   const langBtn = document.getElementById("animatedLangBtn");
   if (langBtn) {
-    langBtn.innerHTML = `<i class="fas fa-globe"></i> ${lang.toUpperCase()}`;
+    const icon = langBtn.querySelector("i.fa-globe");
+    const iconHTML = icon ? `${icon.outerHTML} ` : "";
+    langBtn.innerHTML = `${iconHTML}${lang.toUpperCase()}`;
   }
 
-  // Update currentLanguageIndex based on the set language
   const langIndex = languages.indexOf(lang);
   if (langIndex !== -1) {
     currentLanguageIndex = langIndex;
   }
+
+  // --- MODIFICATION START ---
+  // Call the page-specific re-render function if it's defined
+  // This allows pages like killmail-detail.js to refresh their dynamic content
+  if (window.AlphaStrike && typeof window.AlphaStrike.onLanguageChangeRenderContent === 'function') {
+    console.log("Calling window.AlphaStrike.onLanguageChangeRenderContent() due to language change.");
+    window.AlphaStrike.onLanguageChangeRenderContent();
+  }
+  // --- MODIFICATION END ---
 }
 
 /**
@@ -75,53 +80,51 @@ function cycleLanguage() {
  * Initializes the language switcher button.
  * This function will be called after the navigation is rendered.
  */
-function initializeLanguageSwitcher() {
+export function initializeLanguageSwitcher() {
   const animatedBtn = document.getElementById("animatedLangBtn");
   if (animatedBtn) {
     // Set initial button text from localStorage or default
     const lang = localStorage.getItem("preferredLanguage") || languages[0];
-    animatedBtn.innerHTML = `<i class="fas fa-globe"></i> ${lang.toUpperCase()}`;
+    const icon = animatedBtn.querySelector("i.fa-globe"); // Get existing icon
+    const iconHTML = icon ? `${icon.outerHTML} ` : "<i class=\"fas fa-globe\"></i> "; // Fallback icon
+    animatedBtn.innerHTML = `${iconHTML}${lang.toUpperCase()}`;
 
     animatedBtn.addEventListener("click", cycleLanguage);
   } else {
-    // This might still log if called before navigation is fully ready on slower systems,
-    // or if there's a persistent issue with navigation rendering.
     console.warn(
       "#animatedLangBtn not found during language switcher initialization.",
     );
   }
 }
 
-// Initial language setup on DOMContentLoaded for static content.
-// The main call to setLanguage for dynamically added content will happen in initializePage.
-document.addEventListener("DOMContentLoaded", async () => {
-  await loadTranslations();
-  const preferredLanguage =
-    localStorage.getItem("preferredLanguage") || languages[0];
-  // Ensure currentLanguageIndex is correctly set based on stored language
-  const preferredLangIndex = languages.indexOf(preferredLanguage);
-  if (preferredLangIndex !== -1) {
-    currentLanguageIndex = preferredLangIndex;
-  } else {
-    currentLanguageIndex = 0; // Default to first language if stored one is invalid
-  }
-  setLanguage(languages[currentLanguageIndex]);
-  // Note: initializeLanguageSwitcher() is NOT called here directly anymore.
-  // It will be called by initializePage after navigation is built.
-});
-
-async function loadTranslations() {
+// Load translations and then set the initial language.
+// This ensures `translations` object is populated before `setLanguage` is called.
+export async function loadTranslations() {
   try {
-    const response = await fetch("../localization/translations.json");
+    // Adjust the path based on where this script is likely to be imported from.
+    // If imported in files within /js/, then '../localization/translations.json' is correct.
+    // If imported from index.html, then './localization/translations.json' or 'localization/translations.json'.
+    // Assuming common.js (where initializePage is) is in /js/, this path should generally work from there.
+    // For killmail-detail.js (in /js/), this path is also correct.
+    let pathPrefix = '';
+    // Heuristic to determine path prefix based on current URL
+    if (window.location.pathname.includes('/pages/')) {
+        pathPrefix = '../';
+    } else if (window.location.pathname.endsWith('/') || window.location.pathname.endsWith('.html')) {
+        // Root or direct HTML file in root
+        pathPrefix = './'; // or just '' depending on server setup
+    }
+
+    const response = await fetch(`${pathPrefix}localization/translations.json`);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP error! status: ${response.status} for translations.json at ${pathPrefix}localization/translations.json`);
     }
     translations = await response.json();
+    console.log("Translations loaded successfully.");
   } catch (error) {
     console.error("Failed to load translations:", error);
-    // Fallback to an empty object or handle the error as needed
     translations = {
-      " error.loading": {
+      "error.loading": {
         en: "Error loading translations",
         es: "Error al cargar las traducciones",
         ru: "Ошибка загрузки переводов",
@@ -130,3 +133,21 @@ async function loadTranslations() {
     };
   }
 }
+
+
+// Initial language setup on DOMContentLoaded.
+// This event listener ensures that translations are loaded and the initial language is set
+// as soon as the basic DOM structure is ready.
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadTranslations(); // Ensure translations are loaded first
+  const preferredLanguage =
+    localStorage.getItem("preferredLanguage") || languages[0];
+  const preferredLangIndex = languages.indexOf(preferredLanguage);
+  if (preferredLangIndex !== -1) {
+    currentLanguageIndex = preferredLangIndex;
+  } else {
+    currentLanguageIndex = 0; // Default to the first language if stored one is invalid
+  }
+  setLanguage(languages[currentLanguageIndex]); // Apply the language
+  // initializeLanguageSwitcher() is called by initializePage after navigation is built.
+});

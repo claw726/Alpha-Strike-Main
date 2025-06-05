@@ -14,6 +14,13 @@
     --color-text-muted: #888;
     --color-text-light: #bbb;
 
+    --color-primary-rgb: 211, 47, 47;
+    --color-secondary-rgb: 255, 167, 38;
+    --color-bg-dark-rgb: 18, 18, 18;
+    --color-bg-medium-rgb: 26, 26, 26;
+    --color-bg-light-rgb: 44, 44, 44;
+    --color-text-primary-rgb: 240, 240, 240;
+
     /* Gradients */
     --gradient-dark: linear-gradient(
         135deg,
@@ -44,7 +51,7 @@
     --border-primary-strong: 1px solid rgba(211, 47, 47, 0.6);
 
     /* Typography */
-    --font-primary: "Space Mono", "Orbitron", monospace;
+    --font-primary: "Exo 2", monospace;
     --font-secondary: "Exo 2", "Segoe UI", monospace, sans-serif;
 
     /* Spacing */
@@ -62,4 +69,8 @@
 
     /* Transitions */
     --transition-default: all 0.3s ease;
+
+    /* ... existing variables ... */
+    
+
 }

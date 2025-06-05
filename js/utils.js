@@ -1,13 +1,16 @@
+import { translations, languages } from './translation-dictionary.js';
+import { lazyLoader } from './utils/lazyLoading.js';
+
 // Global var to track timezone prefs
-let showLocalTime = true;
+export let showLocalTime = true;
 
 /**
  * Function to format the timestamp in user's local time
- * @param {number} timestamp - The Windows FILETIME timestamp
+ * @param {number|string} timestamp - The timestamp (Windows FILETIME, Unix seconds/milliseconds, or ISO string)
  * @param {boolean} showLocal - Whether to show local time (default: true)
  * @returns {string} - Formatted timestamp string
  */
-function formatTimestamp(timestamp, showLocal = true) {
+export function formatTimestamp(timestamp, showLocal = true) {
   let date;
 
   // Try different timestamp formats to determine the correct one
@@ -55,7 +58,7 @@ function formatTimestamp(timestamp, showLocal = true) {
     const seconds = String(date.getSeconds()).padStart(2, "0");
 
     // Get timezone abbreviation
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone; // Not used directly
     const timeZoneShort = date
       .toLocaleTimeString("en-US", { timeZoneName: "short" })
       .split(" ")[2];
@@ -78,7 +81,7 @@ function formatTimestamp(timestamp, showLocal = true) {
 /**
  * Toggle between local time and UTC display
  */
-function toggleTimezone() {
+export function toggleTimezone() {
   showLocalTime = !showLocalTime;
 
   // Get current language from HTML tag once at the beginning
@@ -92,7 +95,9 @@ function toggleTimezone() {
     const card = element.closest(".incident-list-item");
     if (card?.dataset.timestamp) {
       element.textContent = formatTimestamp(
-        Number.parseInt(card.dataset.timestamp),
+        // Ensure timestamp is treated as a number if it's a numeric string
+        typeof card.dataset.timestamp === 'string' && !Number.isNaN(card.dataset.timestamp) ?
+        Number(card.dataset.timestamp) : card.dataset.timestamp,
         showLocalTime,
       );
     }
@@ -117,7 +122,7 @@ function toggleTimezone() {
       } else {
         // Fallback to English or key if translation is missing
         toggleSpan.textContent = translationEntry
-          ? translationEntry["en"]
+          ? translationEntry.en
           : newKey;
         console.warn(
           `Translation not found for key: ${newKey}, lang: ${currentLang}. Using fallback.`,
@@ -129,7 +134,7 @@ function toggleTimezone() {
   // Update label text for timestamp dynamically
   const timestampLabels = document.querySelectorAll(
     ".timestamp-group .detail-label",
-  ); // Corrected selector
+  );
 
   [...timestampLabels].map((label) => {
     const newKey = showLocalTime ? "card.localTimeLabel" : "card.utcTimeLabel";
@@ -150,11 +155,15 @@ function toggleTimezone() {
       );
     }
   });
+  if (window.AlphaStrike && typeof window.AlphaStrike.onLanguageChangeRenderContent === 'function') {
+    console.log("ToggleTimezone: Calling page-specific render function.");
+    window.AlphaStrike.onLanguageChangeRenderContent();
+  }
 }
 
 /**
  * Function to calculate time elapsed since incident
- * @param {number} timestamp - The timestamp
+ * @param {number|string} timestamp - The timestamp
  * @returns {string} - Human readable time elapsed
  */
 function getTimeElapsed(timestamp) {
@@ -215,13 +224,19 @@ function getTimeElapsed(timestamp) {
 
 /**
  * Creates a data card element for incident display
- * @param {Object} item - The incident data
- * @returns {HTMLElement} - The created card element
+ * @param {Object} item - The incident data, expected to have an 'id' property for the killmail ID.
+ * @returns {HTMLElement|null} - The created card element or null if item is invalid.
  */
-function createIncidentCard(item) {
+export function createIncidentCard(item) {
   if (!item || typeof item !== "object") {
     console.warn("Invalid item passed to createIncidentCard:", item);
     return null;
+  }
+
+  // Check for the presence of 'id' for the killmail link.
+  if (item.id === undefined || item.id === null) {
+      console.warn("Skipping card creation for item missing 'id':", item);
+      return null;
   }
 
   const isEffectivelyEmpty =
@@ -232,59 +247,104 @@ function createIncidentCard(item) {
     !item.time_stamp;
 
   if (isEffectivelyEmpty) {
-    console.warn(
-      "Skipping card creation for item with all essential fields missing:",
-      item,
-    );
+    console.warn("Skipping card creation for effectively empty item:", item);
     return null;
   }
 
-  const listItem = document.createElement("div");
-  listItem.classList.add("incident-list-item");
+  const card = document.createElement("div");
+  card.className = "incident-list-item";
+  card.dataset.timestamp = item.time_stamp;
 
-  if (item.time_stamp) {
-    listItem.dataset.timestamp = item.time_stamp;
-  }
+  // Create killer image with lazy loading
+  const killerImg = document.createElement("img");
+  killerImg.className = "profile-image";
+  killerImg.alt = `Killer ${item.killer_name || 'Unknown'}`;
+  killerImg.dataset.src = "../assets/images/default-avatar.avif";
+  lazyLoader.addLazyLoading(killerImg, killerImg.dataset.src);
+
+  // Create victim image with lazy loading
+  const victimImg = document.createElement("img");
+  victimImg.className = "profile-image";
+  victimImg.alt = `Victim ${item.victim_name || 'Unknown'}`;
+  victimImg.dataset.src = "../assets/images/default-avatar.avif";
+  lazyLoader.addLazyLoading(victimImg, victimImg.dataset.src);
 
   const isIndexPage =
     window.location.pathname.endsWith("index.html") ||
-    window.location.pathname === "/";
-  const assetBasePath = isIndexPage ? "" : "../";
+    window.location.pathname === "/" ||
+    window.location.pathname.endsWith("/Alpha-Strike-Main/");
+  const assetBasePath = isIndexPage ? "./" : "../";
+  const pagesBasePath = isIndexPage ? "pages/" : "";
 
   const formattedTimestamp = item.time_stamp
     ? formatTimestamp(item.time_stamp, showLocalTime)
     : "N/A";
   const timeElapsed = item.time_stamp ? getTimeElapsed(item.time_stamp) : "";
-
   const timeLabelKey = showLocalTime
     ? "card.localTimeLabel"
     : "card.utcTimeLabel";
-  const placeholderProfileImage = `${assetBasePath}assets/images/awakened.avif`;
+  const placeholderProfileImage = `${assetBasePath}assets/images/default-avatar.avif`;
 
-  listItem.innerHTML = `
+  const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
+
+  function getTranslatedTooltip(key, placeholders = {}, defaultTextPattern = "") {
+    let pattern = defaultTextPattern;
+    if (typeof translations !== 'undefined' && translations[key]?.[preferredLang]) {
+        pattern = translations[key][preferredLang];
+    } else if (typeof translations !== 'undefined' && translations[key]?.en) {
+        pattern = translations[key].en; // Fallback to English from translations
+    }
+
+    for (const placeholder in placeholders) {
+        pattern = pattern.replace(`{${placeholder}}`, placeholders[placeholder]);
+    }
+    return pattern;
+  }
+
+  const killerNameForSearch = item.killer_name || "UNKNOWN";
+  const victimNameForSearch = item.victim_name || "UNKNOWN";
+  const systemNameForSearch = item.solar_system_name || "UNKNOWN";
+
+  // Tooltips are now generated by getTranslatedTooltip, no need to redefine here.
+
+  let detailLinkHTML = "";
+  // Use item.id for the killmail link directly
+  const killmailId = item.id;
+  const linkTooltipTextKey = "tooltip.viewKillmailDetails"; // Reusing existing tooltip key
+  const linkTooltipText = getTranslatedTooltip(linkTooltipTextKey, { killmailId: killmailId }, `View details for killmail ${killmailId}`);
+
+  detailLinkHTML = `
+      <div class="incident-detail-link-container">
+          <a href="${pagesBasePath}killmail.html?mail_id=${encodeURIComponent(killmailId)}"
+             class="view-killmail-details-link icon-only-link"
+             aria-label="${linkTooltipText}"
+             title="${linkTooltipText}">
+             <i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+      </div>
+  `;
+
+
+  card.innerHTML = `
         <div class="incident-photos">
             <div class="photo-container killer-photo">
-                <img src="${placeholderProfileImage}" alt="Aggressor" class="combatant-photo"/>
+                <img src="${killerImg.dataset.src}" alt="Aggressor" class="combatant-photo"/>
             </div>
-            <div class="vs-indicator">
-                <i class="fas fa-bolt"></i>
-            </div>
+            <div class="vs-indicator"><i class="fas fa-bolt"></i></div>
             <div class="photo-container victim-photo">
-                <img src="${placeholderProfileImage}" alt="Victim" class="combatant-photo"/>
+                <img src="${victimImg.dataset.src}" alt="Victim" class="combatant-photo"/>
             </div>
         </div>
-
         <div class="incident-combatants">
             <div class="combatant-info killer-info">
                 <span class="combatant-label" data-translate="card.aggressor"></span>
-                <span class="combatant-name killer clickable-name" data-name="${item.killer_name || ""}" title="Click to search for ${item.killer_name || "UNKNOWN"}">${item.killer_name || "UNKNOWN"}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
+                <span class="combatant-name killer clickable-name" data-name="${killerNameForSearch}" title="${getTranslatedTooltip("tooltip.searchFor", { itemName: killerNameForSearch }, `Search for ${killerNameForSearch}`)}">${killerNameForSearch}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
             </div>
             <div class="combatant-info victim-info">
                 <span class="combatant-label" data-translate="card.casualty"></span>
-                <span class="combatant-name victim clickable-name" data-name="${item.victim_name || ""}" title="Click to search for ${item.victim_name || "UNKNOWN"}">${item.victim_name || "UNKNOWN"}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
+                <span class="combatant-name victim clickable-name" data-name="${victimNameForSearch}" title="${getTranslatedTooltip("tooltip.searchFor", { itemName: victimNameForSearch }, `Search for ${victimNameForSearch}`)}">${victimNameForSearch}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
             </div>
         </div>
-
         <div class="incident-details-compact">
             <div class="detail-group">
                 <span class="detail-label" data-translate="card.lossType"></span>
@@ -292,10 +352,9 @@ function createIncidentCard(item) {
             </div>
             <div class="detail-group">
                 <span class="detail-label" data-translate="card.location"></span>
-                <span class="detail-value clickable-system" data-system="${item.solar_system_name || ""}" title="Click to search for ${item.solar_system_name || "UNKNOWN"}">${item.solar_system_name || "UNKNOWN"}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
+                <span class="detail-value clickable-system" data-system="${systemNameForSearch}" title="${getTranslatedTooltip("tooltip.searchFor", { itemName: systemNameForSearch }, `Search for ${systemNameForSearch}`)}">${systemNameForSearch}<i class="fa-sharp fa-solid fa-arrow-up-right-from-square"></i></span>
             </div>
         </div>
-
         <div class="incident-timestamp">
             <div class="timestamp-group">
                 <span class="detail-label timestamp-label" data-translate="${timeLabelKey}"></span>
@@ -303,9 +362,10 @@ function createIncidentCard(item) {
                 ${timeElapsed ? `<span class="time-elapsed">${timeElapsed}</span>` : ""}
             </div>
         </div>
+        ${detailLinkHTML}
     `;
 
-  return listItem;
+  return card;
 }
 
 /**
@@ -313,7 +373,7 @@ function createIncidentCard(item) {
  * @param {string} query - The search query
  * @param {string} type - The search type ('name' or 'system')
  */
-function navigateToSearch(query, type) {
+export function navigateToSearch(query, type) {
   if (!query || query === "UNKNOWN" || query === "CLASSIFIED") {
     console.warn("Cannot search for empty, unknown, or classified values");
     return;
@@ -322,8 +382,10 @@ function navigateToSearch(query, type) {
   // Determine the correct path to search.html based on current page
   const isIndexPage =
     window.location.pathname.endsWith("index.html") ||
-    window.location.pathname === "/";
-  const searchPagePath = isIndexPage ? "pages/search.html" : "search.html";
+    window.location.pathname === "/" ||
+    window.location.pathname.endsWith("/Alpha-Strike-Main/"); // Adjusted for potential base path
+  const searchPagePath = isIndexPage ? "pages/search.html" : (window.location.pathname.includes("/pages/") ? "search.html" : "../pages/search.html");
+
 
   // Create URL with search parameters
   const searchUrl = `${searchPagePath}?query=${encodeURIComponent(query)}&type=${type}`;
@@ -336,27 +398,34 @@ function navigateToSearch(query, type) {
  * Add click event listeners to incident cards for navigation
  * This should be called after cards are added to the DOM
  */
-function addIncidentCardListeners() {
+export function addIncidentCardListeners() {
   // Add listeners for clickable names
   for (const element of document.querySelectorAll(".clickable-name")) {
-    element.addEventListener("click", (e) => {
-      e.preventDefault();
-      const name = element.dataset.name;
-      if (name && name !== "UNKNOWN") {
-        navigateToSearch(name, "name");
-      }
-    });
+    // Check if a listener has already been attached to this element
+    if (!element.dataset.listenerAttached) {
+        element.addEventListener("click", (e) => {
+            e.preventDefault();
+            const name = element.dataset.name;
+            if (name && name !== "UNKNOWN") {
+                navigateToSearch(name, "name");
+            }
+        });
+        element.dataset.listenerAttached = "true"; // Mark as attached
+    }
   }
 
   // Add listeners for clickable systems
   for (const element of document.querySelectorAll(".clickable-system")) {
-    element.addEventListener("click", (e) => {
-      e.preventDefault();
-      const system = element.dataset.system;
-      if (system && system !== "UNKNOWN") {
-        navigateToSearch(system, "system");
-      }
-    });
+    if (!element.dataset.listenerAttached) {
+        element.addEventListener("click", (e) => {
+            e.preventDefault();
+            const system = element.dataset.system;
+            if (system && system !== "UNKNOWN") {
+                navigateToSearch(system, "system");
+            }
+        });
+        element.dataset.listenerAttached = "true"; // Mark as attached
+    }
   }
 }
 
@@ -382,6 +451,8 @@ function debugTimestamp(timestamp) {
     const date = new Date(msSince1970);
     console.log("As Windows FILETIME (UTC):", date.toUTCString());
     console.log("As Windows FILETIME (Local):", date.toString());
+  } else if (typeof timestamp === 'string') {
+    console.log("As ISO String direct parse:", new Date(timestamp));
   }
   console.log("======================");
 }

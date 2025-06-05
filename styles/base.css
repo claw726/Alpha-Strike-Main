@@ -1,9 +1,16 @@
+html {
+    height: 100%;
+}
+
 /* Base styles */
 body {
+    display: flex; /* Make body a flex container */
+    flex-direction: column; /* Stack children vertically */
+    min-height: 100%; /* Ensure body is at least viewport height */
     margin: 0;
-    padding: 0;
-    padding-top: 60px; /* Adjusted for fixed topnav */
-    font-family: "Orbitron", var(--font-secondary);
+    padding: 0; /* Remove default padding */
+    padding-top: 70px; /* Adjusted for fixed topnav - ensure this value matches or is greater than your topnav's height */
+    font-family: var(--font-secondary), "Exo 2", "Segoe UI", monospace, sans-serif; /* Fallback fonts added */
     background-image:
         radial-gradient(
             circle at 20% 80%,
@@ -15,14 +22,14 @@ body {
             rgba(139, 0, 0, 0.15) 0%,
             transparent 50%
         ),
-        url("../assets/images/blackholes2.avif");
+        url("/assets/images/synth_field.avif"); /* Ensure this path is correct relative to your CSS or use an absolute path if Vite handles it */
     background-size: cover, cover, cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     color: var(--color-text-secondary);
-    min-height: 100vh;
-    position: relative;
+    /* min-height: 100vh; Removed this as we are using flex for full height */
+    position: relative; /* For ::before pseudo-element positioning */
 }
 
 /* Sci-fi overlay effect */
@@ -43,6 +50,15 @@ body::before {
     z-index: -1;
 }
 
+/* This is your main content area that should expand */
+/* If you don't have a single <main> tag wrapping all content between nav and footer,
+   you might need to add one in your HTML files or target a different primary content wrapper */
+main { /* Or your primary content wrapper class/id */
+    flex-grow: 1; /* This makes the main content take up available space */
+    /* You might want to add some default width/max-width and centering for the main content block here
+       if it's not already handled by .container or other wrappers inside <main> */
+}
+
 /* Container adjustments to accommodate wider cards */
 .container {
     max-width: 100%; /* Increased from 50% */
@@ -59,7 +75,7 @@ body::before {
     box-shadow:
         0 0 30px rgba(211, 47, 47, 0.2),
         var(--shadow-inset),
-        0var (--spacing-sm) var(--spacing-xl) rgba(0, 0, 0, 0.6);
+        0 var(--spacing-sm) var(--spacing-xl) rgba(0, 0, 0, 0.6);
     position: relative;
     backdrop-filter: blur(10px);
     overflow: hidden;
@@ -151,6 +167,17 @@ h1 > i,
         rgba(24, 24, 24, 0.9) 100%
     );
     box-shadow: 0 -5px 20px rgba(211, 47, 47, 0.1);
+}
+
+.note {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-top: 20px;
+    text-align: center;
+    padding: 10px;
+    background: rgba(18, 18, 18, 0.8);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(211, 47, 47, 0.2);
 }
 
 @media screen and (max-width: 600px) {

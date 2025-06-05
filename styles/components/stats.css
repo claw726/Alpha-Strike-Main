@@ -15,37 +15,68 @@
 }
 
 .card-header {
-    padding: 20px;
+    padding: 25px;
     background: linear-gradient(
         135deg,
-        rgba(211, 47, 47, 0.9) 0%,
-        rgba(139, 0, 0, 1) 50%,
-        rgba(211, 47, 47, 0.9) 100%
+        rgba(32, 32, 32, 0.95) 0%,
+        rgba(24, 24, 24, 0.98) 100%
     );
-    border-bottom: 1px solid rgba(211, 47, 47, 0.3);
+    border-bottom: 1px solid rgba(211, 47, 47, 0.2);
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add a subtle grid overlay to the header */
+.card-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(rgba(211, 47, 47, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(211, 47, 47, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.3;
+    pointer-events: none;
 }
 
 .profile-section,
 .system-section {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 25px;
     flex: 1;
+    position: relative;
+    z-index: 1;
 }
 
 .profile-image-container,
 .system-image-container {
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     border-radius: 0;
     overflow: hidden;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 0 20px rgba(211, 47, 47, 0.4);
+    border: 2px solid rgba(211, 47, 47, 0.3);
+    box-shadow: 
+        0 0 20px rgba(211, 47, 47, 0.2),
+        inset 0 0 10px rgba(0, 0, 0, 0.5);
     flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.profile-image-container:hover,
+.system-image-container:hover {
+    border-color: rgba(211, 47, 47, 0.6);
+    box-shadow: 
+        0 0 30px rgba(211, 47, 47, 0.3),
+        inset 0 0 15px rgba(0, 0, 0, 0.6);
+    transform: scale(1.02);
 }
 
 .system-image-container {
@@ -67,20 +98,12 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
-.system-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 2rem;
+.profile-image:hover,
+.system-image:hover {
+    transform: scale(1.1);
 }
 
 .profile-info,
@@ -88,20 +111,20 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
 }
 
 /* New styling for system region - less prominent */
 .enhanced-system-card .system-region {
     font-family: "Exo 2", monospace;
-    font-size: 0.7rem; /* Smaller than system-id */
-    color: #888 !important; /* More muted color */
+    font-size: 0.75rem;
+    color: #888 !important;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
     margin: 0;
-    opacity: 0.7; /* Make it less apparent */
-    font-style: italic; /* Add italic to make it look like placeholder text */
+    opacity: 0.8;
+    font-style: italic;
 }
 
 /* Override the .data-card h2 styling for player and system names */
@@ -109,31 +132,25 @@
 .enhanced-system-card .system-name {
     margin: 0;
     font-family: var(--font-primary);
-    font-size: 1.6rem; /* Slightly smaller to fit better */
+    font-size: 1.8rem;
     font-weight: 700;
     color: #ffffff !important;
     text-shadow:
-        0 0 15px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(211, 47, 47, 0.6),
         0 2px 4px rgba(0, 0, 0, 0.8) !important;
-}
-
-.enhanced-player-card .player-status,
-.enhanced-system-card .system-id {
-    font-family: var(--font-secondary);
-    font-size: 0.8rem;
-    color: #c0c0c0 !important;
-    text-transform: uppercase;
     letter-spacing: 1px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-    margin: 0;
 }
 
 /* Header stats - key stats displayed in header */
 .header-stats {
     display: flex;
-    gap: 25px;
+    gap: 30px;
     align-items: center;
     flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    padding-left: 30px;
+    border-left: 1px solid rgba(211, 47, 47, 0.2);
 }
 
 .header-stat {
@@ -141,21 +158,31 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    min-width: 80px;
+    min-width: 90px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.header-stat:hover {
+    background: rgba(211, 47, 47, 0.1);
+    transform: translateY(-2px);
 }
 
 .header-stat-value {
     font-family: var(--font-secondary);
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 700;
     color: #fff;
     text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
     line-height: 1;
+    margin-bottom: 5px;
 }
 
 .header-stat-label {
     font-family: var(--font-primary);
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.8);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -194,26 +221,27 @@
     grid-template-columns: repeat(
         auto-fit,
         minmax(180px, 1fr)
-    ); /* Smaller minimum width */
-    gap: 12px; /* Reduced gap */
-    padding: 15px 20px; /* Reduced padding */
+    );
+    gap: 15px;
+    padding: 20px 25px;
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .stat-item {
     display: flex;
     align-items: center;
-    gap: 10px; /* Reduced gap */
-    padding: 12px; /* Reduced padding */
+    gap: 12px;
+    padding: 15px;
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 0; /* Smaller radius */
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    border: 1px solid rgba(211, 47, 47, 0.1);
     transition: all 0.3s ease;
 }
 
 .stat-item:hover {
-    background: rgba(0, 0, 0, 0.5);
-    border-color: rgba(211, 47, 47, 0.4);
-    transform: translateY(-1px); /* Reduced transform */
+    background: rgba(211, 47, 47, 0.1);
+    border-color: rgba(211, 47, 47, 0.3);
+    transform: translateY(-2px);
 }
 
 .stat-item.primary {
@@ -228,27 +256,33 @@
 }
 
 .stat-icon {
-    width: 32px; /* Smaller icon container */
-    height: 32px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(211, 47, 47, 0.2);
-    border-radius: 0;
+    border-radius: 4px;
     color: #fff;
-    font-size: 1rem; /* Smaller icon */
+    font-size: 1.1rem;
     flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover .stat-icon {
+    background: rgba(211, 47, 47, 0.3);
+    transform: scale(1.1);
 }
 
 .stat-content {
     display: flex;
     flex-direction: column;
-    gap: 1px; /* Reduced gap */
+    gap: 2px;
 }
 
 .stat-value {
     font-family: "Exo 2", monospace;
-    font-size: 1.2rem; /* Smaller value */
+    font-size: 1.3rem;
     font-weight: 700;
     color: #fff;
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
@@ -257,20 +291,17 @@
 
 .stat-label {
     font-family: "Orbitron", monospace;
-    font-size: 0.7rem; /* Smaller label */
+    font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-@media screen and (max-width: 600px) {
-    .header-stats {
+@media screen and (max-width: 800px) {
+    .card-header {
         flex-direction: column;
-        gap: 10px;
-    }
-
-    .header-stat {
-        min-width: auto;
+        gap: 20px;
+        padding: 20px;
     }
 
     .profile-section,
@@ -280,15 +311,34 @@
         gap: 15px;
     }
 
-    .profile-image-container,
-    .system-image-container {
-        width: 60px;
-        height: 60px;
+    .header-stats {
+        flex-direction: row;
+        justify-content: center;
+        gap: 15px;
+        padding-left: 0;
+        border-left: none;
+        border-top: 1px solid rgba(211, 47, 47, 0.2);
+        padding-top: 20px;
     }
 
-    .player-name,
-    .system-name {
-        font-size: 1.4rem;
+    .header-stat {
+        min-width: 80px;
+        padding: 8px;
+    }
+
+    .profile-image-container,
+    .system-image-container {
+        width: 70px;
+        height: 70px;
+    }
+
+    .enhanced-player-card .player-name,
+    .enhanced-system-card .system-name {
+        font-size: 1.5rem;
+    }
+
+    .header-stat-value {
+        font-size: 1.6rem;
     }
 
     .stats-grid {
@@ -302,8 +352,8 @@
     }
 
     .stat-icon {
-        width: 35px;
-        height: 35px;
+        width: 32px;
+        height: 32px;
         font-size: 1rem;
     }
 
@@ -312,23 +362,22 @@
     }
 }
 
-@media screen and (max-width: 800px) {
-    .card-header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-    }
-
-    .profile-section,
-    .system-section {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-    }
-
+@media screen and (max-width: 600px) {
     .header-stats {
-        justify-content: center;
-        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .header-stat {
+        min-width: 70px;
+        padding: 6px;
+    }
+
+    .header-stat-value {
+        font-size: 1.4rem;
+    }
+
+    .header-stat-label {
+        font-size: 0.65rem;
     }
 
     .profile-image-container,
@@ -339,35 +388,6 @@
 
     .enhanced-player-card .player-name,
     .enhanced-system-card .system-name {
-        font-size: 1.4rem;
-    }
-
-    .enhanced-player-card .player-status,
-    .enhanced-system-card .system-region {
-        color: #c0c0c0 !important; /* Maintain consistent mobile styling */
-    }
-
-    .header-stat-value {
-        font-size: 1.5rem;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-        padding: 15px;
-    }
-
-    .stat-item {
-        padding: 10px;
-    }
-
-    .stat-icon {
-        width: 28px;
-        height: 28px;
-        font-size: 0.9rem;
-    }
-
-    .stat-value {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
     }
 }
